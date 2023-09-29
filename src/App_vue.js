@@ -27,12 +27,6 @@ export default {
         <div class="item3">
           <accountinfo :userData="userData"></accountinfo>
         </div>
-        <div class="item4">
-          <email></email>
-        </div>
-        <div class="item5">
-        <prosign></prosign>
-        </div>
       </div>
     </template>
   `,
@@ -114,3 +108,10 @@ export default {
   },
 };
 // </script>
+// temporarily not in use in template
+// <div class="item4">
+// <email></email>
+// </div>
+// <div class="item5">
+// <prosign></prosign>
+// </div>

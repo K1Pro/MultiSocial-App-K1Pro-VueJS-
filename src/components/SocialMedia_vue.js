@@ -46,9 +46,6 @@ export default {
       <b><label for="clientsecret">Client Secret:</label></b><br>
       <input type="text" id="clientsecret" v-model="clientsecret" @change="patchSocialMedia"><br><br>
 
-      <b><label for="accesstokensecret">Access Token Secret:</label></b><br>
-      <input type="text" id="accesstokensecret" v-model="accesstokensecret" @change="patchSocialMedia"><br><br>
-
       <b><label for="urn">URN:</label></b><br>
       <input type="text" id="urn" v-model="urn" @change="patchSocialMedia"><br><br>
     </div>
@@ -61,6 +58,7 @@ export default {
   data() {
     return {
       chosenSocialMedia: 'Facebook',
+      active: false,
       accesstoken: '',
       accesstokenexpiry: '',
       accesstokensecret: '',
@@ -71,7 +69,6 @@ export default {
       clientid: '',
       clientsecret: '',
       urn: '',
-      active: false,
     };
   },
 
@@ -82,10 +79,7 @@ export default {
     },
 
     async patchSocialMedia(event) {
-      const inputValue =
-        event.target.type == 'checkbox'
-          ? `${event.target.checked}`
-          : event.target.value;
+      const inputValue = event.target.type == 'checkbox' ? `${event.target.checked}` : event.target.value;
       try {
         const response = await fetch(servrURL + 'controller/socialmedia.php', {
           method: 'PATCH',
@@ -111,41 +105,40 @@ export default {
 
     async getSocialMedia(endPt) {
       try {
-        const response = await fetch(
-          servrURL + 'controller/socialmedia.php?smwebsite=' + endPt,
-          {
-            method: 'GET',
-            headers: {
-              Authorization: this.accessToken,
-              'Content-Type': 'application/json',
-              'Cache-Control': 'no-store',
-            },
-          }
-        );
+        const response = await fetch(servrURL + 'controller/socialmedia.php?smwebsite=' + endPt, {
+          method: 'GET',
+          headers: {
+            Authorization: this.accessToken,
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-store',
+          },
+        });
         const getSocialMediaJSON = await response.json();
         if (getSocialMediaJSON.success) {
           const SMData = getSocialMediaJSON.data.sm_group;
+          this.active = SMData.active;
+          this.accesstoken = SMData.accesstoken;
+          this.accesstokenexpiry = SMData.accesstokenexpiry;
+          this.accesstokensecret = SMData.accesstokensecret;
           this.appid = SMData.appid;
           this.apikey = SMData.apikey;
           this.apikeysecret = SMData.apikeysecret;
           this.bearertoken = SMData.bearertoken;
           this.clientid = SMData.clientid;
           this.clientsecret = SMData.clientsecret;
-          this.accesstoken = SMData.accesstoken;
-          this.accesstokenexpiry = SMData.accesstokenexpiry;
-          this.accesstokensecret = SMData.accesstokensecret;
-          this.active = SMData.active;
+          this.urn = SMData.urn;
         } else {
+          this.active = false;
+          this.accesstoken = '';
+          this.accesstokenexpiry = '';
+          this.accesstokensecret = '';
           this.appid = '';
           this.apikey = '';
           this.apikeysecret = '';
           this.bearertoken = '';
           this.clientid = '';
           this.clientsecret = '';
-          this.accesstoken = '';
-          this.accesstokenexpiry = '';
-          this.accesstokensecret = '';
-          this.active = false;
+          this.urn = '';
         }
       } catch (error) {
         this.error = error.toString();

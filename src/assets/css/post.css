@@ -7,6 +7,10 @@
   width: 90vw;
 }
 
+.item2 input[type='text'] {
+  width: 89vw;
+}
+
 .item2 button {
   width: 30vw;
 }
@@ -23,6 +27,10 @@
 
   .item2 input[type='search'] {
     width: 30vw;
+  }
+
+  .item2 input[type='text'] {
+    width: 29.5vw;
   }
 
   .item2 button {
