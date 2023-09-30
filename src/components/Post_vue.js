@@ -11,7 +11,7 @@ export default {
       <input type="search" v-model="imageSearchInput" name="image-search" placeholder="Search for an image…" @keyup.enter="imageSearch()"/><br>
       <button type="button" @click.prevent="imageSearch()">Search</button>
       <button type="button">Upload</button>
-      <button type="button" @click.prevent="getActiveSMGroup()">Post</button><br>
+      <button type="button" @click.prevent="socialMediaPost()">Post</button><br>
       <img v-if="randomImagePath" :src="randomImagePath" alt="random-image">
     `,
 
@@ -59,98 +59,27 @@ export default {
       }
     },
 
-    async getActiveSMGroup() {
+    async socialMediaPost() {
       try {
-        const response = await fetch(servrURL + 'controller/socialmedia.php?active=true', {
-          method: 'GET',
+        const response = await fetch(servrURL + 'controller/post.php', {
+          method: 'POST',
           headers: {
             Authorization: this.accessToken,
           },
+          body: JSON.stringify({
+            Title: this.postTitle,
+            Link: this.postLink,
+            LinkDesc: this.postLinkDesc,
+            Body: this.postBody,
+            ImagePath: this.randomImagePath,
+          }),
         });
-        const ActiveSMGroupJSON = await response.json();
-        if (ActiveSMGroupJSON.success) {
-          ActiveSMGroupJSON.data.sm_group.forEach((sm_website) => {
-            if (sm_website.website == 'LinkedIn') this.LinkedIn(sm_website);
-            if (sm_website.website == 'Twitter') this.Twitter(sm_website);
-          });
+        const socialMediaPostJSON = await response.json();
+        if (socialMediaPostJSON.success) {
           this.$emit('post-msg', 'Posting to social media websites...');
         }
       } catch (error) {
         this.$emit('post-msg', error.toString());
-      }
-    },
-
-    async LinkedIn(sm_webData) {
-      try {
-        const response = await fetch('https://api.linkedin.com/v2/ugcPosts', {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${sm_webData.accesstoken}`,
-            'X-Restli-Protocol-Version': '2.0.0',
-            'Content-Type': 'application/json',
-            'Cache-Control': 'no-cache',
-            'Access-Control-Allow-Origin': 'https://multisocial.k1pro.net/',
-            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-            'Access-Control-Allow-Headers': 'X-Requested-With,content-type',
-            'Access-Control-Allow-Credentials': true,
-          },
-          body: JSON.stringify({
-            author: `urn:li:person:${sm_webData.urn}`,
-            lifecycleState: 'PUBLISHED',
-            specificContent: {
-              'com.linkedin.ugc.ShareContent': {
-                shareCommentary: {
-                  text: this.postTitle,
-                },
-                shareMediaCategory: 'ARTICLE',
-                media: [
-                  {
-                    status: 'READY',
-                    description: {
-                      text: this.postBody,
-                    },
-                    originalUrl: this.postLink,
-                    title: {
-                      text: this.postLinkDesc,
-                    },
-                    thumbnails: [
-                      {
-                        url: this.randomImagePath,
-                      },
-                    ],
-                  },
-                ],
-              },
-            },
-            visibility: {
-              'com.linkedin.ugc.MemberNetworkVisibility': 'PUBLIC',
-            },
-          }),
-        });
-        const LinkedInJSON = await response.json();
-        if (LinkedInJSON) {
-          console.log(LinkedInJSON);
-        }
-      } catch (error) {
-        console.log(error.toString());
-      }
-    },
-
-    async Twitter(sm_webData) {
-      try {
-        const response = await fetch('', {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${sm_webData.accesstoken}`,
-          },
-          body: JSON.stringify({}),
-        });
-        const TwitterJSON = await response.json();
-        if (TwitterJSON) {
-          console.log(TwitterJSON);
-        }
-      } catch (error) {
-        console.log(error.toString());
       }
     },
   },
