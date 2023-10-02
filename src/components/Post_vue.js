@@ -65,6 +65,8 @@ export default {
           method: 'POST',
           headers: {
             Authorization: this.accessToken,
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-store',
           },
           body: JSON.stringify({
             Title: this.postTitle,
@@ -75,9 +77,10 @@ export default {
           }),
         });
         const socialMediaPostJSON = await response.json();
-        if (socialMediaPostJSON.success) {
-          this.$emit('post-msg', 'Posting to social media websites...');
-        }
+        // if (socialMediaPostJSON.success) {
+        console.log(socialMediaPostJSON);
+        this.$emit('post-msg', socialMediaPostJSON.messages[0]);
+        // }
       } catch (error) {
         this.$emit('post-msg', error.toString());
       }
