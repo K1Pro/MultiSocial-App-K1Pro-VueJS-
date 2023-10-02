@@ -1,34 +1,4 @@
 //<script>
-// <b><label for="accesstoken">Access Token:</label></b><br>
-// <input type="text" id="accesstoken" v-model="accesstoken" @change="patchSocialMedia"><br><br>
-
-// <b><label for="accesstokenexpiry">Access Token Expiry:</label></b><br>
-// <input type="datetime-local" id="accesstokenexpiry" :value="accesstokenexpiry" @change="patchSocialMedia"><br><br>
-
-// <b><label for="accesstokensecret">Access Token Secret:</label></b><br>
-// <input type="text" id="accesstokensecret" v-model="accesstokensecret" @change="patchSocialMedia"><br><br>
-
-// <b><label for="appid">App ID:</label></b><br>
-// <input type="text" id="appid" v-model="appid" @change="patchSocialMedia"><br><br>
-
-// <b><label for="apikey">API Key:</label></b><br>
-// <input type="text" id="apikey" v-model="apikey" @change="patchSocialMedia"><br><br>
-
-// <b><label for="apikeysecret">API Key Secret:</label></b><br>
-// <input type="text" id="apikeysecret" v-model="apikeysecret" @change="patchSocialMedia"><br><br>
-
-// <b><label for="bearertoken">Bearer Token:</label></b><br>
-// <input type="text" id="bearertoken" v-model="bearertoken" @change="patchSocialMedia"><br><br>
-
-// <b><label for="clientid">Client ID:</label></b><br>
-// <input type="text" id="clientid" v-model="clientid" @change="patchSocialMedia"><br><br>
-
-// <b><label for="clientsecret">Client Secret:</label></b><br>
-// <input type="text" id="clientsecret" v-model="clientsecret" @change="patchSocialMedia"><br><br>
-
-// <b><label for="urn">URN:</label></b><br>
-// <input type="text" id="urn" v-model="urn" @change="patchSocialMedia"><br><br>
-//<div v-for="(smParam, key) in socialMediaParams">{{ smParam }}</div>
 export default {
   name: 'SocialMedia',
 
@@ -38,11 +8,12 @@ export default {
     </div>
 
     <div class="tabcontent">
-      <h2>{{ chosenSocialMedia }}<input type="checkbox" id="active" v-model="active" @click="patchSocialMedia" /></h2>
+      <h2>{{ chosenSocialMedia }}<input type="checkbox" id="active" v-model="active" @click="patchSocialMedia"/></h2>
       
-      <div v-for="value in Object.values(socialMediaParams).filter(smParam => {return smParam.website == chosenSocialMedia})">
-        <div v-for="check in value">
-          {{ check }}
+      <div v-for="selectedWebsite in Object.values(socialMediaParams).filter(smParam => {return smParam.website == chosenSocialMedia})">
+        <div v-for="smKey in Object.values(selectedWebsite).filter(smValue => {return smValue != chosenSocialMedia})">
+          <b>{{smKey}}</b>
+          <input type="text" :id="smKey" v-model="smSchema[smKey]" @change="patchSocialMedia"><br><br>
         </div>
       </div>
       
@@ -61,16 +32,18 @@ export default {
       socialMediaParams: '',
       chosenSocialMedia: 'Facebook',
       active: false,
-      accesstoken: '',
-      accesstokenexpiry: '',
-      accesstokensecret: '',
-      appid: '',
-      apikey: '',
-      apikeysecret: '',
-      bearertoken: '',
-      clientid: '',
-      clientsecret: '',
-      urn: '',
+      smSchema: {
+        accesstoken: '',
+        accesstokenexpiry: '',
+        accesstokensecret: '',
+        appid: '',
+        apikey: '',
+        apikeysecret: '',
+        bearertoken: '',
+        clientid: '',
+        clientsecret: '',
+        urn: '',
+      },
     };
   },
 
@@ -119,28 +92,28 @@ export default {
         if (getSocialMediaJSON.success) {
           const SMData = getSocialMediaJSON.data.sm_group;
           this.active = SMData.active;
-          this.accesstoken = SMData.accesstoken;
-          this.accesstokenexpiry = SMData.accesstokenexpiry;
-          this.accesstokensecret = SMData.accesstokensecret;
-          this.appid = SMData.appid;
-          this.apikey = SMData.apikey;
-          this.apikeysecret = SMData.apikeysecret;
-          this.bearertoken = SMData.bearertoken;
-          this.clientid = SMData.clientid;
-          this.clientsecret = SMData.clientsecret;
-          this.urn = SMData.urn;
+          this.smSchema.accesstoken = SMData.accesstoken;
+          this.smSchema.accesstokenexpiry = SMData.accesstokenexpiry;
+          this.smSchema.accesstokensecret = SMData.accesstokensecret;
+          this.smSchema.appid = SMData.appid;
+          this.smSchema.apikey = SMData.apikey;
+          this.smSchema.apikeysecret = SMData.apikeysecret;
+          this.smSchema.bearertoken = SMData.bearertoken;
+          this.smSchema.clientid = SMData.clientid;
+          this.smSchema.clientsecret = SMData.clientsecret;
+          this.smSchema.urn = SMData.urn;
         } else {
           this.active = false;
-          this.accesstoken = '';
-          this.accesstokenexpiry = '';
-          this.accesstokensecret = '';
-          this.appid = '';
-          this.apikey = '';
-          this.apikeysecret = '';
-          this.bearertoken = '';
-          this.clientid = '';
-          this.clientsecret = '';
-          this.urn = '';
+          this.smSchema.accesstoken = '';
+          this.smSchema.accesstokenexpiry = '';
+          this.smSchema.accesstokensecret = '';
+          this.smSchema.appid = '';
+          this.smSchema.apikey = SMData.apikey;
+          this.smSchema.apikeysecret = '';
+          this.smSchema.bearertoken = '';
+          this.smSchema.clientid = '';
+          this.smSchema.clientsecret = '';
+          this.smSchema.urn = '';
         }
       } catch (error) {
         this.error = error.toString();
