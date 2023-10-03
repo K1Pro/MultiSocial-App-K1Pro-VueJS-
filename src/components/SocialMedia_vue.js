@@ -8,7 +8,7 @@ export default {
     </div>
 
     <div class="tabcontent">
-      <h2>{{ chosenSocialMedia }}<input type="checkbox" id="active" v-model="active" @click="patchSocialMedia"/></h2>
+      <h2>{{ chosenSocialMedia }}<input type="checkbox" id="active" v-if="chosenSocialMedia" v-model="active" @click="patchSocialMedia"/></h2>
       
       <div v-for="selectedWebsite in Object.values(socialMediaParams).filter(smParam => {return smParam.website == chosenSocialMedia})">
         <div v-for="smKey in Object.values(selectedWebsite).filter(smValue => {return smValue != chosenSocialMedia})">
@@ -16,21 +16,17 @@ export default {
           <input type="text" :id="smKey" v-model="smSchema[smKey]" @change="patchSocialMedia"><br><br>
         </div>
       </div>
-      
-
-      
-      
     </div>
   `,
 
   props: ['accessToken'],
 
-  emits: ['socialmedia-msg'],
+  emits: ['socialmedia-msg', 'chosen-social-media'],
 
   data() {
     return {
       socialMediaParams: '',
-      chosenSocialMedia: 'Facebook',
+      chosenSocialMedia: '',
       active: false,
       smSchema: {
         accesstoken: '',
@@ -102,6 +98,7 @@ export default {
           this.smSchema.clientid = SMData.clientid;
           this.smSchema.clientsecret = SMData.clientsecret;
           this.smSchema.urn = SMData.urn;
+          this.$emit('chosen-social-media', this.chosenSocialMedia);
         } else {
           this.active = false;
           this.smSchema.accesstoken = '';
@@ -138,7 +135,7 @@ export default {
 
   created() {
     this.getSocialMediaParams();
-    this.getSocialMedia(this.chosenSocialMedia);
+    // this.getSocialMedia(this.chosenSocialMedia);
   },
 };
 // </script>
