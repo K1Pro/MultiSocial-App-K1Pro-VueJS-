@@ -17,7 +17,7 @@ export default {
     </template>
     <template v-else>
       <logoutbtn :accessToken="accessToken" :sessionID="sessionID" @logout="updateAccessToken" @logout-msg="updateSnackbar">></logoutbtn>
-      <div class="grid-container">
+      <div class="grid-container" :style="[chosenSocialMedia ? {'grid-template-columns': '33.3vw 33.3vw 33.3vw'} : {'grid-template-columns': '10vw 45vw 45vw'}]">
         <div class="item1">
           <socialmedia :accessToken="accessToken" @socialmedia-msg="updateSnackbar" @chosen-social-media="openCloseSMPanel"></socialmedia>
         </div>
@@ -48,6 +48,7 @@ export default {
       sessionID: this.getCookie('_s_i'),
       userData: '',
       message: null,
+      chosenSocialMedia: '',
     };
   },
   methods: {
@@ -59,8 +60,11 @@ export default {
       this.message = message;
     },
 
-    openCloseSMPanel() {
-      console.log('updating');
+    openCloseSMPanel(chosenSocialMedia) {
+      if (chosenSocialMedia) {
+        this.chosenSocialMedia = chosenSocialMedia;
+        console.log(chosenSocialMedia);
+      }
     },
 
     updateAccessToken(accessToken, sessionID) {

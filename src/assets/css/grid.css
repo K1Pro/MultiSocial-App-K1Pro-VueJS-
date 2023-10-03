@@ -41,7 +41,6 @@
 
   .grid-container {
     display: grid;
-    grid-template-columns: 33.3vw 33.3vw 33.3vw;
     grid-template-rows: 100vh;
     /* grid-template-rows: 50vh 50vh; */
     grid-row-gap: 10px;

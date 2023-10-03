@@ -3,11 +3,11 @@ export default {
   name: 'SocialMedia',
 
   template: /*html*/ `
-    <div class="tab">
+    <div class="tab" :style="[chosenSocialMedia ? {'width': '30%'} : {'width': '100%'}]">
       <button v-for="(smParam, key) in socialMediaParams" class="tablinks" :class="{active: chosenSocialMedia == smParam.website}" @click="openSocialMedia">{{ smParam.website }}</button>
     </div>
 
-    <div class="tabcontent">
+    <div class="tabcontent" :style="[chosenSocialMedia ? {'width': '70%'} : {'width': '0%'}]">
       <h2>{{ chosenSocialMedia }}<input type="checkbox" id="active" v-if="chosenSocialMedia" v-model="active" @click="patchSocialMedia"/></h2>
       
       <div v-for="selectedWebsite in Object.values(socialMediaParams).filter(smParam => {return smParam.website == chosenSocialMedia})">
@@ -111,9 +111,11 @@ export default {
           this.smSchema.clientid = '';
           this.smSchema.clientsecret = '';
           this.smSchema.urn = '';
+          this.$emit('chosen-social-media', this.chosenSocialMedia);
         }
       } catch (error) {
         this.error = error.toString();
+        this.$emit('chosen-social-media', this.chosenSocialMedia);
       }
     },
 
