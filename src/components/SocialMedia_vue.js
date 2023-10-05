@@ -12,16 +12,17 @@ export default {
     <div class="socialmedia">
       <div class="tab">
         
-        <a :class="{active: chosenSocialMedia == 'Home'}" class="btn tablinks fa fa-home" @click="openTab"></a>
+        <a :class="{active: chosenSocialMedia == 'home'}" class="btn tablinks fa fa-home" @click="openTab"></a>
         <a :class="['btn tablinks fab fa-'] + smParam.website.toLowerCase()" v-for="smParam in socialMediaParams" @click="openTab"></a>
+        <a :class="{active: chosenSocialMedia == 'logout'}" class="btn tablinks fa fa-sign-out" @click="openTab"></a>
       </div>
 
-      <div class="tabcontent" v-if="chosenSocialMedia == 'Home'">
+      <div class="tabcontent" v-if="chosenSocialMedia == 'home'">
         <post :accessToken="accessToken"></post>
       </div>
 
-      <div class="tabcontent" v-if="chosenSocialMedia != 'Home'">
-        <h2>{{ chosenSocialMedia }}<input type="checkbox" id="active" v-model="active" @click="patchSocialMedia"/></h2>
+      <div class="tabcontent" v-if="chosenSocialMedia != 'home'">
+        <h2><input type="checkbox" id="active" v-model="active" @click="patchSocialMedia"/>{{ chosenSocialMedia.charAt(0).toUpperCase() }}{{ chosenSocialMedia.slice(1) }}</h2>
         
         <div v-for="selectedWebsite in Object.values(socialMediaParams).filter(smParam => {return smParam.website == chosenSocialMedia})">
           <div v-for="smKey in Object.values(selectedWebsite).filter(smValue => {return smValue != chosenSocialMedia})">
@@ -42,7 +43,7 @@ export default {
   data() {
     return {
       socialMediaParams: '',
-      chosenSocialMedia: 'Home',
+      chosenSocialMedia: 'home',
       active: false,
       smSchema: {
         accesstoken: '',
@@ -62,15 +63,15 @@ export default {
   methods: {
     openTab(event) {
       const selectedTab = event.target.classList.value.substring(event.target.classList.value.indexOf('fa-') + 3);
-      const firstLetter = selectedTab.charAt(0);
-      const firstLetterCap = firstLetter.toUpperCase();
-      const remainingLetters = selectedTab.slice(1);
-      const selectedTabCap = firstLetterCap + remainingLetters;
+      // const firstLetter = selectedTab.charAt(0);
+      // const firstLetterCap = firstLetter.toUpperCase();
+      // const remainingLetters = selectedTab.slice(1);
+      // const selectedTabCap = firstLetterCap + remainingLetters;
 
-      console.log(selectedTabCap);
-      this.chosenSocialMedia = selectedTabCap;
-      if (selectedTabCap != 'Home') {
-        this.getSocialMedia(selectedTabCap);
+      console.log(selectedTab);
+      this.chosenSocialMedia = selectedTab;
+      if (selectedTab != 'home') {
+        this.getSocialMedia(selectedTab);
       }
     },
 
