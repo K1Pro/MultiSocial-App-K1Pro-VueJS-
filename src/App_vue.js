@@ -1,4 +1,4 @@
-// <script>
+// <script> <socialmedia :accessToken="accessToken" @socialmedia-msg="updateSnackbar" @chosen-social-media="openCloseSMPanel"></socialmedia>
 import Snackbar from './components/Snackbar_vue.js';
 import Login from './components/Login_vue.js';
 import Logoutbtn from './components/LogOutBtn_vue.js';
@@ -17,14 +17,12 @@ export default {
     </template>
     <template v-else>
       <logoutbtn :accessToken="accessToken" :sessionID="sessionID" @logout="updateAccessToken" @logout-msg="updateSnackbar">></logoutbtn>
-      <div class="grid-container" :style="[chosenSocialMedia ? {'grid-template-columns': '33.3vw 33.3vw 33.3vw'} : {'grid-template-columns': '10vw 45vw 45vw'}]">
+      <div class="grid-container">
         <div class="item1">
-          <socialmedia :accessToken="accessToken" @socialmedia-msg="updateSnackbar" @chosen-social-media="openCloseSMPanel"></socialmedia>
-        </div>
-        <div class="item2">
+          <socialmedia :accessToken="accessToken" @socialmedia-msg="updateSnackbar"></socialmedia>
           <post :accessToken="accessToken" @post-msg="updateSnackbar"></post>
-        </div>
-        <div class="item3">
+          </div>
+        <div class="item2">
           <accountinfo :userData="userData"></accountinfo>
         </div>
       </div>
@@ -58,13 +56,6 @@ export default {
 
     updateSnackbar(message) {
       this.message = message;
-    },
-
-    openCloseSMPanel(chosenSocialMedia) {
-      if (chosenSocialMedia) {
-        this.chosenSocialMedia = chosenSocialMedia;
-        console.log(chosenSocialMedia);
-      }
     },
 
     updateAccessToken(accessToken, sessionID) {

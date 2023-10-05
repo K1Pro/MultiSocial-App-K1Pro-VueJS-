@@ -3,16 +3,18 @@ export default {
   name: 'Post',
 
   template: /*html*/ `
+    <div class="Post">
       <b>Post</b><br>
-      <input v-model="postTitle" type="text" name="postTitle" placeholder="Post title"><br>
-      <input v-model="postLink" type="text" name="postLink" placeholder="Post link"><br>
-      <input v-model="postLinkDesc" type="text" name="postLinkDesc" placeholder="Post link description"><br>
-      <textarea v-model="postBody" rows="3" name="postBody" placeholder="Post body text"></textarea><br>
-      <input type="search" v-model="imageSearchInput" name="image-search" placeholder="Search for an image…" @keyup.enter="imageSearch()"/><br>
+      <input v-model="postTitle" type="text" name="postTitle" placeholder="Post title"><br><br>
+      <input v-model="postLink" type="text" name="postLink" placeholder="Post link"><br><br>
+      <input v-model="postLinkDesc" type="text" name="postLinkDesc" placeholder="Post link description"><br><br>
+      <textarea v-model="postBody" rows="3" name="postBody" placeholder="Post body text"></textarea><br><br>
+      <input type="search" v-model="imageSearchInput" name="image-search" placeholder="Search for an image…" @keyup.enter="imageSearch()"/><br><br>
       <button type="button" @click.prevent="imageSearch()">Search</button>
       <button type="button">Upload</button>
-      <button type="button" @click.prevent="socialMediaPost()">Post</button><br>
+      <button type="button" @click.prevent="socialMediaPost()">Post</button><br><br>
       <img v-if="randomImagePath" :src="randomImagePath" alt="random-image">
+    </div>
     `,
 
   props: ['accessToken'],

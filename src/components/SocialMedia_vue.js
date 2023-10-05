@@ -3,17 +3,19 @@ export default {
   name: 'SocialMedia',
 
   template: /*html*/ `
-    <div class="tab" :style="[chosenSocialMedia ? {'width': '30%'} : {'width': '100%'}]">
-      <button v-for="(smParam, key) in socialMediaParams" class="tablinks" :class="{active: chosenSocialMedia == smParam.website}" @click="openSocialMedia">{{ smParam.website }}</button>
-    </div>
+    <div class="socialmedia">
+      <div class="tab">
+        <button v-for="(smParam, key) in socialMediaParams" class="tablinks" :class="{active: chosenSocialMedia == smParam.website}" @click="openSocialMedia">{{ smParam.website }}</button>
+      </div>
 
-    <div class="tabcontent" :style="[chosenSocialMedia ? {'width': '70%'} : {'width': '0%'}]">
-      <h2>{{ chosenSocialMedia }}<input type="checkbox" id="active" v-if="chosenSocialMedia" v-model="active" @click="patchSocialMedia"/></h2>
-      
-      <div v-for="selectedWebsite in Object.values(socialMediaParams).filter(smParam => {return smParam.website == chosenSocialMedia})">
-        <div v-for="smKey in Object.values(selectedWebsite).filter(smValue => {return smValue != chosenSocialMedia})">
-          <b>{{smKey}}</b>
-          <input type="text" :id="smKey" v-model="smSchema[smKey]" @change="patchSocialMedia"><br><br>
+      <div class="tabcontent" v-if="chosenSocialMedia">
+        <h2>{{ chosenSocialMedia }}<input type="checkbox" id="active" v-model="active" @click="patchSocialMedia"/></h2>
+        
+        <div v-for="selectedWebsite in Object.values(socialMediaParams).filter(smParam => {return smParam.website == chosenSocialMedia})">
+          <div v-for="smKey in Object.values(selectedWebsite).filter(smValue => {return smValue != chosenSocialMedia})">
+            <b>{{smKey}}</b>
+            <input type="text" :id="smKey" v-model="smSchema[smKey]" @change="patchSocialMedia"><br><br>
+          </div>
         </div>
       </div>
     </div>
@@ -21,7 +23,7 @@ export default {
 
   props: ['accessToken'],
 
-  emits: ['socialmedia-msg', 'chosen-social-media'],
+  emits: ['socialmedia-msg'],
 
   data() {
     return {
@@ -98,7 +100,6 @@ export default {
           this.smSchema.clientid = SMData.clientid;
           this.smSchema.clientsecret = SMData.clientsecret;
           this.smSchema.urn = SMData.urn;
-          this.$emit('chosen-social-media', this.chosenSocialMedia);
         } else {
           this.active = false;
           this.smSchema.accesstoken = '';
@@ -111,11 +112,9 @@ export default {
           this.smSchema.clientid = '';
           this.smSchema.clientsecret = '';
           this.smSchema.urn = '';
-          this.$emit('chosen-social-media', this.chosenSocialMedia);
         }
       } catch (error) {
         this.error = error.toString();
-        this.$emit('chosen-social-media', this.chosenSocialMedia);
       }
     },
 

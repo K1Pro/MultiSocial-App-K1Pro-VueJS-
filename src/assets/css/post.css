@@ -1,44 +1,44 @@
-.item2 textarea {
+.Post textarea {
   width: 89vw;
   resize: none;
 }
 
-.item2 input[type='search'] {
+.Post input[type='search'] {
   width: 90vw;
 }
 
-.item2 input[type='text'] {
+.Post input[type='text'] {
   width: 89vw;
 }
 
-.item2 button {
+.Post button {
   width: 30vw;
 }
 
-.item2 img {
+.Post img {
   width: 90vw;
   height: 60vw;
 }
 
 @media only screen and (min-width: 768px) {
-  .item2 textarea {
-    width: 29.5vw;
+  .Post textarea {
+    width: 75%;
   }
 
-  .item2 input[type='search'] {
-    width: 30vw;
+  .Post input[type='search'] {
+    width: 75%;
   }
 
-  .item2 input[type='text'] {
-    width: 29.5vw;
+  .Post input[type='text'] {
+    width: 75%;
   }
 
-  .item2 button {
-    width: 10vw;
+  .Post button {
+    width: 25%;
   }
 
-  .item2 img {
-    width: 30vw;
-    height: 18vw;
+  .Post img {
+    width: 75%;
+    height: 45%;
   }
 }
