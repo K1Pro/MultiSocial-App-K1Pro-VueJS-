@@ -2,7 +2,6 @@
 import Snackbar from './components/Snackbar_vue.js';
 import Login from './components/Login_vue.js';
 import Logoutbtn from './components/LogOutBtn_vue.js';
-import Post from './components/Post_vue.js';
 import Accountinfo from './components/AccountInfo_vue.js';
 import Prosign from './components/ProSign_vue.js';
 import Email from './components/Email_vue.js';
@@ -20,7 +19,6 @@ export default {
       <div class="grid-container">
         <div class="item1">
           <socialmedia :accessToken="accessToken" @socialmedia-msg="updateSnackbar"></socialmedia>
-          <post :accessToken="accessToken" @post-msg="updateSnackbar"></post>
           </div>
         <div class="item2">
           <accountinfo :userData="userData"></accountinfo>
@@ -33,7 +31,6 @@ export default {
     Snackbar,
     Login,
     Logoutbtn,
-    Post,
     Accountinfo,
     Prosign,
     Email,

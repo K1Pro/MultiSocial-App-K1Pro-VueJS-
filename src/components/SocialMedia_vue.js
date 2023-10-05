@@ -1,14 +1,26 @@
 //<script>
+// <post :accessToken="accessToken" @post-msg="updateSnackbar"></post>
+// <button class="btn tablinks" :class="{active: chosenSocialMedia == 'Home'}" @click="openTab"><i class="fa fa-home"></i></button>
+// {{ smParam.website }}
+// <a :class="{active: chosenSocialMedia == smParam.website}"
+import Post from './Post_vue.js';
+
 export default {
   name: 'SocialMedia',
 
   template: /*html*/ `
     <div class="socialmedia">
       <div class="tab">
-        <button v-for="(smParam, key) in socialMediaParams" class="tablinks" :class="{active: chosenSocialMedia == smParam.website}" @click="openSocialMedia">{{ smParam.website }}</button>
+        
+        <a :class="{active: chosenSocialMedia == 'Home'}" class="btn tablinks fa fa-home" @click="openTab"></a>
+        <a :class="['btn tablinks fab fa-'] + smParam.website.toLowerCase()" v-for="smParam in socialMediaParams" @click="openTab"></a>
       </div>
 
-      <div class="tabcontent" v-if="chosenSocialMedia">
+      <div class="tabcontent" v-if="chosenSocialMedia == 'Home'">
+        <post :accessToken="accessToken"></post>
+      </div>
+
+      <div class="tabcontent" v-if="chosenSocialMedia != 'Home'">
         <h2>{{ chosenSocialMedia }}<input type="checkbox" id="active" v-model="active" @click="patchSocialMedia"/></h2>
         
         <div v-for="selectedWebsite in Object.values(socialMediaParams).filter(smParam => {return smParam.website == chosenSocialMedia})">
@@ -21,6 +33,8 @@ export default {
     </div>
   `,
 
+  components: { Post },
+
   props: ['accessToken'],
 
   emits: ['socialmedia-msg'],
@@ -28,7 +42,7 @@ export default {
   data() {
     return {
       socialMediaParams: '',
-      chosenSocialMedia: '',
+      chosenSocialMedia: 'Home',
       active: false,
       smSchema: {
         accesstoken: '',
@@ -46,9 +60,18 @@ export default {
   },
 
   methods: {
-    openSocialMedia(event) {
-      this.chosenSocialMedia = event.target.innerHTML;
-      this.getSocialMedia(event.target.innerHTML);
+    openTab(event) {
+      const selectedTab = event.target.classList.value.substring(event.target.classList.value.indexOf('fa-') + 3);
+      const firstLetter = selectedTab.charAt(0);
+      const firstLetterCap = firstLetter.toUpperCase();
+      const remainingLetters = selectedTab.slice(1);
+      const selectedTabCap = firstLetterCap + remainingLetters;
+
+      console.log(selectedTabCap);
+      this.chosenSocialMedia = selectedTabCap;
+      if (selectedTabCap != 'Home') {
+        this.getSocialMedia(selectedTabCap);
+      }
     },
 
     async patchSocialMedia(event) {

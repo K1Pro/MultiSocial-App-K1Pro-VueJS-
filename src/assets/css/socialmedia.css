@@ -11,24 +11,24 @@
 }
 
 /* Style the buttons inside the tab */
-.socialmedia > .tab button {
-  display: block;
+/* .socialmedia > .tab button { */
+/* display: block;
   background-color: inherit;
   color: black;
-  padding: 22px 16px;
   width: 100%;
   border: none;
   outline: none;
   text-align: left;
   cursor: pointer;
   transition: 0.3s;
-  font-size: 17px;
-}
+  font-size: 17px; */
+/* padding: 22px 16px; */
+/* } */
 
 /* Change background color of buttons on hover */
-.socialmedia > .tab button:hover {
+/* .socialmedia > .tab button:hover {
   background-color: #ddd;
-}
+} */
 
 /* Create an active/current "tab button" class */
 .socialmedia > .tab button.active {

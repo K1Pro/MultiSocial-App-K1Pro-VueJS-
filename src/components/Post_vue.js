@@ -4,11 +4,16 @@ export default {
 
   template: /*html*/ `
     <div class="Post">
-      <b>Post</b><br>
-      <input v-model="postTitle" type="text" name="postTitle" placeholder="Post title"><br><br>
-      <input v-model="postLink" type="text" name="postLink" placeholder="Post link"><br><br>
-      <input v-model="postLinkDesc" type="text" name="postLinkDesc" placeholder="Post link description"><br><br>
-      <textarea v-model="postBody" rows="3" name="postBody" placeholder="Post body text"></textarea><br><br>
+      <h2>Post</h2>
+      <b>Title</b>
+      <input v-model="postTitle" type="text" name="postTitle" placeholder="Title..."><br><br>
+      <b>Link</b>
+      <input v-model="postLink" type="text" name="postLink" placeholder="Link..."><br><br>
+      <b>Link description</b>
+      <input v-model="postLinkDesc" type="text" name="postLinkDesc" placeholder="Link description..."><br><br>
+      <b>Body text</b>
+      <textarea v-model="postBody" rows="3" name="postBody" placeholder="Body text..."></textarea><br><br>
+      <b>Search for an image</b>
       <input type="search" v-model="imageSearchInput" name="image-search" placeholder="Search for an image…" @keyup.enter="imageSearch()"/><br><br>
       <button type="button" @click.prevent="imageSearch()">Search</button>
       <button type="button">Upload</button>
