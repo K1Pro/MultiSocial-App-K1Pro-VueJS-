@@ -27,7 +27,7 @@ export default {
       <b>Hashtags</b>
       <input v-model="postHashtags" type="text" name="postHashtags" placeholder="Hashtags..."><br><br>
 
-      <button type="button" @click.prevent="socialMediaPost()">Post</button>
+      <button type="button" @click.prevent="socialMediaPost()">Post</button><br><br>
     </div>
     `,
 

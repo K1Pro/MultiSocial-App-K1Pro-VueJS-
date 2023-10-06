@@ -149,13 +149,3 @@
   background: #8400ff;
   color: white;
 }
-
-@media only screen and (min-width: 768px) {
-  .fa {
-    padding: 15px 70% 15px 30%;
-  }
-
-  .fab {
-    padding: 15px 70% 15px 30%;
-  }
-}
