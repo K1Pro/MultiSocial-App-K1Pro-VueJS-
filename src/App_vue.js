@@ -18,7 +18,7 @@ export default {
       <logoutbtn :accessToken="accessToken" :sessionID="sessionID" @logout="updateAccessToken" @logout-msg="updateSnackbar">></logoutbtn>
       <div class="grid-container">
         <div class="item1">
-          <socialmedia :accessToken="accessToken" @socialmedia-msg="updateSnackbar"></socialmedia>
+          <socialmedia :accessToken="accessToken" @socialmedia-msg="updateSnackbar" :userData="userData"></socialmedia>
           </div>
         <div class="item2">
           <accountinfo :userData="userData"></accountinfo>

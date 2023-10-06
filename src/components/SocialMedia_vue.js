@@ -1,8 +1,4 @@
 //<script>
-// <post :accessToken="accessToken" @post-msg="updateSnackbar"></post>
-// <button class="btn tablinks" :class="{active: chosenSocialMedia == 'Home'}" @click="openTab"><i class="fa fa-home"></i></button>
-// {{ smParam.website }}
-// <a :class="{active: chosenSocialMedia == smParam.website}"
 import Post from './Post_vue.js';
 
 export default {
@@ -11,17 +7,16 @@ export default {
   template: /*html*/ `
     <div class="socialmedia">
       <div class="tab">
-        
-        <a :class="{active: chosenSocialMedia == 'home'}" class="btn tablinks fa fa-home" @click="openTab"></a>
-        <a :class="['btn tablinks fab fa-'] + smParam.website.toLowerCase()" v-for="smParam in socialMediaParams" @click="openTab"></a>
-        <a :class="{active: chosenSocialMedia == 'logout'}" class="btn tablinks fa fa-sign-out" @click="openTab"></a>
+        <a :class="{active: chosenSocialMedia == 'home'}" class="tablinks fa fa-home" @click="openTab"></a>
+        <a :class="['tablinks fab fa-'] + smParam.website.toLowerCase()" v-for="smParam in socialMediaParams" @click="openTab"></a>
+        <a :class="{active: chosenSocialMedia == 'logout'}" class="tablinks fa fa-sign-out" @click="openTab"></a>
       </div>
 
       <div class="tabcontent" v-if="chosenSocialMedia == 'home'">
-        <post :accessToken="accessToken"></post>
+        <post :accessToken="accessToken" :userData="userData" @post-msg="updateSnackbar"></post>
       </div>
 
-      <div class="tabcontent" v-if="chosenSocialMedia != 'home'">
+      <div class="tabcontent" v-if="chosenSocialMedia != 'home' && chosenSocialMedia != 'sign-out'">
         <h2><input type="checkbox" id="active" v-model="active" @click="patchSocialMedia"/>{{ chosenSocialMedia.charAt(0).toUpperCase() }}{{ chosenSocialMedia.slice(1) }}</h2>
         
         <div v-for="selectedWebsite in Object.values(socialMediaParams).filter(smParam => {return smParam.website == chosenSocialMedia})">
@@ -30,15 +25,16 @@ export default {
             <input type="text" :id="smKey" v-model="smSchema[smKey]" @change="patchSocialMedia"><br><br>
           </div>
         </div>
+        
       </div>
     </div>
   `,
 
   components: { Post },
 
-  props: ['accessToken'],
+  props: ['accessToken', 'userData'],
 
-  emits: ['socialmedia-msg'],
+  emits: ['socialmedia-msg', '@post-msg'],
 
   data() {
     return {
@@ -63,14 +59,8 @@ export default {
   methods: {
     openTab(event) {
       const selectedTab = event.target.classList.value.substring(event.target.classList.value.indexOf('fa-') + 3);
-      // const firstLetter = selectedTab.charAt(0);
-      // const firstLetterCap = firstLetter.toUpperCase();
-      // const remainingLetters = selectedTab.slice(1);
-      // const selectedTabCap = firstLetterCap + remainingLetters;
-
-      console.log(selectedTab);
       this.chosenSocialMedia = selectedTab;
-      if (selectedTab != 'home') {
+      if (selectedTab != 'home' && selectedTab != 'sign-out') {
         this.getSocialMedia(selectedTab);
       }
     },
@@ -155,6 +145,10 @@ export default {
       } catch (error) {
         this.error = error.toString();
       }
+    },
+
+    updateSnackbar(message) {
+      this.$emit('socialmedia-msg', message);
     },
   },
 

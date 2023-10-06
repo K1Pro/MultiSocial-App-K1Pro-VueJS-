@@ -1,6 +1,6 @@
 .fa {
   /* padding: 20px; */
-  padding: 15px 60% 15px 40%;
+  padding: 15px 70% 15px 30%;
   font-size: 30px;
   width: 100%;
   text-align: center;
@@ -14,7 +14,7 @@
 
 .fab {
   /* padding: 20px; */
-  padding: 15px 60% 15px 40%;
+  padding: 15px 70% 15px 30%;
   font-size: 30px;
   width: 100%;
   text-align: center;
@@ -141,7 +141,21 @@
   color: white;
 }
 
+.fa-pexels:before {
+  content: 'P';
+}
+
 .fa-sign-out {
   background: #8400ff;
   color: white;
+}
+
+@media only screen and (min-width: 768px) {
+  .fa {
+    padding: 15px 70% 15px 30%;
+  }
+
+  .fab {
+    padding: 15px 70% 15px 30%;
+  }
 }
