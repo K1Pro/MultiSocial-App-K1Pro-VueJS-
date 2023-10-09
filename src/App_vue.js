@@ -1,8 +1,6 @@
 // <script> <socialmedia :accessToken="accessToken" @socialmedia-msg="updateSnackbar" @chosen-social-media="openCloseSMPanel"></socialmedia>
 import Snackbar from './components/Snackbar_vue.js';
 import Login from './components/Login_vue.js';
-import Logoutbtn from './components/LogOutBtn_vue.js';
-import Accountinfo from './components/AccountInfo_vue.js';
 import Prosign from './components/ProSign_vue.js';
 import Email from './components/Email_vue.js';
 import Socialmedia from './components/SocialMedia_vue.js';
@@ -11,18 +9,23 @@ export default {
   name: 'App',
   template: /*html*/ `
     <snackbar :message="message"></snackbar>
-    <template v-if="accessToken === undefined">
-      <login @login="updateAccessToken" @login-msg="updateSnackbar"></login>
-    </template>
-    <template v-else>
-      <logoutbtn :accessToken="accessToken" :sessionID="sessionID" @logout="updateAccessToken" @logout-msg="updateSnackbar">></logoutbtn>
+
+    <template  v-if="loggedIn === true">
       <div class="grid-container">
         <div class="item1">
-          <socialmedia :accessToken="accessToken" @socialmedia-msg="updateSnackbar" :userData="userData"></socialmedia>
-          </div>
-        <div class="item2">
-          <accountinfo :userData="userData"></accountinfo>
+          <socialmedia :accessToken="accessToken" :sessionID="sessionID" @socialmedia-msg="updateSnackbar" @logout="updateAccessToken" :userData="userData"></socialmedia>
         </div>
+        <div class="item2"></div>
+      </div>
+    </template>
+
+    <template v-if="loggedIn === false">
+      <login @login="updateAccessToken" @login-msg="updateSnackbar"></login>
+    </template>
+
+    <template v-else>
+      <div class="loader-container">
+        <div class="loader"></div>
       </div>
     </template>
   `,
@@ -30,8 +33,6 @@ export default {
   components: {
     Snackbar,
     Login,
-    Logoutbtn,
-    Accountinfo,
     Prosign,
     Email,
     Socialmedia,
@@ -44,6 +45,7 @@ export default {
       userData: '',
       message: null,
       chosenSocialMedia: '',
+      loggedIn: null,
     };
   },
   methods: {
@@ -60,7 +62,7 @@ export default {
       this.sessionID = sessionID;
     },
 
-    async userDataFunc(endPt) {
+    async getUserData(endPt) {
       try {
         const response = await fetch(servrURL + endPt, {
           method: 'GET',
@@ -72,10 +74,13 @@ export default {
         const userDataResJSON = await response.json();
         if (userDataResJSON.success) {
           this.userData = userDataResJSON.data.user;
+          this.loggedIn = true;
         } else {
+          this.loggedIn = false;
           document.cookie = `_a_t=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${cookiePath};`;
           document.cookie = `_s_i=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${cookiePath};`;
           this.accessToken = undefined;
+          this.sessionID = undefined;
         }
       } catch (error) {
         this.error = error.toString();
@@ -87,7 +92,8 @@ export default {
   watch: {
     accessToken(newToken, oldToken) {
       this.userData = '';
-      if (newToken != undefined) this.userDataFunc(this.userDataEndPt);
+      this.loggedIn = false;
+      if (newToken != undefined) this.getUserData(this.userDataEndPt);
     },
     message() {
       setTimeout(() => {
@@ -99,7 +105,9 @@ export default {
   created() {
     this.userDataEndPt = 'controller/users.php?userid=';
     if (this.accessToken) {
-      this.userDataFunc(this.userDataEndPt);
+      this.getUserData(this.userDataEndPt);
+    } else {
+      this.loggedIn = false;
     }
   },
 };

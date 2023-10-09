@@ -12,7 +12,7 @@ export default {
       <b>Search for an image</b>
       <input type="search" v-model="imageSearchInput" name="image-search" placeholder="Search for an image…" @keyup.enter="imageSearch()"/><br>
       <button type="button" @click.prevent="imageSearch()">Search</button>
-      <button type="button">Upload</button><br>
+      <input type="file" name="filename" @change="previewFiles"><br>
       <img v-if="imagePath" :src="imagePath" alt="random-image"><br><br>
 
       <b>Body text</b>
@@ -100,6 +100,7 @@ export default {
             Title: this.postTitle,
             Link: this.postLink,
             LinkDesc: this.postLinkDesc,
+            Hashtags: this.postHashtags,
             Body: this.postBody,
             ImagePath: this.imagePath,
           }),
@@ -113,10 +114,10 @@ export default {
         this.$emit('post-msg', error.toString());
       }
     },
-  },
 
-  updateSnackbar(message) {
-    this.message = message;
+    previewFiles(event) {
+      console.log(event.target.files);
+    },
   },
 
   watch: {
@@ -142,6 +143,9 @@ export default {
       ? localStorage.getItem(`Multisocial-mostRecentSearch`).charAt(0).toUpperCase() +
         localStorage.getItem(`Multisocial-mostRecentSearch`).slice(1)
       : '';
+    this.postLink = this.userData ? this.userData.Website : '';
+    this.postLinkDesc = this.userData ? 'This is a link to ' + this.userData.Organization : '';
+    this.postHashtags = this.userData ? `#${this.userData.Tag1} #${this.userData.Tag2} #${this.userData.Tag3}` : '';
   },
 };
 // </script>

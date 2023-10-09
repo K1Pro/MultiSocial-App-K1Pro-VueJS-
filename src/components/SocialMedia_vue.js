@@ -1,5 +1,7 @@
 //<script>
 import Post from './Post_vue.js';
+import Accountinfo from './AccountInfo_vue.js';
+import Logoutbtn from './LogOutBtn_vue.js';
 
 export default {
   name: 'SocialMedia',
@@ -16,13 +18,18 @@ export default {
         <post :accessToken="accessToken" :userData="userData" @post-msg="updateSnackbar"></post>
       </div>
 
+      <div class="tabcontent" v-if="chosenSocialMedia == 'sign-out'">
+        <accountinfo :userData="userData"></accountinfo>
+        <logoutbtn :accessToken="accessToken" :sessionID="sessionID" @logout="updateAccessToken" @logout-msg="updateSnackbar">></logoutbtn>
+      </div>
+
       <div class="tabcontent" v-if="chosenSocialMedia != 'home' && chosenSocialMedia != 'sign-out'">
         <h2><input type="checkbox" id="active" v-model="active" @click="patchSocialMedia"/>{{ chosenSocialMedia.charAt(0).toUpperCase() }}{{ chosenSocialMedia.slice(1) }}</h2>
         
         <div v-for="selectedWebsite in Object.values(socialMediaParams).filter(smParam => {return smParam.website == chosenSocialMedia})">
           <div v-for="smKey in Object.values(selectedWebsite).filter(smValue => {return smValue != chosenSocialMedia})">
-            <b>{{smKey}}</b>
-            <input type="text" :id="smKey" v-model="smSchema[smKey]" @change="patchSocialMedia"><br><br>
+            <b>{{smKey.replaceAll('_', ' ')}}</b>
+            <input :type="smKey.includes('Expiry') ? 'datetime-local' : 'text'" :id="smKey" v-model="smSchema[smKey]" @change="patchSocialMedia"><br><br>
           </div>
         </div>
         
@@ -30,11 +37,11 @@ export default {
     </div>
   `,
 
-  components: { Post },
+  components: { Post, Accountinfo, Logoutbtn },
 
-  props: ['accessToken', 'userData'],
+  props: ['accessToken', 'sessionID', 'userData'],
 
-  emits: ['socialmedia-msg', '@post-msg'],
+  emits: ['socialmedia-msg', 'logout'],
 
   data() {
     return {
@@ -42,16 +49,17 @@ export default {
       chosenSocialMedia: 'home',
       active: false,
       smSchema: {
-        accesstoken: '',
-        accesstokenexpiry: '',
-        accesstokensecret: '',
-        appid: '',
-        apikey: '',
-        apikeysecret: '',
-        bearertoken: '',
-        clientid: '',
-        clientsecret: '',
-        urn: '',
+        Access_Token: '',
+        Access_Token_Expiry: '',
+        Access_Token_Secret: '',
+        App_ID: '',
+        API_Key: '',
+        API_Key_Secret: '',
+        Bearer_Token: '',
+        Client_ID: '',
+        Client_Secret: '',
+        Page_ID: '',
+        URN: '',
       },
     };
   },
@@ -104,28 +112,30 @@ export default {
         if (getSocialMediaJSON.success) {
           const SMData = getSocialMediaJSON.data.sm_group;
           this.active = SMData.active;
-          this.smSchema.accesstoken = SMData.accesstoken;
-          this.smSchema.accesstokenexpiry = SMData.accesstokenexpiry;
-          this.smSchema.accesstokensecret = SMData.accesstokensecret;
-          this.smSchema.appid = SMData.appid;
-          this.smSchema.apikey = SMData.apikey;
-          this.smSchema.apikeysecret = SMData.apikeysecret;
-          this.smSchema.bearertoken = SMData.bearertoken;
-          this.smSchema.clientid = SMData.clientid;
-          this.smSchema.clientsecret = SMData.clientsecret;
-          this.smSchema.urn = SMData.urn;
+          this.smSchema.Access_Token = SMData.Access_Token;
+          this.smSchema.Access_Token_Expiry = SMData.Access_Token_Expiry;
+          this.smSchema.Access_Token_Secret = SMData.Access_Token_Secret;
+          this.smSchema.App_ID = SMData.App_ID;
+          this.smSchema.API_Key = SMData.API_Key;
+          this.smSchema.API_Key_Secret = SMData.API_Key_Secret;
+          this.smSchema.Bearer_Token = SMData.Bearer_Token;
+          this.smSchema.Client_ID = SMData.Client_ID;
+          this.smSchema.Client_Secret = SMData.Client_Secret;
+          this.smSchema.Page_ID = SMData.Page_ID;
+          this.smSchema.URN = SMData.URN;
         } else {
           this.active = false;
-          this.smSchema.accesstoken = '';
-          this.smSchema.accesstokenexpiry = '';
-          this.smSchema.accesstokensecret = '';
-          this.smSchema.appid = '';
-          this.smSchema.apikey = SMData.apikey;
-          this.smSchema.apikeysecret = '';
-          this.smSchema.bearertoken = '';
-          this.smSchema.clientid = '';
-          this.smSchema.clientsecret = '';
-          this.smSchema.urn = '';
+          this.smSchema.Access_Token = '';
+          this.smSchema.Access_Token_Expiry = '';
+          this.smSchema.Access_Token_Secret = '';
+          this.smSchema.App_ID = '';
+          this.smSchema.API_Key = '';
+          this.smSchema.API_Key_Secret = '';
+          this.smSchema.Bearer_Token = '';
+          this.smSchema.Client_ID = '';
+          this.smSchema.Client_Secret = '';
+          this.smSchema.Page_ID = '';
+          this.smSchema.URN = '';
         }
       } catch (error) {
         this.error = error.toString();
@@ -138,10 +148,7 @@ export default {
           method: 'GET',
         });
         const SocialMediaParamsJSON = await response.json();
-        if (SocialMediaParamsJSON.success) {
-          console.log(SocialMediaParamsJSON);
-          this.socialMediaParams = SocialMediaParamsJSON.data.sm_params;
-        }
+        if (SocialMediaParamsJSON.success) this.socialMediaParams = SocialMediaParamsJSON.data.sm_params;
       } catch (error) {
         this.error = error.toString();
       }
@@ -149,6 +156,10 @@ export default {
 
     updateSnackbar(message) {
       this.$emit('socialmedia-msg', message);
+    },
+
+    updateAccessToken(accessToken, sessionID) {
+      this.$emit('logout', accessToken, sessionID);
     },
   },
 

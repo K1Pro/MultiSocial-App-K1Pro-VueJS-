@@ -3,11 +3,13 @@ export default {
   name: 'AccountInfo',
 
   template: /*html*/ `
-    <b>Account Info</b><br>
-    <ul>
-        <li v-for="value in Object.keys(userData).filter(e => {return (e !== 'LoginActivity')})">{{ value }}: {{ userData[value] }}</li>
-    </ul>
-    <p></p>
+    <div class="accountinfo">
+      <h2>Account Info</h2>
+      <ul>
+          <li v-for="value in Object.keys(userData).filter(e => {return (e !== 'LoginActivity')})">{{ value }}: {{ userData[value] }}</li>
+      </ul>
+      <p></p>
+    </div>
   `,
 
   props: ['userData'],

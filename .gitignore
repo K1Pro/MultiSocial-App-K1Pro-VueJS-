@@ -11,3 +11,4 @@
 *.env
 /index.php
 /src/Template.Vue
+/sync.ffs_db

@@ -22,7 +22,7 @@ export default {
         });
         const logOutResJSON = await response.json();
         if (logOutResJSON.success) {
-          this.$emit('logout', undefined, undefined, '');
+          this.$emit('logout', undefined, undefined);
           document.cookie = `_a_t=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${cookiePath};`;
           document.cookie = `_s_i=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${cookiePath};`;
         }
@@ -39,9 +39,9 @@ export default {
 
     // <style scoped>
     this.logoutBtn = {
-      position: 'absolute',
-      top: '5px',
-      right: '15px',
+      // position: 'absolute',
+      // top: '5px',
+      // right: '15px',
     };
     // </style>
   },
