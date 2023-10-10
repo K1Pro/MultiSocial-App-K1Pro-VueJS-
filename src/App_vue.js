@@ -16,7 +16,7 @@ export default {
           <socialmedia :accessToken="accessToken" :sessionID="sessionID" @socialmedia-msg="updateSnackbar" @logout="updateAccessToken" :userData="userData"></socialmedia>
         </div>
         <div class="item2">
-        <posted></posted>
+        <posted :accessToken="accessToken"></posted>
         </div>
       </div>
     </template>
