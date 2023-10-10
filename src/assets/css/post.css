@@ -34,6 +34,16 @@
   height: 60%;
   display: block;
   margin: auto;
+  outline: 4px solid white;
+  outline-offset: -4px;
+}
+
+.lineHeight {
+  margin-top: 12px;
+}
+
+.hiddenLineHeight {
+  margin-top: 12px;
 }
 
 #inner-grid {
@@ -45,6 +55,17 @@
 }
 
 @media only screen and (min-width: 768px) {
+  .Post img {
+    outline: 8px solid white;
+    outline-offset: -8px;
+  }
+
+  .lineHeight {
+    margin-top: 12px;
+  }
+  .hiddenLineHeight {
+    margin-top: 0px;
+  }
   .Post {
     padding: 0px 50px;
   }

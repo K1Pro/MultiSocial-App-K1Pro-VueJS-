@@ -9,32 +9,35 @@ export default {
       <div id="inner-grid">
         <div>        
           <b>Title</b>
-          <input v-model="postTitle" type="text" name="postTitle" placeholder="Title..."><br><br>
+          <input v-model="postTitle" type="text" name="postTitle" placeholder="Title..."><br>
 
+          <div class="lineHeight"></div>
           <b>Body text</b>
-          <textarea v-model="postBody" rows="3" name="postBody" placeholder="Body text..."></textarea><br><br>
+          <textarea v-model="postBody" rows="2" name="postBody" placeholder="Body text..."></textarea><br>
 
+          <div class="lineHeight"></div>
           <b>Link</b>
-          <input v-model="postLink" type="text" name="postLink" placeholder="Link..."><br><br>
+          <input v-model="postLink" type="text" name="postLink" placeholder="Link..."><br>
         </div>
 
-        <div>          
+        <div>
+          <div class="hiddenLineHeight"></div>          
           <b>Link description</b>
-          <input v-model="postLinkDesc" type="text" name="postLinkDesc" placeholder="Link description..."><br><br>
+          <input v-model="postLinkDesc" type="text" name="postLinkDesc" placeholder="Link description..."><br>
           
+          <div class="lineHeight"></div>
           <b>Hashtags</b>
-          <input v-model="postHashtags" type="text" name="postHashtags" placeholder="Hashtags..."><br><br>
+          <input v-model="postHashtags" type="text" name="postHashtags" placeholder="Hashtags..."><br>
 
+          <div class="lineHeight"></div>
           <b>Choose an image</b><br>
           <button type="button" @click.prevent="imageSearch()">Search</button>
           <input type="search" v-model="imageSearchInput" name="image-search" placeholder="Search for an image…" @keyup.enter="imageSearch()"/><br>
           <input type="file" name="filename" @change="previewFiles"><br><br>
-          
-          <button class="centerSpan" type="button" @click.prevent="socialMediaPost()">Post</button>
         </div>
       </div>
 
-      <br>
+      <button class="centerSpan" type="button" @click.prevent="socialMediaPost()">Post</button><br><br>
       <img v-if="imagePath" :src="imagePath" alt="random-image"><br>
     </div>
     `,
