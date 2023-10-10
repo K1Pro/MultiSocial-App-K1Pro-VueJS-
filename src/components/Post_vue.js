@@ -6,28 +6,36 @@ export default {
     <div class="Post">
       <h2>Rapid Marketing AI</h2>
 
-      <b>Title</b>
-      <input v-model="postTitle" type="text" name="postTitle" placeholder="Title..."><br><br>
+      <div id="inner-grid">
+        <div>        
+          <b>Title</b>
+          <input v-model="postTitle" type="text" name="postTitle" placeholder="Title..."><br><br>
 
-      <b>Search for an image</b>
-      <input type="search" v-model="imageSearchInput" name="image-search" placeholder="Search for an image…" @keyup.enter="imageSearch()"/><br>
-      <button type="button" @click.prevent="imageSearch()">Search</button>
-      <input type="file" name="filename" @change="previewFiles"><br>
-      <img v-if="imagePath" :src="imagePath" alt="random-image"><br><br>
+          <b>Body text</b>
+          <textarea v-model="postBody" rows="3" name="postBody" placeholder="Body text..."></textarea><br><br>
 
-      <b>Body text</b>
-      <textarea v-model="postBody" rows="3" name="postBody" placeholder="Body text..."></textarea><br><br>
+          <b>Link</b>
+          <input v-model="postLink" type="text" name="postLink" placeholder="Link..."><br><br>
+        </div>
 
-      <b>Link</b>
-      <input v-model="postLink" type="text" name="postLink" placeholder="Link..."><br><br>
+        <div>          
+          <b>Link description</b>
+          <input v-model="postLinkDesc" type="text" name="postLinkDesc" placeholder="Link description..."><br><br>
+          
+          <b>Hashtags</b>
+          <input v-model="postHashtags" type="text" name="postHashtags" placeholder="Hashtags..."><br><br>
 
-      <b>Link description</b>
-      <input v-model="postLinkDesc" type="text" name="postLinkDesc" placeholder="Link description..."><br><br>
-      
-      <b>Hashtags</b>
-      <input v-model="postHashtags" type="text" name="postHashtags" placeholder="Hashtags..."><br><br>
+          <b>Choose an image</b><br>
+          <button type="button" @click.prevent="imageSearch()">Search</button>
+          <input type="search" v-model="imageSearchInput" name="image-search" placeholder="Search for an image…" @keyup.enter="imageSearch()"/><br>
+          <input type="file" name="filename" @change="previewFiles"><br><br>
+          
+          <button class="centerSpan" type="button" @click.prevent="socialMediaPost()">Post</button>
+        </div>
+      </div>
 
-      <button type="button" @click.prevent="socialMediaPost()">Post</button><br><br>
+      <br>
+      <img v-if="imagePath" :src="imagePath" alt="random-image"><br>
     </div>
     `,
 

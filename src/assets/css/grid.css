@@ -31,7 +31,7 @@
   }
 
   .grid-container {
-    grid-template-columns: 60vw 40vw;
+    grid-template-columns: 75vw 25vw;
     grid-template-rows: 100vh;
   }
 

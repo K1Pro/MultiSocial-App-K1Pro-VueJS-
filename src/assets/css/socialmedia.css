@@ -25,6 +25,14 @@
   width: 100%;
 }
 
+.tablinks {
+  padding: 15px 70% 15px 30%;
+  font-size: 30px;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+}
+
 .socialmedia input[type='datetime-local'] {
   width: 100%;
 }
