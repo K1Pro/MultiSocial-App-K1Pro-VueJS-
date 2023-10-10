@@ -3,11 +3,10 @@ export default {
   name: 'Posted',
 
   template: /*html*/ `
-    <h2>Posted</h2>
     <table>
     <tr>
-      <th>Link</th>
-      <th>Date</th>
+      <th>Post Date</th>
+      <th>Post Link</th>
     </tr>
     <tr v-for="value in posted">
       <td v-for="(value, key) in Object.entries(value).filter(([key, val]) => {return (key === 'date')})">{{value[1].slice(0,16)}}</td>
