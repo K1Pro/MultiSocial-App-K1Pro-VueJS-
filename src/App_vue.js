@@ -1,7 +1,7 @@
 // <script> <socialmedia :accessToken="accessToken" @socialmedia-msg="updateSnackbar" @chosen-social-media="openCloseSMPanel"></socialmedia>
 import Snackbar from './components/Snackbar_vue.js';
 import Login from './components/Login_vue.js';
-import Prosign from './components/ProSign_vue.js';
+import Posted from './components/Posted_vue.js';
 import Email from './components/Email_vue.js';
 import Socialmedia from './components/SocialMedia_vue.js';
 
@@ -15,11 +15,13 @@ export default {
         <div class="item1">
           <socialmedia :accessToken="accessToken" :sessionID="sessionID" @socialmedia-msg="updateSnackbar" @logout="updateAccessToken" :userData="userData"></socialmedia>
         </div>
-        <div class="item2"></div>
+        <div class="item2">
+        <posted></posted>
+        </div>
       </div>
     </template>
 
-    <template v-if="loggedIn === false">
+    <template v-else-if="loggedIn === false">
       <login @login="updateAccessToken" @login-msg="updateSnackbar"></login>
     </template>
 
@@ -33,7 +35,7 @@ export default {
   components: {
     Snackbar,
     Login,
-    Prosign,
+    Posted,
     Email,
     Socialmedia,
   },

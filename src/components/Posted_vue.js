@@ -1,9 +1,9 @@
 //<script>
 export default {
-  name: 'ProSign',
+  name: 'Posted',
 
   template: /*html*/ `
-    <b>ProSign</b>
+    <b>Posted</b>
   `,
 
   data() {
