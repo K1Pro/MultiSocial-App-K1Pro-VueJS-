@@ -15,7 +15,7 @@ export default {
     </table>
   `,
 
-  props: ['accessToken'],
+  props: ['accessToken', 'newPostTimestamp'],
 
   data() {
     return { posted: '' };
@@ -42,6 +42,13 @@ export default {
         this.error = error.toString();
         console.log(error.toString());
       }
+    },
+  },
+
+  watch: {
+    newPostTimestamp(newTS, oldTS) {
+      console.log(newTS);
+      this.getPosted();
     },
   },
 

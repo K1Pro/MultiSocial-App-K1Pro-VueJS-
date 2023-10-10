@@ -8,21 +8,36 @@ import Socialmedia from './components/SocialMedia_vue.js';
 export default {
   name: 'App',
   template: /*html*/ `
-    <snackbar :message="message"></snackbar>
+    <snackbar 
+      :message="message">
+    </snackbar>
 
     <template  v-if="loggedIn === true">
       <div class="grid-container">
         <div class="item1">
-          <socialmedia :accessToken="accessToken" :sessionID="sessionID" @socialmedia-msg="updateSnackbar" @logout="updateAccessToken" :userData="userData"></socialmedia>
+          <socialmedia 
+            :accessToken="accessToken" 
+            :sessionID="sessionID" 
+            :userData="userData" 
+            @socialmedia-msg="updateSnackbar" 
+            @logout="updateAccessToken" 
+            @posted="updatePosted">
+          </socialmedia>
         </div>
         <div class="item2">
-        <posted :accessToken="accessToken"></posted>
+        <posted 
+          :accessToken="accessToken"
+          :newPostTimestamp="newPostTimestamp">
+        </posted>
         </div>
       </div>
     </template>
 
     <template v-else-if="loggedIn === false">
-      <login @login="updateAccessToken" @login-msg="updateSnackbar"></login>
+      <login 
+        @login="updateAccessToken" 
+        @login-msg="updateSnackbar">
+      </login>
     </template>
 
     <template v-else>
@@ -48,6 +63,7 @@ export default {
       message: null,
       chosenSocialMedia: '',
       loggedIn: null,
+      newPostTimestamp: '',
     };
   },
   methods: {
@@ -57,6 +73,10 @@ export default {
 
     updateSnackbar(message) {
       this.message = message;
+    },
+
+    updatePosted(timestamp) {
+      this.newPostTimestamp = timestamp;
     },
 
     updateAccessToken(accessToken, sessionID) {

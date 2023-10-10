@@ -33,7 +33,7 @@ export default {
 
   props: ['accessToken', 'userData'],
 
-  emits: ['post-msg'],
+  emits: ['post-msg', 'posted'],
 
   data() {
     return {
@@ -109,6 +109,7 @@ export default {
         // if (socialMediaPostJSON.success) {
         console.log(socialMediaPostJSON);
         this.$emit('post-msg', socialMediaPostJSON.messages[0]);
+        this.$emit('posted', Date.now());
         // }
       } catch (error) {
         this.$emit('post-msg', error.toString());

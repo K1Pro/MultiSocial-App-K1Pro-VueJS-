@@ -15,7 +15,7 @@ export default {
       </div>
 
       <div class="tabcontent" v-if="chosenSocialMedia == 'home'">
-        <post :accessToken="accessToken" :userData="userData" @post-msg="updateSnackbar"></post>
+        <post :accessToken="accessToken" :userData="userData" @post-msg="updateSnackbar" @posted="updatePosted"></post>
       </div>
 
       <div class="tabcontent" v-if="chosenSocialMedia == 'sign-out'">
@@ -41,7 +41,7 @@ export default {
 
   props: ['accessToken', 'sessionID', 'userData'],
 
-  emits: ['socialmedia-msg', 'logout'],
+  emits: ['socialmedia-msg', 'logout', 'posted'],
 
   data() {
     return {
@@ -159,6 +159,10 @@ export default {
 
     updateSnackbar(message) {
       this.$emit('socialmedia-msg', message);
+    },
+
+    updatePosted(timestamp) {
+      this.$emit('posted', timestamp);
     },
 
     updateAccessToken(accessToken, sessionID) {
