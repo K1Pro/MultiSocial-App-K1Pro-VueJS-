@@ -53,6 +53,7 @@ export default {
         Access_Token_Expiry: '',
         Access_Token_Secret: '',
         App_ID: '',
+        App_Secret: '',
         API_Key: '',
         API_Key_Secret: '',
         Bearer_Token: '',
@@ -116,6 +117,7 @@ export default {
           this.smSchema.Access_Token_Expiry = SMData.Access_Token_Expiry;
           this.smSchema.Access_Token_Secret = SMData.Access_Token_Secret;
           this.smSchema.App_ID = SMData.App_ID;
+          this.smSchema.App_Secret = SMData.App_Secret;
           this.smSchema.API_Key = SMData.API_Key;
           this.smSchema.API_Key_Secret = SMData.API_Key_Secret;
           this.smSchema.Bearer_Token = SMData.Bearer_Token;
@@ -129,6 +131,7 @@ export default {
           this.smSchema.Access_Token_Expiry = '';
           this.smSchema.Access_Token_Secret = '';
           this.smSchema.App_ID = '';
+          this.smSchema.App_Secret = '';
           this.smSchema.API_Key = '';
           this.smSchema.API_Key_Secret = '';
           this.smSchema.Bearer_Token = '';
