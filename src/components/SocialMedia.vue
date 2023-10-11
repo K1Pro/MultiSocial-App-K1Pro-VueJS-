@@ -85,6 +85,7 @@ export default {
         Bearer_Token: '',
         Client_ID: '',
         Client_Secret: '',
+        IG_User_ID: '',
         Page_ID: '',
         URN: '',
       },
@@ -149,6 +150,7 @@ export default {
           this.smSchema.Bearer_Token = SMData.Bearer_Token;
           this.smSchema.Client_ID = SMData.Client_ID;
           this.smSchema.Client_Secret = SMData.Client_Secret;
+          this.smSchema.IG_User_ID = SMData.IG_User_ID;
           this.smSchema.Page_ID = SMData.Page_ID;
           this.smSchema.URN = SMData.URN;
         } else {
@@ -163,6 +165,7 @@ export default {
           this.smSchema.Bearer_Token = '';
           this.smSchema.Client_ID = '';
           this.smSchema.Client_Secret = '';
+          this.smSchema.IG_User_ID = '';
           this.smSchema.Page_ID = '';
           this.smSchema.URN = '';
         }
@@ -202,3 +205,44 @@ export default {
   },
 };
 </script>
+
+<style>
+.fa {
+  color: black;
+  /* padding: 20px; */
+  /* padding: 15px 70% 15px 30%;
+  font-size: 30px;
+  width: 100%;
+  text-align: center;
+  text-decoration: none; */
+  /* margin: 5px 2px; */
+}
+
+.fa:hover {
+  opacity: 0.7;
+}
+
+.fab {
+  color: black;
+  /* padding: 20px; */
+  /* padding: 15px 70% 15px 30%;
+  font-size: 30px;
+  width: 100%;
+  text-align: center;
+  text-decoration: none; */
+  /* margin: 5px 2px; */
+}
+
+.fab:hover {
+  opacity: 0.7;
+}
+
+.fa-pexels:before {
+  content: 'P';
+}
+
+/* .fa-sign-out {
+  background: #8400ff;
+  color: white;
+} */
+</style>
