@@ -1,41 +1,67 @@
-//<script>
-import Post from './Post_vue.js';
-import Accountinfo from './AccountInfo_vue.js';
-import Logoutbtn from './LogOutBtn_vue.js';
+<template>
+  <div class="socialmedia">
+    <div class="tab">
+      <a :class="{ active: chosenSocialMedia == 'home' }" class="tablinks fa fa-home" @click="openTab"></a>
+      <a
+        :class="['tablinks fab fa-'] + smParam.website.toLowerCase()"
+        v-for="smParam in socialMediaParams"
+        @click="openTab"
+      ></a>
+      <a :class="{ active: chosenSocialMedia == 'logout' }" class="tablinks fa fa-sign-out" @click="openTab"></a>
+    </div>
+
+    <div class="tabcontent" v-if="chosenSocialMedia == 'home'">
+      <post :accessToken="accessToken" :userData="userData" @post-msg="updateSnackbar" @posted="updatePosted"></post>
+    </div>
+
+    <div class="tabcontent" v-if="chosenSocialMedia == 'sign-out'">
+      <accountinfo :userData="userData"></accountinfo>
+      <logoutbtn
+        :accessToken="accessToken"
+        :sessionID="sessionID"
+        @logout="updateAccessToken"
+        @logout-msg="updateSnackbar"
+        >></logoutbtn
+      >
+    </div>
+
+    <div class="tabcontent" v-if="chosenSocialMedia != 'home' && chosenSocialMedia != 'sign-out'">
+      <h2>
+        <input type="checkbox" id="active" v-model="active" @click="patchSocialMedia" />{{
+          chosenSocialMedia.charAt(0).toUpperCase()
+        }}{{ chosenSocialMedia.slice(1) }}
+      </h2>
+
+      <div
+        v-for="selectedWebsite in Object.values(socialMediaParams).filter((smParam) => {
+          return smParam.website == chosenSocialMedia;
+        })"
+      >
+        <div
+          v-for="smKey in Object.values(selectedWebsite).filter((smValue) => {
+            return smValue != chosenSocialMedia;
+          })"
+        >
+          <b>{{ smKey.replaceAll('_', ' ') }}</b>
+          <input
+            :type="smKey.includes('Expiry') ? 'datetime-local' : 'text'"
+            :id="smKey"
+            v-model="smSchema[smKey]"
+            @change="patchSocialMedia"
+          /><br /><br />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import Post from './Post.vue';
+import Accountinfo from './AccountInfo.vue';
+import Logoutbtn from './LogOutBtn.vue';
 
 export default {
   name: 'SocialMedia',
-
-  template: /*html*/ `
-    <div class="socialmedia">
-      <div class="tab">
-        <a :class="{active: chosenSocialMedia == 'home'}" class="tablinks fa fa-home" @click="openTab"></a>
-        <a :class="['tablinks fab fa-'] + smParam.website.toLowerCase()" v-for="smParam in socialMediaParams" @click="openTab"></a>
-        <a :class="{active: chosenSocialMedia == 'logout'}" class="tablinks fa fa-sign-out" @click="openTab"></a>
-      </div>
-
-      <div class="tabcontent" v-if="chosenSocialMedia == 'home'">
-        <post :accessToken="accessToken" :userData="userData" @post-msg="updateSnackbar" @posted="updatePosted"></post>
-      </div>
-
-      <div class="tabcontent" v-if="chosenSocialMedia == 'sign-out'">
-        <accountinfo :userData="userData"></accountinfo>
-        <logoutbtn :accessToken="accessToken" :sessionID="sessionID" @logout="updateAccessToken" @logout-msg="updateSnackbar">></logoutbtn>
-      </div>
-
-      <div class="tabcontent" v-if="chosenSocialMedia != 'home' && chosenSocialMedia != 'sign-out'">
-        <h2><input type="checkbox" id="active" v-model="active" @click="patchSocialMedia"/>{{ chosenSocialMedia.charAt(0).toUpperCase() }}{{ chosenSocialMedia.slice(1) }}</h2>
-        
-        <div v-for="selectedWebsite in Object.values(socialMediaParams).filter(smParam => {return smParam.website == chosenSocialMedia})">
-          <div v-for="smKey in Object.values(selectedWebsite).filter(smValue => {return smValue != chosenSocialMedia})">
-            <b>{{smKey.replaceAll('_', ' ')}}</b>
-            <input :type="smKey.includes('Expiry') ? 'datetime-local' : 'text'" :id="smKey" v-model="smSchema[smKey]" @change="patchSocialMedia"><br><br>
-          </div>
-        </div>
-        
-      </div>
-    </div>
-  `,
 
   components: { Post, Accountinfo, Logoutbtn },
 
@@ -175,4 +201,4 @@ export default {
     // this.getSocialMedia(this.chosenSocialMedia);
   },
 };
-// </script>
+</script>

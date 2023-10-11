@@ -1,46 +1,46 @@
-//<script>
-export default {
-  name: 'Post',
+<template>
+  <div class="Post">
+    <h2>Rapid Marketing AI</h2>
 
-  template: /*html*/ `
-    <div class="Post">
-      <h2>Rapid Marketing AI</h2>
+    <div id="inner-grid">
+      <div>
+        <b>Title</b>
+        <input v-model="postTitle" type="text" name="postTitle" placeholder="Title..." /><br />
 
-      <div id="inner-grid">
-        <div>        
-          <b>Title</b>
-          <input v-model="postTitle" type="text" name="postTitle" placeholder="Title..."><br>
+        <div class="boldLabel">Body text</div>
+        <textarea v-model="postBody" rows="2" name="postBody" placeholder="Body text..."></textarea><br />
 
-          <div class="lineHeight"></div>
-          <b>Body text</b>
-          <textarea v-model="postBody" rows="2" name="postBody" placeholder="Body text..."></textarea><br>
-
-          <div class="lineHeight"></div>
-          <b>Link</b>
-          <input v-model="postLink" type="text" name="postLink" placeholder="Link..."><br>
-        </div>
-
-        <div>
-          <div class="hiddenLineHeight"></div>          
-          <b>Link description</b>
-          <input v-model="postLinkDesc" type="text" name="postLinkDesc" placeholder="Link description..."><br>
-          
-          <div class="lineHeight"></div>
-          <b>Hashtags</b>
-          <input v-model="postHashtags" type="text" name="postHashtags" placeholder="Hashtags..."><br>
-
-          <div class="lineHeight"></div>
-          <b>Choose an image</b><br>
-          <button type="button" @click.prevent="imageSearch()">Search</button>
-          <input type="search" v-model="imageSearchInput" name="image-search" placeholder="Search for an image…" @keyup.enter="imageSearch()"/><br>
-          <input type="file" name="filename" @change="previewFiles"><br><br>
-        </div>
+        <div class="boldLabel">Link</div>
+        <input v-model="postLink" type="text" name="postLink" placeholder="Link..." /><br />
       </div>
 
-      <button class="centerSpan" type="button" @click.prevent="socialMediaPost()">Post</button><br><br>
-      <img v-if="imagePath" :src="imagePath" alt="random-image"><br>
+      <div>
+        <div class="boldLabelResp">Link description</div>
+        <input v-model="postLinkDesc" type="text" name="postLinkDesc" placeholder="Link description..." /><br />
+
+        <div class="boldLabel">Hashtags</div>
+        <input v-model="postHashtags" type="text" name="postHashtags" placeholder="Hashtags..." /><br />
+
+        <div class="boldLabel">Choose an image</div>
+        <button type="button" @click.prevent="imageSearch()">Search</button>
+        <input
+          type="search"
+          v-model="imageSearchInput"
+          name="image-search"
+          placeholder="Search for an image…"
+          @keyup.enter="imageSearch()"
+        /><br />
+        <input type="file" name="filename" @change="previewFiles" /><br /><br />
+      </div>
     </div>
-    `,
+
+    <button class="centerSpan" type="button" @click.prevent="socialMediaPost()">Post</button><br /><br />
+    <img v-if="imagePath" :src="imagePath" alt="random-image" /><br />
+  </div>
+</template>
+<script>
+export default {
+  name: 'Post',
 
   props: ['accessToken', 'userData'],
 
@@ -160,4 +160,4 @@ export default {
     this.postHashtags = this.userData ? `#${this.userData.Tag1} #${this.userData.Tag2} #${this.userData.Tag3}` : '';
   },
 };
-// </script>
+</script>

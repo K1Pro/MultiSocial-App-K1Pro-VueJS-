@@ -1,10 +1,10 @@
-//<script>
+<template>
+  <button :style="logoutBtn" type="button" @click="logoutFunc(logoutEndPt)">Log Out</button>
+</template>
+
+<script>
 export default {
   name: 'LogOutBtn',
-
-  template: /*html*/ `
-    <button :style="logoutBtn" type="button" @click="logoutFunc(logoutEndPt)">Log Out</button>
-  `,
 
   props: ['accessToken', 'sessionID'],
 
@@ -46,4 +46,4 @@ export default {
     // </style>
   },
 };
-// </script>
+</script>

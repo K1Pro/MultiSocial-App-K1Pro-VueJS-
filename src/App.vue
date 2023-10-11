@@ -1,51 +1,45 @@
-// <script> <socialmedia :accessToken="accessToken" @socialmedia-msg="updateSnackbar" @chosen-social-media="openCloseSMPanel"></socialmedia>
-import Snackbar from './components/Snackbar_vue.js';
-import Login from './components/Login_vue.js';
-import Posted from './components/Posted_vue.js';
-import Email from './components/Email_vue.js';
-import Socialmedia from './components/SocialMedia_vue.js';
+<template>
+  <snackbar :message="message"> </snackbar>
+
+  <template v-if="loggedIn === true">
+    <div class="grid-container">
+      <div class="item1">
+        <socialmedia
+          :accessToken="accessToken"
+          :sessionID="sessionID"
+          :userData="userData"
+          @socialmedia-msg="updateSnackbar"
+          @logout="updateAccessToken"
+          @posted="updatePosted"
+        >
+        </socialmedia>
+      </div>
+      <div class="item2">
+        <posted :accessToken="accessToken" :newPostTimestamp="newPostTimestamp"> </posted>
+      </div>
+    </div>
+  </template>
+
+  <template v-else-if="loggedIn === false">
+    <login @login="updateAccessToken" @login-msg="updateSnackbar"> </login>
+  </template>
+
+  <template v-else>
+    <div class="loader-container">
+      <div class="loader"></div>
+    </div>
+  </template>
+</template>
+<!-- script -->
+<script>
+import Snackbar from './components/Snackbar.vue';
+import Login from './components/Login.vue';
+import Posted from './components/Posted.vue';
+import Email from './components/Email.vue';
+import Socialmedia from './components/SocialMedia.vue';
 
 export default {
   name: 'App',
-  template: /*html*/ `
-    <snackbar 
-      :message="message">
-    </snackbar>
-
-    <template  v-if="loggedIn === true">
-      <div class="grid-container">
-        <div class="item1">
-          <socialmedia 
-            :accessToken="accessToken" 
-            :sessionID="sessionID" 
-            :userData="userData" 
-            @socialmedia-msg="updateSnackbar" 
-            @logout="updateAccessToken" 
-            @posted="updatePosted">
-          </socialmedia>
-        </div>
-        <div class="item2">
-        <posted 
-          :accessToken="accessToken"
-          :newPostTimestamp="newPostTimestamp">
-        </posted>
-        </div>
-      </div>
-    </template>
-
-    <template v-else-if="loggedIn === false">
-      <login 
-        @login="updateAccessToken" 
-        @login-msg="updateSnackbar">
-      </login>
-    </template>
-
-    <template v-else>
-      <div class="loader-container">
-        <div class="loader"></div>
-      </div>
-    </template>
-  `,
 
   components: {
     Snackbar,
@@ -66,6 +60,7 @@ export default {
       newPostTimestamp: '',
     };
   },
+
   methods: {
     getCookie(name) {
       return document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`))?.at(2);
@@ -133,11 +128,10 @@ export default {
     }
   },
 };
-// </script>
-// temporarily not in use in template
-// <div class="item4">
-// <email></email>
-// </div>
-// <div class="item5">
-// <prosign></prosign>
-// </div>
+</script>
+
+<style scoped>
+.example {
+  color: v-bind('color');
+}
+</style>

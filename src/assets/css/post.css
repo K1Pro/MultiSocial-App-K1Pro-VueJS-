@@ -38,11 +38,13 @@
   outline-offset: -4px;
 }
 
-.lineHeight {
+.boldLabel {
+  font-weight: bold;
   margin-top: 12px;
 }
 
-.hiddenLineHeight {
+.boldLabelResp {
+  font-weight: bold;
   margin-top: 12px;
 }
 
@@ -60,10 +62,7 @@
     outline-offset: -8px;
   }
 
-  .lineHeight {
-    margin-top: 12px;
-  }
-  .hiddenLineHeight {
+  .boldLabelResp {
     margin-top: 0px;
   }
   .Post {

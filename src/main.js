@@ -1,13 +1,28 @@
-// import { createApp } from 'vue'
-import App from './App_vue.js';
-import Snackbar from './components/Snackbar_vue.js';
+const options = {
+  moduleCache: {
+    vue: Vue,
+  },
+  async getFile(url) {
+    const res = await fetch(url);
+    if (!res.ok) throw Object.assign(new Error(res.statusText + ' ' + url), { res });
+    return {
+      getContentData: (asBinary) => (asBinary ? res.arrayBuffer() : res.text()),
+    };
+  },
+  addStyle(textContent) {
+    const style = Object.assign(document.createElement('style'), { textContent });
+    const ref = document.head.getElementsByTagName('style')[0] || null;
+    document.head.insertBefore(style, ref);
+  },
+};
 
-// import './assets/main.css'
+const { loadModule } = window['vue3-sfc-loader'];
 
-// createApp(App).mount('#app')
-let vm = Vue.createApp(App);
-
-//registering global components
-vm.component('Snackbar', Snackbar);
+const vm = Vue.createApp({
+  components: {
+    app: Vue.defineAsyncComponent(() => loadModule('./src/App.vue', options)),
+  },
+  template: '<app></app>',
+});
 
 vm.mount('#app');

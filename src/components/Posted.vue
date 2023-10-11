@@ -1,19 +1,30 @@
-//<script> {{ value[1].split('.')[1].charAt(0).toUpperCase() }}{{ value[1].split('.')[1].slice(1) }} Post
-export default {
-  name: 'Posted',
-
-  template: /*html*/ `
-    <table>
+<template>
+  <table>
     <tr>
       <th>Post Date</th>
       <th>Post Link</th>
     </tr>
     <tr v-for="value in posted">
-      <td v-for="(value, key) in Object.entries(value).filter(([key, val]) => {return (key === 'date')})">{{value[1].slice(0,16)}}</td>
-      <td v-for="(value, key) in Object.entries(value).filter(([key, val]) => {return (key === 'link')})"><a :href="value[1]" :class="['postlinks fab fa-'] + value[1].split('.')[1]" target="_blank"></a></td>
+      <td
+        v-for="(value, key) in Object.entries(value).filter(([key, val]) => {
+          return key === 'date';
+        })"
+      >
+        {{ value[1].slice(0, 16) }}
+      </td>
+      <td
+        v-for="(value, key) in Object.entries(value).filter(([key, val]) => {
+          return key === 'link';
+        })"
+      >
+        <a :href="value[1]" :class="['postlinks fab fa-'] + value[1].split('.')[1]" target="_blank"></a>
+      </td>
     </tr>
-    </table>
-  `,
+  </table>
+</template>
+<script>
+export default {
+  name: 'Posted',
 
   props: ['accessToken', 'newPostTimestamp'],
 
@@ -56,4 +67,4 @@ export default {
     this.getPosted();
   },
 };
-// </script>
+</script>
