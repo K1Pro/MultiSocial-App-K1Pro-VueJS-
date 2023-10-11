@@ -22,6 +22,7 @@
     </tr>
   </table>
 </template>
+
 <script>
 export default {
   name: 'Posted',

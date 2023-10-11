@@ -38,6 +38,7 @@
     <img v-if="imagePath" :src="imagePath" alt="random-image" /><br />
   </div>
 </template>
+
 <script>
 export default {
   name: 'Post',
@@ -99,31 +100,34 @@ export default {
     },
 
     async socialMediaPost() {
-      try {
-        const response = await fetch(servrURL + 'controller/post.php', {
-          method: 'POST',
-          headers: {
-            Authorization: this.accessToken,
-            'Content-Type': 'application/json',
-            'Cache-Control': 'no-store',
-          },
-          body: JSON.stringify({
-            Title: this.postTitle,
-            Link: this.postLink,
-            LinkDesc: this.postLinkDesc,
-            Hashtags: this.postHashtags,
-            Body: this.postBody,
-            ImagePath: this.imagePath,
-          }),
-        });
-        const socialMediaPostJSON = await response.json();
-        // if (socialMediaPostJSON.success) {
-        console.log(socialMediaPostJSON);
-        this.$emit('post-msg', socialMediaPostJSON.messages[0]);
-        this.$emit('posted', Date.now());
-        // }
-      } catch (error) {
-        this.$emit('post-msg', error.toString());
+      let confirmPostText = 'Are you sure you would like to post?\nClick OK or Cancel.';
+      if (confirm(confirmPostText) == true) {
+        try {
+          const response = await fetch(servrURL + 'controller/post.php', {
+            method: 'POST',
+            headers: {
+              Authorization: this.accessToken,
+              'Content-Type': 'application/json',
+              'Cache-Control': 'no-store',
+            },
+            body: JSON.stringify({
+              Title: this.postTitle,
+              Link: this.postLink,
+              LinkDesc: this.postLinkDesc,
+              Hashtags: this.postHashtags,
+              Body: this.postBody,
+              ImagePath: this.imagePath,
+            }),
+          });
+          const socialMediaPostJSON = await response.json();
+          // if (socialMediaPostJSON.success) {
+          console.log(socialMediaPostJSON);
+          this.$emit('post-msg', socialMediaPostJSON.messages[0]);
+          this.$emit('posted', Date.now());
+          // }
+        } catch (error) {
+          this.$emit('post-msg', error.toString());
+        }
       }
     },
 

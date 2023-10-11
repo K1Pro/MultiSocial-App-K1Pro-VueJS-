@@ -30,7 +30,7 @@
     </div>
   </template>
 </template>
-<!-- script -->
+
 <script>
 import Snackbar from './components/Snackbar.vue';
 import Login from './components/Login.vue';
