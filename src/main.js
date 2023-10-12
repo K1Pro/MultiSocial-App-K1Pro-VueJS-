@@ -18,11 +18,21 @@ const options = {
 
 const { loadModule } = window['vue3-sfc-loader'];
 
+const store = Vuex.createStore({
+  state() {
+    return {
+      counter: 0,
+    };
+  },
+});
+
 const vm = Vue.createApp({
   components: {
     app: Vue.defineAsyncComponent(() => loadModule('./src/App.vue', options)),
   },
   template: '<app></app>',
 });
+
+vm.use(store);
 
 vm.mount('#app');
