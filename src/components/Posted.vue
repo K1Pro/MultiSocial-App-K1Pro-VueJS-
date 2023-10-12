@@ -71,6 +71,33 @@ export default {
 </script>
 
 <style scoped>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  table-layout: auto;
+  width: 100%;
+}
+
+td,
+th {
+  /* border: 1px solid #dddddd; */
+  text-align: center;
+  padding: 5px;
+}
+
+th {
+  background-color: #f1f1f1;
+}
+
+.postlinks {
+  padding: 5px 0px;
+  height: 100%;
+  font-size: 30px;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+}
+
 .fab {
   color: white;
 }
