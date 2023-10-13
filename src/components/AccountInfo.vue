@@ -26,3 +26,11 @@ export default {
   },
 };
 </script>
+
+<style>
+.accountinfo ul {
+  /* list-style-type: none;
+  padding: 0;
+  margin: 0; */
+}
+</style>
