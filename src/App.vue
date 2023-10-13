@@ -130,8 +130,54 @@ export default {
 };
 </script>
 
-<style scoped>
-.example {
-  color: v-bind('color');
+<style>
+.grid-container {
+  display: grid;
+  grid-template-columns: 98.5vw;
+  grid-template-rows: auto;
+  grid-row-gap: 10px;
+  background-color: #c6c6c6;
+  word-break: break-all;
+}
+
+.item1 {
+  background-color: #999999;
+  background: -webkit-linear-gradient(left, #f1f1f1 20%, #999999 20%);
+  background: -moz-linear-gradient(left, #f1f1f1 20%, #999999 20%);
+  background: -ms-linear-gradient(left, #f1f1f1 20%, #999999 20%);
+  background: linear-gradient(left, #f1f1f1 20%, #999999 20%);
+  padding-right: 5px;
+  scrollbar-width: thin;
+  overflow-y: hidden;
+}
+
+.item2 {
+  background-color: #999999;
+  padding: 5px;
+  scrollbar-width: thin;
+  overflow-y: hidden;
+}
+
+@media only screen and (min-width: 768px) {
+  body {
+    overflow-y: hidden;
+  }
+
+  .grid-container {
+    grid-template-columns: 75vw 25vw;
+    grid-template-rows: 100vh;
+  }
+
+  .item1 {
+    overflow-y: scroll;
+    background: -webkit-linear-gradient(left, #f1f1f1 10%, #999999 10%);
+    background: -moz-linear-gradient(left, #f1f1f1 10%, #999999 10%);
+    background: -ms-linear-gradient(left, #f1f1f1 10%, #999999 10%);
+    background: linear-gradient(left, #f1f1f1 10%, #999999 10%);
+  }
+
+  .item2 {
+    overflow-y: scroll;
+  }
 }
 </style>
