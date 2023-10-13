@@ -1,6 +1,7 @@
 <template>
   <div class="Post">
-    <h2>Rapid Marketing AI</h2>
+    <h2>{{ userData.Organization ? userData.Organization + ' # ' : '' }}{{ userData.FirstName }}</h2>
+    <!-- <h2>Rapid Marketing AI</h2> -->
 
     <div id="inner-grid">
       <div>

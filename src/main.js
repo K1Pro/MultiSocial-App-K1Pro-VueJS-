@@ -4,6 +4,12 @@ const store = Vuex.createStore({
       counter: 5,
     };
   },
+  mutations: {
+    increment(state) {
+      state.counter++;
+      // this.$store.commit('increment'); use this inside components
+    },
+  },
 });
 
 const options = {
