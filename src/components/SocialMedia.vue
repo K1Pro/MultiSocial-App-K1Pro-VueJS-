@@ -245,4 +245,53 @@ export default {
   background: #8400ff;
   color: white;
 } */
+
+/* Style the tab */
+.socialmedia * {
+  box-sizing: border-box;
+}
+
+.socialmedia > .tab {
+  float: left;
+  /* border: 1px solid #ccc; */
+  background-color: #f1f1f1;
+  width: 20%;
+  /* height: 100%; */
+}
+
+/* Style the tab content */
+.socialmedia > .tabcontent {
+  float: left;
+  padding: 0px 12px;
+  /* border: 1px solid #ccc; */
+  width: 80%;
+  border-left: none;
+  /* height: 100%; */
+}
+
+.socialmedia input[type='text'] {
+  width: 100%;
+}
+
+.tablinks {
+  padding: 15px 70% 15px 30%;
+  font-size: 30px;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+}
+
+.socialmedia input[type='datetime-local'] {
+  width: 100%;
+}
+
+@media only screen and (min-width: 768px) {
+  .socialmedia > .tab {
+    width: 10%;
+  }
+
+  .socialmedia > .tabcontent {
+    width: 90%;
+  }
+}
 </style>

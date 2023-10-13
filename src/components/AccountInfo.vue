@@ -1,6 +1,7 @@
 <template>
   <div class="accountinfo">
     <h2>Account Info</h2>
+
     <ul>
       <li
         v-for="value in Object.keys(userData).filter((e) => {

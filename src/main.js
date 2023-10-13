@@ -1,3 +1,11 @@
+const store = Vuex.createStore({
+  state() {
+    return {
+      counter: 5,
+    };
+  },
+});
+
 const options = {
   moduleCache: {
     vue: Vue,
@@ -17,14 +25,6 @@ const options = {
 };
 
 const { loadModule } = window['vue3-sfc-loader'];
-
-const store = Vuex.createStore({
-  state() {
-    return {
-      counter: 0,
-    };
-  },
-});
 
 const vm = Vue.createApp({
   components: {
