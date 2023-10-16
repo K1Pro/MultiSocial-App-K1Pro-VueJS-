@@ -12,3 +12,5 @@
 /index.php
 /src/Template.Vue
 /sync.ffs_db
+/src/assets/js/pinia
+/src/assets/js/vue-demi

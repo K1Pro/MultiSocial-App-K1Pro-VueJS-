@@ -109,7 +109,7 @@ export default {
   watch: {
     accessToken(newToken, oldToken) {
       this.userData = '';
-      this.loggedIn = false;
+      // this.loggedIn = false;
       if (newToken != undefined) this.getUserData(this.userDataEndPt);
     },
     message() {
