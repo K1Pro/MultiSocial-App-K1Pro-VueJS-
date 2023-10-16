@@ -92,13 +92,13 @@ export default {
     };
   },
 
-  // computed: {
-  //   ...Pinia.mapStores(useCounterStore),
-  //   ...Pinia.mapStores(useModalStore),
-  // },
+  computed: {
+    ...Pinia.mapStores(useModalStore),
+  },
 
   methods: {
     openTab(event) {
+      this.modalStore.isOpen = !this.modalStore.isOpen;
       console.log(this.modalStore.isOpen);
       const selectedTab = event.target.classList.value.substring(event.target.classList.value.indexOf('fa-') + 3);
       this.chosenSocialMedia = selectedTab;
