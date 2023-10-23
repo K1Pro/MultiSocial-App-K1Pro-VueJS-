@@ -32,6 +32,10 @@ export default {
     };
   },
 
+  computed: {
+    ...Pinia.mapStores(useUserStore),
+  },
+
   emits: ['login', 'login-msg'],
 
   methods: {

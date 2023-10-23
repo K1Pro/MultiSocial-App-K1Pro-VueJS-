@@ -1,6 +1,9 @@
 <template>
   <div class="Post">
-    <h2>{{ userData.Organization ? userData.Organization + ' # ' : '' }}{{ userData.FirstName }}</h2>
+    <h2>
+      {{ this.userStore.userDataPinia.Organization ? this.userStore.userDataPinia.Organization + ' # ' : ''
+      }}{{ this.userStore.userDataPinia.FirstName }}
+    </h2>
     <!-- <h2>Rapid Marketing AI</h2> -->
 
     <div id="inner-grid">
@@ -44,7 +47,7 @@
 export default {
   name: 'Post',
 
-  props: ['accessToken', 'userData'],
+  props: ['accessToken'],
 
   emits: ['post-msg', 'posted'],
 
@@ -58,6 +61,10 @@ export default {
       postHashtags: '',
       postBody: '',
     };
+  },
+
+  computed: {
+    ...Pinia.mapStores(useUserStore),
   },
 
   methods: {
@@ -137,14 +144,6 @@ export default {
     },
   },
 
-  watch: {
-    userData() {
-      this.postLink = this.userData ? this.userData.Website : '';
-      this.postLinkDesc = this.userData ? 'This is a link to ' + this.userData.Organization : '';
-      this.postHashtags = this.userData ? `#${this.userData.Tag1} #${this.userData.Tag2} #${this.userData.Tag3}` : '';
-    },
-  },
-
   created() {
     this.imageSearchInput = localStorage.getItem(`Multisocial-mostRecentSearch`)
       ? localStorage.getItem(`Multisocial-mostRecentSearch`)
@@ -160,9 +159,13 @@ export default {
       ? localStorage.getItem(`Multisocial-mostRecentSearch`).charAt(0).toUpperCase() +
         localStorage.getItem(`Multisocial-mostRecentSearch`).slice(1)
       : '';
-    this.postLink = this.userData ? this.userData.Website : '';
-    this.postLinkDesc = this.userData ? 'This is a link to ' + this.userData.Organization : '';
-    this.postHashtags = this.userData ? `#${this.userData.Tag1} #${this.userData.Tag2} #${this.userData.Tag3}` : '';
+    this.postLink = this.userStore.userDataPinia ? this.userStore.userDataPinia.Website : '';
+    this.postLinkDesc = this.userStore.userDataPinia
+      ? 'This is a link to ' + this.userStore.userDataPinia.Organization
+      : '';
+    this.postHashtags = this.userStore.userDataPinia
+      ? `#${this.userStore.userDataPinia.Tag1} #${this.userStore.userDataPinia.Tag2} #${this.userStore.userDataPinia.Tag3}`
+      : '';
   },
 };
 </script>
