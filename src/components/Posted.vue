@@ -33,13 +33,17 @@ export default {
     return { posted: '' };
   },
 
+  computed: {
+    ...Pinia.mapStores(useUserStore),
+  },
+
   methods: {
     async getPosted() {
       try {
         const response = await fetch(servrURL + 'controller/posted.php', {
           method: 'GET',
           headers: {
-            Authorization: this.accessToken,
+            Authorization: this.userStore.accessTokenPinia,
             'Cache-Control': 'no-store',
           },
         });

@@ -1,12 +1,14 @@
 <template>
-  <div class="snackbar" :class="{ show: message }">{{ message }}</div>
+  <div class="snackbar" :class="{ show: this.userStore.messagePinia }">{{ this.userStore.messagePinia }}</div>
 </template>
 
 <script>
 export default {
   name: 'Snackbar',
 
-  props: ['message'],
+  computed: {
+    ...Pinia.mapStores(useUserStore),
+  },
 };
 </script>
 

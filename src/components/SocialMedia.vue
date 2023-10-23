@@ -99,8 +99,6 @@ export default {
   methods: {
     openTab(event) {
       console.log(this.userStore.userDataPinia.AccountType);
-      this.userStore.isOpen = !this.userStore.isOpen;
-      console.log(this.userStore.isOpen);
       const selectedTab = event.target.classList.value.substring(event.target.classList.value.indexOf('fa-') + 3);
       this.chosenSocialMedia = selectedTab;
       if (selectedTab != 'home' && selectedTab != 'sign-out') {
@@ -114,7 +112,7 @@ export default {
         const response = await fetch(servrURL + 'controller/socialmedia.php', {
           method: 'PATCH',
           headers: {
-            Authorization: this.accessToken,
+            Authorization: this.userStore.accessTokenPinia,
             'Content-Type': 'application/json',
             'Cache-Control': 'no-store',
           },
@@ -138,7 +136,7 @@ export default {
         const response = await fetch(servrURL + 'controller/socialmedia.php?smwebsite=' + endPt, {
           method: 'GET',
           headers: {
-            Authorization: this.accessToken,
+            Authorization: this.userStore.accessTokenPinia,
             'Content-Type': 'application/json',
             'Cache-Control': 'no-store',
           },

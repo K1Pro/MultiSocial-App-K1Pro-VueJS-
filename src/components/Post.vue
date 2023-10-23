@@ -114,7 +114,7 @@ export default {
           const response = await fetch(servrURL + 'controller/post.php', {
             method: 'POST',
             headers: {
-              Authorization: this.accessToken,
+              Authorization: this.userStore.accessTokenPinia,
               'Content-Type': 'application/json',
               'Cache-Control': 'no-store',
             },

@@ -56,6 +56,7 @@ export default {
         const logInResJSON = await response.json();
         if (logInResJSON.success) {
           this.$emit('login', logInResJSON.data.accesstoken, logInResJSON.data.session_id);
+          this.userStore.accessTokenPinia = logInResJSON.data.accesstoken;
           const tomorrow = new Date();
           tomorrow.setDate(tomorrow.getDate() + 1);
           document.cookie = `_a_t=${logInResJSON.data.accesstoken}; expires=${tomorrow.toString()};`;

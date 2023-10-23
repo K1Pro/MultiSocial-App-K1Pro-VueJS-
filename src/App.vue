@@ -1,26 +1,19 @@
 <template>
-  <snackbar :message="message"> </snackbar>
+  <snackbar> </snackbar>
 
-  <template v-if="loggedIn === true">
+  <template v-if="this.userStore.loggedInPinia === true">
     <div class="grid-container">
       <div class="item1">
-        <socialmedia
-          :accessToken="accessToken"
-          :sessionID="sessionID"
-          :userData="userData"
-          @socialmedia-msg="updateSnackbar"
-          @logout="updateAccessToken"
-          @posted="updatePosted"
-        >
+        <socialmedia @socialmedia-msg="updateSnackbar" @logout="updateAccessToken" @posted="updatePosted">
         </socialmedia>
       </div>
       <div class="item2">
-        <posted :accessToken="accessToken" :newPostTimestamp="newPostTimestamp"> </posted>
+        <posted> </posted>
       </div>
     </div>
   </template>
 
-  <template v-else-if="loggedIn === false">
+  <template v-else-if="this.userStore.loggedInPinia === false">
     <login @login="updateAccessToken" @login-msg="updateSnackbar"> </login>
   </template>
 
@@ -51,13 +44,13 @@ export default {
 
   data() {
     return {
-      accessToken: this.getCookie('_a_t'),
-      sessionID: this.getCookie('_s_i'),
-      userData: '',
-      message: null,
-      chosenSocialMedia: '',
-      loggedIn: null,
-      newPostTimestamp: '',
+      // accessToken: this.getCookie('_a_t'),
+      // sessionID: this.getCookie('_s_i'),
+      // userData: '',
+      // message: null,
+      // chosenSocialMedia: '',
+      // loggedIn: null,
+      // newPostTimestamp: '',
     };
   },
 
@@ -88,21 +81,28 @@ export default {
         const response = await fetch(servrURL + endPt, {
           method: 'GET',
           headers: {
-            Authorization: this.accessToken,
+            Authorization: this.userStore.accessTokenPinia,
             'Cache-Control': 'no-store',
           },
         });
         const userDataResJSON = await response.json();
         if (userDataResJSON.success) {
-          this.userData = userDataResJSON.data.user;
+          // this.userData = userDataResJSON.data.user;
+          // this.loggedIn = true;
+
           this.userStore.userDataPinia = userDataResJSON.data.user;
-          this.loggedIn = true;
+          this.userStore.loggedInPinia = true;
         } else {
-          this.loggedIn = false;
+          // this.loggedIn = false;
           document.cookie = `_a_t=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${cookiePath};`;
           document.cookie = `_s_i=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${cookiePath};`;
-          this.accessToken = undefined;
-          this.sessionID = undefined;
+          // this.accessToken = undefined;
+          // this.sessionID = undefined;
+
+          this.userStore.loggedInPinia = false;
+
+          this.userStore.accessTokenPinia = undefined;
+          this.userStore.sessionIDPinia = undefined;
         }
       } catch (error) {
         this.error = error.toString();
@@ -114,6 +114,7 @@ export default {
   watch: {
     accessToken(newToken, oldToken) {
       this.userData = '';
+      this.userStore.userDataPinia = '';
       // this.loggedIn = false;
       if (newToken != undefined) this.getUserData(this.userDataEndPt);
     },
@@ -126,10 +127,13 @@ export default {
 
   created() {
     this.userDataEndPt = 'controller/users.php?userid=';
-    if (this.accessToken) {
+    this.userStore.getCookiePinia('_a_t');
+    if (this.userStore.accessTokenPinia) {
       this.getUserData(this.userDataEndPt);
     } else {
-      this.loggedIn = false;
+      // this.loggedIn = false;
+
+      this.userStore.loggedInPinia = false;
     }
   },
 };

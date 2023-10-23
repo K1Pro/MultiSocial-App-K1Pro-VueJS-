@@ -10,13 +10,17 @@ export default {
 
   emits: ['logout', 'logout-msg'],
 
+  computed: {
+    ...Pinia.mapStores(useUserStore),
+  },
+
   methods: {
     async logoutFunc(endPt) {
       try {
         const response = await fetch(servrURL + endPt + this.sessionID, {
           method: 'DELETE',
           headers: {
-            Authorization: this.accessToken,
+            Authorization: this.userStore.accessTokenPinia,
             'Cache-Control': 'no-store',
           },
         });
