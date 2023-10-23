@@ -47,10 +47,6 @@
 export default {
   name: 'Post',
 
-  props: ['accessToken'],
-
-  emits: ['post-msg', 'posted'],
-
   data() {
     return {
       imageSearchInput: '',
@@ -100,10 +96,10 @@ export default {
           }
         } catch (error) {
           console.log(error.toString());
-          this.$emit('post-msg', error.toString());
+          this.userStore.messagePinia = error.toString();
         }
       } else {
-        this.$emit('post-msg', 'Image search cannot be blank');
+        this.userStore.messagePinia = 'Image search cannot be blank';
       }
     },
 
@@ -130,11 +126,11 @@ export default {
           const socialMediaPostJSON = await response.json();
           // if (socialMediaPostJSON.success) {
           console.log(socialMediaPostJSON);
-          this.$emit('post-msg', socialMediaPostJSON.messages[0]);
-          this.$emit('posted', Date.now());
+          this.userStore.messagePinia = socialMediaPostJSON.messages[0];
+          this.userStore.newPostTimestampPinia = Date.now();
           // }
         } catch (error) {
-          this.$emit('post-msg', error.toString());
+          this.userStore.messagePinia = error.toString();
         }
       }
     },

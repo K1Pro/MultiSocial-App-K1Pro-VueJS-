@@ -6,34 +6,31 @@
 export default {
   name: 'LogOutBtn',
 
-  props: ['accessToken', 'sessionID'],
-
-  emits: ['logout', 'logout-msg'],
-
   computed: {
-    ...Pinia.mapStores(useUserStore),
+    ...Pinia.mapWritableState(useUserStore, ['accessTokenPinia', 'sessionIDPinia', 'loggedInPinia', 'messagePinia']),
   },
 
   methods: {
     async logoutFunc(endPt) {
       try {
-        const response = await fetch(servrURL + endPt + this.sessionID, {
+        const response = await fetch(servrURL + endPt + this.sessionIDPinia, {
           method: 'DELETE',
           headers: {
-            Authorization: this.userStore.accessTokenPinia,
+            Authorization: this.accessTokenPinia,
             'Cache-Control': 'no-store',
           },
         });
         const logOutResJSON = await response.json();
         if (logOutResJSON.success) {
-          this.$emit('logout', undefined, undefined);
+          this.accessTokenPinia = undefined;
+          this.sessionIDPinia = undefined;
           document.cookie = `_a_t=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${cookiePath};`;
           document.cookie = `_s_i=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${cookiePath};`;
         }
-        this.$emit('logout-msg', logOutResJSON.messages[0]);
+        this.messagePinia = logOutResJSON.messages[0];
       } catch (error) {
         this.error = error.toString();
-        this.$emit('logout-msg', this.error);
+        this.messagePinia = this.error;
       }
     },
   },

@@ -36,8 +36,6 @@ export default {
     ...Pinia.mapStores(useUserStore),
   },
 
-  emits: ['login', 'login-msg'],
-
   methods: {
     async loginFunc(endPt) {
       try {
@@ -55,17 +53,18 @@ export default {
         });
         const logInResJSON = await response.json();
         if (logInResJSON.success) {
-          this.$emit('login', logInResJSON.data.accesstoken, logInResJSON.data.session_id);
+          // this.$emit('login', logInResJSON.data.accesstoken, logInResJSON.data.session_id);
           this.userStore.accessTokenPinia = logInResJSON.data.accesstoken;
+          this.userStore.sessionIDPinia = logInResJSON.data.session_id;
           const tomorrow = new Date();
           tomorrow.setDate(tomorrow.getDate() + 1);
           document.cookie = `_a_t=${logInResJSON.data.accesstoken}; expires=${tomorrow.toString()};`;
           document.cookie = `_s_i=${logInResJSON.data.session_id}; expires=${tomorrow.toString()};`;
         }
-        this.$emit('login-msg', logInResJSON.messages[0]);
+        this.userStore.messagePinia = logInResJSON.messages[0];
       } catch (error) {
         this.error = error.toString();
-        this.$emit('login-msg', this.error);
+        this.userStore.messagePinia = this.error;
       }
     },
   },

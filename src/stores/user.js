@@ -11,8 +11,9 @@ const useUserStore = Pinia.defineStore('user', {
     };
   },
   actions: {
-    getCookiePinia(name) {
-      this.accessTokenPinia = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`))?.at(2);
+    getCookiePinia(accessToken, sessionID) {
+      this.accessTokenPinia = document.cookie.match(new RegExp(`(^| )${accessToken}=([^;]+)`))?.at(2);
+      this.sessionIDPinia = document.cookie.match(new RegExp(`(^| )${sessionID}=([^;]+)`))?.at(2);
     },
   },
 });
