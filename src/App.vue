@@ -61,6 +61,10 @@ export default {
     };
   },
 
+  computed: {
+    ...Pinia.mapStores(useModalStore),
+  },
+
   methods: {
     getCookie(name) {
       return document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`))?.at(2);
@@ -91,6 +95,7 @@ export default {
         const userDataResJSON = await response.json();
         if (userDataResJSON.success) {
           this.userData = userDataResJSON.data.user;
+          this.modalStore.userDataPinia = userDataResJSON.data.user;
           this.loggedIn = true;
         } else {
           this.loggedIn = false;

@@ -98,6 +98,7 @@ export default {
 
   methods: {
     openTab(event) {
+      console.log(this.modalStore.userDataPinia.AccountType);
       this.modalStore.isOpen = !this.modalStore.isOpen;
       console.log(this.modalStore.isOpen);
       const selectedTab = event.target.classList.value.substring(event.target.classList.value.indexOf('fa-') + 3);
