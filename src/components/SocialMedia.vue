@@ -15,7 +15,7 @@
     </div>
 
     <div class="tabcontent" v-if="chosenSocialMedia == 'sign-out'">
-      <accountinfo :userData="userData"></accountinfo>
+      <accountinfo></accountinfo>
       <logoutbtn
         :accessToken="accessToken"
         :sessionID="sessionID"
@@ -93,14 +93,14 @@ export default {
   },
 
   computed: {
-    ...Pinia.mapStores(useModalStore),
+    ...Pinia.mapStores(useUserStore),
   },
 
   methods: {
     openTab(event) {
-      console.log(this.modalStore.userDataPinia.AccountType);
-      this.modalStore.isOpen = !this.modalStore.isOpen;
-      console.log(this.modalStore.isOpen);
+      console.log(this.userStore.userDataPinia.AccountType);
+      this.userStore.isOpen = !this.userStore.isOpen;
+      console.log(this.userStore.isOpen);
       const selectedTab = event.target.classList.value.substring(event.target.classList.value.indexOf('fa-') + 3);
       this.chosenSocialMedia = selectedTab;
       if (selectedTab != 'home' && selectedTab != 'sign-out') {

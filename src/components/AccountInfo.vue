@@ -4,13 +4,14 @@
 
     <ul>
       <li
-        v-for="value in Object.keys(userData).filter((e) => {
+        v-for="value in Object.keys(this.userStore.userDataPinia).filter((e) => {
           return e !== 'LoginActivity';
         })"
       >
-        {{ value }}: {{ userData[value] }}
+        {{ value }}: {{ this.userStore.userDataPinia[value] }}
       </li>
     </ul>
+
     <p></p>
   </div>
 </template>
@@ -19,10 +20,12 @@
 export default {
   name: 'AccountInfo',
 
-  props: ['userData'],
-
   data() {
     return {};
+  },
+
+  computed: {
+    ...Pinia.mapStores(useUserStore),
   },
 };
 </script>

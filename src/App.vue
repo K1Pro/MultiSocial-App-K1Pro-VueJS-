@@ -62,7 +62,7 @@ export default {
   },
 
   computed: {
-    ...Pinia.mapStores(useModalStore),
+    ...Pinia.mapStores(useUserStore),
   },
 
   methods: {
@@ -95,7 +95,7 @@ export default {
         const userDataResJSON = await response.json();
         if (userDataResJSON.success) {
           this.userData = userDataResJSON.data.user;
-          this.modalStore.userDataPinia = userDataResJSON.data.user;
+          this.userStore.userDataPinia = userDataResJSON.data.user;
           this.loggedIn = true;
         } else {
           this.loggedIn = false;
