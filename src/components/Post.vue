@@ -6,40 +6,33 @@
     </h2>
     <!-- <h2>Rapid Marketing AI</h2> -->
 
-    <div id="inner-grid">
-      <div>
-        <b>Title</b>
-        <input v-model="postTitle" type="text" name="postTitle" placeholder="Title..." /><br />
+    <b>Title</b>
+    <input v-model="postTitle" type="text" name="postTitle" placeholder="Title..." /><br /><br />
 
-        <div class="boldLabel">Body text</div>
-        <textarea v-model="postBody" rows="2" name="postBody" placeholder="Body text..."></textarea><br />
+    <b>Body text</b>
+    <textarea v-model="postBody" rows="4" name="postBody" placeholder="Body text..."></textarea><br /><br />
 
-        <div class="boldLabel">Link</div>
-        <input v-model="postLink" type="text" name="postLink" placeholder="Link..." /><br />
-      </div>
+    <b>Link</b>
+    <input v-model="postLink" type="text" name="postLink" placeholder="Link..." /><br /><br />
 
-      <div>
-        <div class="boldLabelResp">Link description</div>
-        <input v-model="postLinkDesc" type="text" name="postLinkDesc" placeholder="Link description..." /><br />
+    <b>Link description</b>
+    <input v-model="postLinkDesc" type="text" name="postLinkDesc" placeholder="Link description..." /><br /><br />
 
-        <div class="boldLabel">Hashtags</div>
-        <input v-model="postHashtags" type="text" name="postHashtags" placeholder="Hashtags..." /><br />
+    <b>Hashtags</b>
+    <input v-model="postHashtags" type="text" name="postHashtags" placeholder="Hashtags..." /><br /><br />
 
-        <div class="boldLabel">Choose an image</div>
-        <button type="button" @click.prevent="imageSearch()">Search</button>
-        <input
-          type="search"
-          v-model="imageSearchInput"
-          name="image-search"
-          placeholder="Search for an image…"
-          @keyup.enter="imageSearch()"
-        /><br />
-        <input type="file" name="filename" @change="previewFiles" /><br /><br />
-      </div>
-    </div>
+    <button type="button" @click.prevent="imageSearch()">Search</button>
+    <input
+      type="search"
+      v-model="imageSearchInput"
+      name="image-search"
+      placeholder="Search for an image…"
+      @keyup.enter="imageSearch()"
+    /><br /><br />
+
+    <input type="file" name="filename" @change="previewFiles" /><br /><br />
 
     <button class="centerSpan" type="button" @click.prevent="socialMediaPost()">Post</button><br /><br />
-    <img v-if="imagePath" :src="imagePath" alt="random-image" /><br />
   </div>
 </template>
 
@@ -50,7 +43,6 @@ export default {
   data() {
     return {
       imageSearchInput: '',
-      imagePath: '',
       postTitle: '',
       postLink: '',
       postLinkDesc: '',
@@ -85,6 +77,7 @@ export default {
           );
           const imageSearchJSON = await response.json();
           if (imageSearchJSON && Number.isInteger(+imageSearchJSON.total_results)) {
+            console.log(imageSearchJSON.photos);
             const max = imageSearchJSON.total_results > 80 ? 80 : imageSearchJSON.total_results;
             const randomImage = Math.floor(Math.random() * (max - 1 + 1) + 1);
             localStorage.setItem(`Multisocial-${this.imageSearchInput.toLowerCase()}`, imageSearchJSON.total_results);
@@ -92,7 +85,7 @@ export default {
               `Multisocial-mostRecentImagePath`,
               imageSearchJSON.photos[randomImage].src['landscape']
             );
-            this.imagePath = imageSearchJSON.photos[randomImage].src['landscape'];
+            this.userStore.imagePath = imageSearchJSON.photos[randomImage].src['landscape'];
           }
         } catch (error) {
           console.log(error.toString());
@@ -120,7 +113,7 @@ export default {
               LinkDesc: this.postLinkDesc,
               Hashtags: this.postHashtags,
               Body: this.postBody,
-              ImagePath: this.imagePath,
+              // ImagePath: this.imagePath,
             }),
           });
           const socialMediaPostJSON = await response.json();
@@ -143,9 +136,6 @@ export default {
   created() {
     this.imageSearchInput = localStorage.getItem(`Multisocial-mostRecentSearch`)
       ? localStorage.getItem(`Multisocial-mostRecentSearch`)
-      : '';
-    this.imagePath = localStorage.getItem(`Multisocial-mostRecentImagePath`)
-      ? localStorage.getItem(`Multisocial-mostRecentImagePath`)
       : '';
     this.postTitle = localStorage.getItem(`Multisocial-mostRecentSearch`)
       ? localStorage.getItem(`Multisocial-mostRecentSearch`).charAt(0).toUpperCase() +
@@ -196,49 +186,14 @@ export default {
   width: 23%;
 }
 
-.Post img {
-  width: 100%;
-  height: 60%;
-  display: block;
-  margin: auto;
-  outline: 4px solid white;
-  outline-offset: -4px;
-}
-
-.boldLabel {
-  font-weight: bold;
-  margin-top: 12px;
-}
-
-.boldLabelResp {
-  font-weight: bold;
-  margin-top: 12px;
-}
-
-#inner-grid {
-  grid-template-columns: 1fr;
-}
-#inner-grid > div {
-  /* background: lightgreen;
-  padding: 8px; */
-}
-
 @media only screen and (min-width: 768px) {
   .Post img {
     outline: 8px solid white;
     outline-offset: -8px;
   }
 
-  .boldLabelResp {
-    margin-top: 0px;
-  }
   .Post {
-    padding: 0px 50px;
-  }
-  #inner-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 30px;
+    padding: 0px 10px;
   }
 }
 </style>

@@ -120,9 +120,12 @@ export default {
 .item2,
 .item3 {
   background-color: #999999;
-  padding: 5px;
   scrollbar-width: thin;
   overflow-y: hidden;
+}
+
+.item3 {
+  padding: 5px;
 }
 
 @media only screen and (min-width: 768px) {
