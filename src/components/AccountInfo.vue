@@ -4,11 +4,11 @@
 
     <ul>
       <li
-        v-for="value in Object.keys(this.userStore.userDataPinia).filter((e) => {
+        v-for="value in Object.keys(this.userStore.userData).filter((e) => {
           return e !== 'LoginActivity';
         })"
       >
-        {{ value }}: {{ this.userStore.userDataPinia[value] }}
+        {{ value }}: {{ this.userStore.userData[value] }}
       </li>
     </ul>
 

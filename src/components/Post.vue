@@ -1,8 +1,8 @@
 <template>
   <div class="Post">
     <h2>
-      {{ this.userStore.userDataPinia.Organization ? this.userStore.userDataPinia.Organization + ' # ' : ''
-      }}{{ this.userStore.userDataPinia.FirstName }}
+      {{ this.userStore.userData.Organization ? this.userStore.userData.Organization + ' # ' : ''
+      }}{{ this.userStore.userData.FirstName }}
     </h2>
     <!-- <h2>Rapid Marketing AI</h2> -->
 
@@ -96,10 +96,10 @@ export default {
           }
         } catch (error) {
           console.log(error.toString());
-          this.userStore.messagePinia = error.toString();
+          this.userStore.message = error.toString();
         }
       } else {
-        this.userStore.messagePinia = 'Image search cannot be blank';
+        this.userStore.message = 'Image search cannot be blank';
       }
     },
 
@@ -110,7 +110,7 @@ export default {
           const response = await fetch(servrURL + 'controller/post.php', {
             method: 'POST',
             headers: {
-              Authorization: this.userStore.accessTokenPinia,
+              Authorization: this.userStore.accessToken,
               'Content-Type': 'application/json',
               'Cache-Control': 'no-store',
             },
@@ -126,11 +126,11 @@ export default {
           const socialMediaPostJSON = await response.json();
           // if (socialMediaPostJSON.success) {
           console.log(socialMediaPostJSON);
-          this.userStore.messagePinia = socialMediaPostJSON.messages[0];
-          this.userStore.newPostTimestampPinia = Date.now();
+          this.userStore.message = socialMediaPostJSON.messages[0];
+          this.userStore.newPostTimestamp = Date.now();
           // }
         } catch (error) {
-          this.userStore.messagePinia = error.toString();
+          this.userStore.message = error.toString();
         }
       }
     },
@@ -155,12 +155,10 @@ export default {
       ? localStorage.getItem(`Multisocial-mostRecentSearch`).charAt(0).toUpperCase() +
         localStorage.getItem(`Multisocial-mostRecentSearch`).slice(1)
       : '';
-    this.postLink = this.userStore.userDataPinia ? this.userStore.userDataPinia.Website : '';
-    this.postLinkDesc = this.userStore.userDataPinia
-      ? 'This is a link to ' + this.userStore.userDataPinia.Organization
-      : '';
-    this.postHashtags = this.userStore.userDataPinia
-      ? `#${this.userStore.userDataPinia.Tag1} #${this.userStore.userDataPinia.Tag2} #${this.userStore.userDataPinia.Tag3}`
+    this.postLink = this.userStore.userData ? this.userStore.userData.Website : '';
+    this.postLinkDesc = this.userStore.userData ? 'This is a link to ' + this.userStore.userData.Organization : '';
+    this.postHashtags = this.userStore.userData
+      ? `#${this.userStore.userData.Tag1} #${this.userStore.userData.Tag2} #${this.userStore.userData.Tag3}`
       : '';
   },
 };

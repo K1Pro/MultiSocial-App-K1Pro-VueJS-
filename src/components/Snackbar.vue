@@ -1,5 +1,5 @@
 <template>
-  <div class="snackbar" :class="{ show: messagePinia }">{{ messagePinia }}</div>
+  <div class="snackbar" :class="{ show: message }">{{ message }}</div>
 </template>
 
 <script>
@@ -7,13 +7,13 @@ export default {
   name: 'Snackbar',
 
   computed: {
-    ...Pinia.mapWritableState(useUserStore, ['messagePinia']),
+    ...Pinia.mapWritableState(useUserStore, ['message']),
   },
 
   watch: {
-    messagePinia() {
+    message() {
       setTimeout(() => {
-        this.messagePinia = null;
+        this.message = null;
       }, 3000);
     },
   },

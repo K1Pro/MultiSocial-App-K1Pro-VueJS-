@@ -27,14 +27,12 @@
 export default {
   name: 'Posted',
 
-  props: ['accessToken', 'newPostTimestamp'],
-
   data() {
     return { posted: '' };
   },
 
   computed: {
-    ...Pinia.mapStores(useUserStore),
+    ...Pinia.mapWritableState(useUserStore, ['accessToken', 'newPostTimestamp']),
   },
 
   methods: {
@@ -43,7 +41,7 @@ export default {
         const response = await fetch(servrURL + 'controller/posted.php', {
           method: 'GET',
           headers: {
-            Authorization: this.userStore.accessTokenPinia,
+            Authorization: this.accessToken,
             'Cache-Control': 'no-store',
           },
         });

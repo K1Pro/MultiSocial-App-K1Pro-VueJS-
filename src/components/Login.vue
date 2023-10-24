@@ -53,18 +53,17 @@ export default {
         });
         const logInResJSON = await response.json();
         if (logInResJSON.success) {
-          // this.$emit('login', logInResJSON.data.accesstoken, logInResJSON.data.session_id);
-          this.userStore.accessTokenPinia = logInResJSON.data.accesstoken;
-          this.userStore.sessionIDPinia = logInResJSON.data.session_id;
+          this.userStore.accessToken = logInResJSON.data.accesstoken;
+          this.userStore.sessionID = logInResJSON.data.session_id;
           const tomorrow = new Date();
           tomorrow.setDate(tomorrow.getDate() + 1);
           document.cookie = `_a_t=${logInResJSON.data.accesstoken}; expires=${tomorrow.toString()};`;
           document.cookie = `_s_i=${logInResJSON.data.session_id}; expires=${tomorrow.toString()};`;
         }
-        this.userStore.messagePinia = logInResJSON.messages[0];
+        this.userStore.message = logInResJSON.messages[0];
       } catch (error) {
         this.error = error.toString();
-        this.userStore.messagePinia = this.error;
+        this.userStore.message = this.error;
       }
     },
   },

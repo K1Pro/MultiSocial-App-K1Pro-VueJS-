@@ -16,13 +16,7 @@
 
     <div class="tabcontent" v-if="chosenSocialMedia == 'sign-out'">
       <accountinfo></accountinfo>
-      <logoutbtn
-        :accessToken="accessToken"
-        :sessionID="sessionID"
-        @logout="updateAccessToken"
-        @logout-msg="updateSnackbar"
-        >></logoutbtn
-      >
+      <logoutbtn>></logoutbtn>
     </div>
 
     <div class="tabcontent" v-if="chosenSocialMedia != 'home' && chosenSocialMedia != 'sign-out'">
@@ -65,10 +59,6 @@ export default {
 
   components: { Post, Accountinfo, Logoutbtn },
 
-  props: ['accessToken', 'sessionID'],
-
-  emits: ['socialmedia-msg', 'logout'],
-
   data() {
     return {
       socialMediaParams: '',
@@ -98,7 +88,6 @@ export default {
 
   methods: {
     openTab(event) {
-      console.log(this.userStore.userDataPinia.AccountType);
       const selectedTab = event.target.classList.value.substring(event.target.classList.value.indexOf('fa-') + 3);
       this.chosenSocialMedia = selectedTab;
       if (selectedTab != 'home' && selectedTab != 'sign-out') {
@@ -112,7 +101,7 @@ export default {
         const response = await fetch(servrURL + 'controller/socialmedia.php', {
           method: 'PATCH',
           headers: {
-            Authorization: this.userStore.accessTokenPinia,
+            Authorization: this.userStore.accessToken,
             'Content-Type': 'application/json',
             'Cache-Control': 'no-store',
           },
@@ -123,11 +112,11 @@ export default {
         });
         const patchSocialMediaJSON = await response.json();
         if (patchSocialMediaJSON.success) {
-          this.$emit('socialmedia-msg', patchSocialMediaJSON.messages[0]);
+          this.userStore.message = patchSocialMediaJSON.messages[0];
         }
       } catch (error) {
         this.error = error.toString();
-        this.$emit('socialmedia-msg', this.error);
+        this.userStore.message = this.error;
       }
     },
 
@@ -136,7 +125,7 @@ export default {
         const response = await fetch(servrURL + 'controller/socialmedia.php?smwebsite=' + endPt, {
           method: 'GET',
           headers: {
-            Authorization: this.userStore.accessTokenPinia,
+            Authorization: this.userStore.accessToken,
             'Content-Type': 'application/json',
             'Cache-Control': 'no-store',
           },
@@ -189,14 +178,6 @@ export default {
       } catch (error) {
         this.error = error.toString();
       }
-    },
-
-    updateSnackbar(message) {
-      this.$emit('socialmedia-msg', message);
-    },
-
-    updateAccessToken(accessToken, sessionID) {
-      this.$emit('logout', accessToken, sessionID);
     },
   },
 
