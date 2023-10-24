@@ -10,6 +10,7 @@ const useUserStore = Pinia.defineStore('user', {
       imagePath: localStorage.getItem(`Multisocial-mostRecentImagePath`)
         ? localStorage.getItem(`Multisocial-mostRecentImagePath`)
         : '',
+      imgSrchArr: '',
       endPts: {
         userData: 'controller/users.php?userid=',
         login: 'controller/sessions.php',

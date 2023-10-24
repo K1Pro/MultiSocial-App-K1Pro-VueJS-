@@ -10,7 +10,7 @@
     <input v-model="postTitle" type="text" name="postTitle" placeholder="Title..." /><br /><br />
 
     <b>Body text</b>
-    <textarea v-model="postBody" rows="4" name="postBody" placeholder="Body text..."></textarea><br /><br />
+    <textarea v-model="postBody" rows="3" name="postBody" placeholder="Body text..."></textarea><br /><br />
 
     <b>Link</b>
     <input v-model="postLink" type="text" name="postLink" placeholder="Link..." /><br /><br />
@@ -28,7 +28,9 @@
       name="image-search"
       placeholder="Search for an image…"
       @keyup.enter="imageSearch()"
-    /><br /><br />
+    /><br />
+
+    <img v-if="this.userStore.imagePath" :src="this.userStore.imagePath" alt="random-image" /><br />
 
     <input type="file" name="filename" @change="previewFiles" /><br /><br />
 
@@ -77,7 +79,8 @@ export default {
           );
           const imageSearchJSON = await response.json();
           if (imageSearchJSON && Number.isInteger(+imageSearchJSON.total_results)) {
-            console.log(imageSearchJSON.photos);
+            // console.log(imageSearchJSON.photos);
+            this.userStore.imgSrchArr = imageSearchJSON.photos;
             const max = imageSearchJSON.total_results > 80 ? 80 : imageSearchJSON.total_results;
             const randomImage = Math.floor(Math.random() * (max - 1 + 1) + 1);
             localStorage.setItem(`Multisocial-${this.imageSearchInput.toLowerCase()}`, imageSearchJSON.total_results);
@@ -113,7 +116,7 @@ export default {
               LinkDesc: this.postLinkDesc,
               Hashtags: this.postHashtags,
               Body: this.postBody,
-              // ImagePath: this.imagePath,
+              ImagePath: this.userStore.imagePath,
             }),
           });
           const socialMediaPostJSON = await response.json();
@@ -184,6 +187,10 @@ export default {
 
 .Post button {
   width: 23%;
+}
+
+.Post img {
+  width: 100%;
 }
 
 @media only screen and (min-width: 768px) {

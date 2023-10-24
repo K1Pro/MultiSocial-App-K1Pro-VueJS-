@@ -2,7 +2,9 @@
   <div class="Gallery">
     <h2>Choose an image</h2>
 
-    <img v-if="imagePath" :src="imagePath" alt="random-image" /><br />
+    <div>
+      <img v-for="value in this.imgSrchArr" :src="value.src.medium" @click="clickImg(value.src.landscape)" />
+    </div>
   </div>
 </template>
 
@@ -15,10 +17,14 @@ export default {
   },
 
   computed: {
-    ...Pinia.mapWritableState(useUserStore, ['imagePath']),
+    ...Pinia.mapWritableState(useUserStore, ['imagePath', 'imgSrchArr']),
   },
 
-  methods: {},
+  methods: {
+    clickImg(srchdImgPath) {
+      this.imagePath = srchdImgPath;
+    },
+  },
 };
 </script>
 
@@ -28,10 +34,11 @@ export default {
 }
 
 .Gallery img {
-  width: 100%;
-  height: 60%;
-  display: block;
+  width: 50%;
+  /* height: 60%; */
+  display: inline;
   margin: auto;
+  cursor: pointer;
   /* outline: 4px solid white;
   outline-offset: -4px; */
 }
