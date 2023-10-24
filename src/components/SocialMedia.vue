@@ -98,7 +98,7 @@ export default {
     async patchSocialMedia(event) {
       const inputValue = event.target.type == 'checkbox' ? `${event.target.checked}` : event.target.value;
       try {
-        const response = await fetch(servrURL + 'controller/socialmedia.php', {
+        const response = await fetch(servrURL + this.userStore.endPts.socialMedia, {
           method: 'PATCH',
           headers: {
             Authorization: this.userStore.accessToken,
@@ -122,7 +122,7 @@ export default {
 
     async getSocialMedia(endPt) {
       try {
-        const response = await fetch(servrURL + 'controller/socialmedia.php?smwebsite=' + endPt, {
+        const response = await fetch(servrURL + this.userStore.endPts.socialMedia + '?smwebsite=' + endPt, {
           method: 'GET',
           headers: {
             Authorization: this.userStore.accessToken,
@@ -170,7 +170,7 @@ export default {
 
     async getSocialMediaParams() {
       try {
-        const response = await fetch(servrURL + 'controller/smparams.php', {
+        const response = await fetch(servrURL + this.userStore.endPts.socialMediaParams, {
           method: 'GET',
         });
         const SocialMediaParamsJSON = await response.json();

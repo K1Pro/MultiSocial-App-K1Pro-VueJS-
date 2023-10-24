@@ -1,5 +1,5 @@
 <template>
-  <button :style="logoutBtn" type="button" @click="logoutFunc(logoutEndPt)">Log Out</button>
+  <button :style="logoutBtn" type="button" @click="logoutFunc(this.endPts.logout)">Log Out</button>
 </template>
 
 <script>
@@ -7,7 +7,7 @@ export default {
   name: 'LogOutBtn',
 
   computed: {
-    ...Pinia.mapWritableState(useUserStore, ['accessToken', 'sessionID', 'loggedIn', 'message']),
+    ...Pinia.mapWritableState(useUserStore, ['accessToken', 'sessionID', 'loggedIn', 'message', 'endPts']),
   },
 
   methods: {
@@ -24,6 +24,7 @@ export default {
         if (logOutResJSON.success) {
           this.accessToken = undefined;
           this.sessionID = undefined;
+          this.loggedIn = false;
           document.cookie = `_a_t=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${cookiePath};`;
           document.cookie = `_s_i=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${cookiePath};`;
         }
@@ -33,18 +34,6 @@ export default {
         this.message = this.error;
       }
     },
-  },
-
-  created() {
-    this.logoutEndPt = 'controller/sessions.php?sessionid=';
-
-    // <style scoped>
-    this.logoutBtn = {
-      // position: 'absolute',
-      // top: '5px',
-      // right: '15px',
-    };
-    // </style>
   },
 };
 </script>

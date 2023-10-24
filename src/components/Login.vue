@@ -10,11 +10,16 @@
             v-model="email"
             id="email"
             autocomplete="email"
-            @keyup.enter="loginFunc(loginEndPt)"
+            @keyup.enter="loginFunc(this.userStore.endPts.login)"
           /><br /><br />
           <label for="password">Password: </label>
-          <input type="password" v-model="password" id="password" @keyup.enter="loginFunc(loginEndPt)" /><br /><br />
-          <button type="button" @click.prevent="loginFunc(loginEndPt)">Log In</button>
+          <input
+            type="password"
+            v-model="password"
+            id="password"
+            @keyup.enter="loginFunc(this.userStore.endPts.login)"
+          /><br /><br />
+          <button type="button" @click.prevent="loginFunc(this.userStore.endPts.login)">Log In</button>
         </form>
       </div>
     </div>
@@ -67,12 +72,6 @@ export default {
       }
     },
   },
-
-  created() {
-    this.loginEndPt = 'controller/sessions.php';
-  },
-
-  beforeMount() {},
 };
 </script>
 

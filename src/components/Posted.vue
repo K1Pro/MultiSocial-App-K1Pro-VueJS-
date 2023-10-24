@@ -32,13 +32,13 @@ export default {
   },
 
   computed: {
-    ...Pinia.mapWritableState(useUserStore, ['accessToken', 'newPostTimestamp']),
+    ...Pinia.mapWritableState(useUserStore, ['accessToken', 'newPostTimestamp', 'endPts']),
   },
 
   methods: {
     async getPosted() {
       try {
-        const response = await fetch(servrURL + 'controller/posted.php', {
+        const response = await fetch(servrURL + this.endPts.posted, {
           method: 'GET',
           headers: {
             Authorization: this.accessToken,
