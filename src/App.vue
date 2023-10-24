@@ -43,7 +43,7 @@ export default {
 
   computed: {
     ...Pinia.mapStores(useUserStore),
-    ...Pinia.mapWritableState(useUserStore, ['accessToken', 'sessionID', 'loggedIn', 'userData']),
+    ...Pinia.mapWritableState(useUserStore, ['accessToken', 'sessionID', 'loggedIn', 'userData', 'endPts']),
   },
 
   methods: {
@@ -78,15 +78,14 @@ export default {
     accessToken(newToken, oldToken) {
       this.userData = '';
       // this.loggedIn = false;
-      if (newToken != undefined) this.getUserData(this.userDataEndPt);
+      if (newToken != undefined) this.getUserData(this.endPts.userData);
     },
   },
 
   created() {
-    this.userDataEndPt = 'controller/users.php?userid=';
     this.userStore.getCookie('_a_t', '_s_i');
     if (this.accessToken) {
-      this.getUserData(this.userDataEndPt);
+      this.getUserData(this.endPts.userData);
     } else {
       this.loggedIn = false;
     }

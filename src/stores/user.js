@@ -7,6 +7,7 @@ const useUserStore = Pinia.defineStore('user', {
       userData: '',
       message: null,
       newPostTimestamp: '',
+      endPts: { userData: 'controller/users.php?userid=' },
     };
   },
   actions: {
