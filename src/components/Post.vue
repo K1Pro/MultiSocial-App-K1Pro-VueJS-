@@ -107,7 +107,7 @@ export default {
       let confirmPostText = 'Are you sure you would like to post?\nClick OK or Cancel.';
       if (confirm(confirmPostText) == true) {
         try {
-          const response = await fetch(servrURL + 'controller/post.php', {
+          const response = await fetch(servrURL + this.userStore.endPts.posted, {
             method: 'POST',
             headers: {
               Authorization: this.userStore.accessToken,

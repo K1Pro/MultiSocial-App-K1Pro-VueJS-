@@ -7,6 +7,9 @@
         <socialmedia> </socialmedia>
       </div>
       <div class="item2">
+        <gallery> </gallery>
+      </div>
+      <div class="item3">
         <posted> </posted>
       </div>
     </div>
@@ -27,7 +30,7 @@
 import Snackbar from './components/Snackbar.vue';
 import Login from './components/Login.vue';
 import Posted from './components/Posted.vue';
-import Email from './components/Email.vue';
+import Gallery from './components/Gallery.vue';
 import Socialmedia from './components/SocialMedia.vue';
 
 export default {
@@ -37,7 +40,7 @@ export default {
     Snackbar,
     Login,
     Posted,
-    Email,
+    Gallery,
     Socialmedia,
   },
 
@@ -114,7 +117,8 @@ export default {
   overflow-y: hidden;
 }
 
-.item2 {
+.item2,
+.item3 {
   background-color: #999999;
   padding: 5px;
   scrollbar-width: thin;
@@ -127,7 +131,7 @@ export default {
   }
 
   .grid-container {
-    grid-template-columns: 75vw 25vw;
+    grid-template-columns: 40vw 40vw 20vw;
     grid-template-rows: 100vh;
   }
 
@@ -139,7 +143,8 @@ export default {
     background: linear-gradient(left, #f1f1f1 10%, #999999 10%);
   }
 
-  .item2 {
+  .item2,
+  .item3 {
     overflow-y: scroll;
   }
 }

@@ -10,7 +10,7 @@
           return key === 'date';
         })"
       >
-        {{ value[1].slice(0, 16) }}
+        {{ value[1].slice(5, 7) }}/{{ value[1].slice(8, 10) }}/{{ value[1].slice(2, 4) }} {{ value[1].slice(10, 16) }}
       </td>
       <td
         v-for="(value, key) in Object.entries(value).filter(([key, val]) => {
@@ -76,19 +76,22 @@ export default {
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
-  table-layout: auto;
+  /* table-layout: auto; */
   width: 100%;
+  /* max-width: 100%; */
+  /* white-space: nowrap; */
 }
 
-td,
 th {
+  text-align: center;
+  padding: 5px;
+  background-color: #f1f1f1;
+}
+
+td {
   /* border: 1px solid #dddddd; */
   text-align: center;
   padding: 5px;
-}
-
-th {
-  background-color: #f1f1f1;
 }
 
 .postlinks {
@@ -180,33 +183,11 @@ th {
   background: #07a081;
 }
 
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  table-layout: auto;
-  width: 100%;
-}
-
-td,
-th {
-  /* border: 1px solid #dddddd; */
-  text-align: center;
-  padding: 5px;
-}
-th {
-  background-color: #f1f1f1;
-}
-
-/* tr:nth-child(odd) {
-  background-color: #f1f1f1;
-} */
-
-.postlinks {
-  padding: 5px 0px;
-  height: 100%;
-  font-size: 30px;
-  width: 100%;
-  text-align: center;
-  text-decoration: none;
+@media only screen and (min-width: 768px) {
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    white-space: nowrap;
+  }
 }
 </style>
