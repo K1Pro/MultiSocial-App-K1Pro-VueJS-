@@ -82,7 +82,6 @@ export default {
             console.log(imageSearchJSON.photos);
             this.userStore.imgSrchArr = imageSearchJSON.photos;
             const max = imageSearchJSON.total_results > 80 ? 80 : imageSearchJSON.total_results;
-            this.userStore.totalImages = max;
             const randomImage = Math.floor(Math.random() * (max - 1 + 1) + 1);
             localStorage.setItem(
               `RapidMarketingAI-${this.imageSearchInput.toLowerCase()}`,
@@ -96,7 +95,6 @@ export default {
                 element.src.original
               );
             });
-            // this.userStore.imagePath = imageSearchJSON.photos[randomImage].src['landscape'];
           }
         } catch (error) {
           console.log(error.toString());

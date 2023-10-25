@@ -4,10 +4,10 @@
 
     <div class="Gallery-Row">
       <div class="Gallery-Column">
-        <img v-for="value in this.imgSrchArr1stPart" :src="value.src.medium" @click="selectImg(value.src.original)" />
+        <img v-for="value in imgSrchArr1stPart" :src="value.src.medium" @click="selectImg(value.src.original)" />
       </div>
       <div class="Gallery-Column">
-        <img v-for="value in this.imgSrchArr2ndPart" :src="value.src.medium" @click="selectImg(value.src.original)" />
+        <img v-for="value in imgSrchArr2ndPart" :src="value.src.medium" @click="selectImg(value.src.original)" />
       </div>
     </div>
   </div>
@@ -28,7 +28,6 @@ export default {
       'imgSrchArr1stPart',
       'imgSrchArr2ndPart',
       'vars',
-      'totalImages',
     ]),
   },
 
@@ -59,13 +58,6 @@ export default {
         }
       } while (localStorage.getItem(`RapidMarketingAI-${mostRecentSearch}-imgPath-${rep}`));
       this.imgSrchArr = mostRcntSrchArr;
-      this.imgSrchArr1stPart = mostRcntSrchArr.slice(0, mostRcntSrchArr.length / 2);
-      this.imgSrchArr2ndPart = mostRcntSrchArr.slice(mostRcntSrchArr.length / 2, mostRcntSrchArr.length);
-
-      this.totalImages = mostRcntSrchArr.length;
-      console.log(mostRcntSrchArr.length);
-      console.log(mostRcntSrchArr.slice(0, mostRcntSrchArr.length / 2));
-      console.log(mostRcntSrchArr.slice(mostRcntSrchArr.length / 2, mostRcntSrchArr.length));
     }
   },
 };

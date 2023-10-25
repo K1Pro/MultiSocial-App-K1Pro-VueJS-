@@ -12,9 +12,6 @@ const useUserStore = Pinia.defineStore('user', {
           '?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200'
         : '',
       imgSrchArr: '',
-      imgSrchArr1stPart: '',
-      imgSrchArr2ndPart: '',
-      totalImages: '',
       endPts: {
         userData: 'controller/users.php?userid=',
         login: 'controller/sessions.php',
@@ -36,5 +33,9 @@ const useUserStore = Pinia.defineStore('user', {
       this.accessToken = document.cookie.match(new RegExp(`(^| )${accessToken}=([^;]+)`))?.at(2);
       this.sessionID = document.cookie.match(new RegExp(`(^| )${sessionID}=([^;]+)`))?.at(2);
     },
+  },
+  getters: {
+    imgSrchArr1stPart: (state) => state.imgSrchArr.slice(0, state.imgSrchArr.length / 2),
+    imgSrchArr2ndPart: (state) => state.imgSrchArr.slice(state.imgSrchArr.length / 2, state.imgSrchArr.length),
   },
 });
