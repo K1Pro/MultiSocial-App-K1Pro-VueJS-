@@ -10,7 +10,7 @@
     <input v-model="postTitle" type="text" name="postTitle" placeholder="Title..." /><br /><br />
 
     <b>Body text</b>
-    <textarea v-model="postBody" rows="3" name="postBody" placeholder="Body text..."></textarea><br /><br />
+    <textarea v-model="postBody" rows="2" name="postBody" placeholder="Body text..."></textarea><br /><br />
 
     <b>Link</b>
     <input v-model="postLink" type="text" name="postLink" placeholder="Link..." /><br /><br />
@@ -19,22 +19,13 @@
     <input v-model="postLinkDesc" type="text" name="postLinkDesc" placeholder="Link description..." /><br /><br />
 
     <b>Hashtags</b>
-    <input v-model="postHashtags" type="text" name="postHashtags" placeholder="Hashtags..." /><br /><br />
-
-    <button type="button" @click.prevent="imageSearch()">Search</button>
-    <input
-      type="search"
-      v-model="imageSearchInput"
-      name="image-search"
-      placeholder="Search for an image…"
-      @keyup.enter="imageSearch()"
-    /><br />
+    <input v-model="postHashtags" type="text" name="postHashtags" placeholder="Hashtags..." /><br />
 
     <img v-if="this.userStore.imagePath" :src="this.userStore.imagePath" alt="random-image" /><br />
 
     <input type="file" name="filename" @change="previewFiles" /><br /><br />
 
-    <button class="centerSpan" type="button" @click.prevent="socialMediaPost()">Post</button><br /><br />
+    <button type="button" @click.prevent="socialMediaPost()">Post</button><br /><br />
   </div>
 </template>
 
@@ -44,7 +35,6 @@ export default {
 
   data() {
     return {
-      imageSearchInput: '',
       postTitle: '',
       postLink: '',
       postLinkDesc: '',
@@ -58,53 +48,6 @@ export default {
   },
 
   methods: {
-    async imageSearch() {
-      if (this.imageSearchInput) {
-        localStorage.setItem(`RapidMarketingAI-mostRecentSearch`, this.imageSearchInput.toLowerCase());
-        const prevSrchTtlRslts = localStorage.getItem(`RapidMarketingAI-${this.imageSearchInput.toLowerCase()}`);
-        const prevSrchTtlRsltsMax =
-          prevSrchTtlRslts && prevSrchTtlRslts != 'undefined' ? Math.floor(prevSrchTtlRslts / 80) : 1;
-        const randomPage = Math.floor(Math.random() * (prevSrchTtlRsltsMax - 1 + 1) + 1);
-        try {
-          const response = await fetch(
-            'https://api.pexels.com/v1/search?query=' +
-              this.imageSearchInput.toLowerCase() +
-              `&page=${randomPage}&per_page=80`,
-            {
-              method: 'GET',
-              headers: {
-                Authorization: pexelsKey,
-              },
-            }
-          );
-          const imageSearchJSON = await response.json();
-          if (imageSearchJSON && Number.isInteger(+imageSearchJSON.total_results)) {
-            console.log(imageSearchJSON.photos);
-            this.userStore.imgSrchArr = imageSearchJSON.photos;
-            const max = imageSearchJSON.total_results > 80 ? 80 : imageSearchJSON.total_results;
-            const randomImage = Math.floor(Math.random() * (max - 1 + 1) + 1);
-            localStorage.setItem(
-              `RapidMarketingAI-${this.imageSearchInput.toLowerCase()}`,
-              imageSearchJSON.total_results
-            );
-            let rep = 0;
-            imageSearchJSON.photos.forEach((element) => {
-              rep++;
-              localStorage.setItem(
-                `RapidMarketingAI-${this.imageSearchInput.toLowerCase()}-imgPath-${rep}`,
-                element.src.original
-              );
-            });
-          }
-        } catch (error) {
-          console.log(error.toString());
-          this.userStore.message = error.toString();
-        }
-      } else {
-        this.userStore.message = 'Image search cannot be blank';
-      }
-    },
-
     async socialMediaPost() {
       let confirmPostText = 'Are you sure you would like to post?\nClick OK or Cancel.';
       if (confirm(confirmPostText) == true) {
@@ -143,9 +86,6 @@ export default {
   },
 
   created() {
-    this.imageSearchInput = localStorage.getItem(`RapidMarketingAI-mostRecentSearch`)
-      ? localStorage.getItem(`RapidMarketingAI-mostRecentSearch`)
-      : '';
     this.postTitle = localStorage.getItem(`RapidMarketingAI-mostRecentSearch`)
       ? localStorage.getItem(`RapidMarketingAI-mostRecentSearch`).charAt(0).toUpperCase() +
         localStorage.getItem(`RapidMarketingAI-mostRecentSearch`).slice(1)
@@ -171,28 +111,36 @@ export default {
 .Post textarea {
   width: 100%;
   padding-left: 5px;
-}
-
-.Post input[type='search'] {
-  width: 77%;
+  background: #f1f1f1;
+  border: 1px solid black;
+  padding: 6px;
 }
 
 .Post input[type='text'] {
   width: 100%;
   padding-left: 5px;
+  background: #f1f1f1;
+  border: 1px solid black;
+  padding: 6px;
+  /* border-radius: 4px; */
+  /* border: none; */
 }
 
 .Post input[type='file'] {
   width: 100%;
-  background: #ffffff;
+  background: #f1f1f1;
+  padding: 6px;
+  border: 1px solid black;
 }
 
-.centerSpan {
+/* .centerSpan {
   margin-left: 38%;
-}
+} */
 
 .Post button {
-  width: 23%;
+  width: 100%;
+  padding: 6px;
+  border: 1px solid black;
 }
 
 .Post img {
