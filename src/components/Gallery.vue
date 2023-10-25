@@ -34,15 +34,17 @@ export default {
       const mostRcntSrchArr = [];
       do {
         rep++;
-        const obj = {
-          src: {
-            original: localStorage.getItem(`RapidMarketingAI-${mostRecentSearch}-imgPath-${rep}`),
-            medium: localStorage.getItem(`RapidMarketingAI-${mostRecentSearch}-imgPath-${rep}`) + this.vars.medium,
-            landscape:
-              localStorage.getItem(`RapidMarketingAI-${mostRecentSearch}-imgPath-${rep}`) + this.vars.landscape,
-          },
-        };
-        mostRcntSrchArr.push(obj);
+        if (localStorage.getItem(`RapidMarketingAI-${mostRecentSearch}-imgPath-${rep}`)) {
+          const obj = {
+            src: {
+              original: localStorage.getItem(`RapidMarketingAI-${mostRecentSearch}-imgPath-${rep}`),
+              medium: localStorage.getItem(`RapidMarketingAI-${mostRecentSearch}-imgPath-${rep}`) + this.vars.medium,
+              landscape:
+                localStorage.getItem(`RapidMarketingAI-${mostRecentSearch}-imgPath-${rep}`) + this.vars.landscape,
+            },
+          };
+          mostRcntSrchArr.push(obj);
+        }
       } while (localStorage.getItem(`RapidMarketingAI-${mostRecentSearch}-imgPath-${rep}`));
       this.imgSrchArr = mostRcntSrchArr;
       console.log(mostRcntSrchArr);

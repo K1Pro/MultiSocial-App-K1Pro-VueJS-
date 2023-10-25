@@ -8,7 +8,8 @@ const useUserStore = Pinia.defineStore('user', {
       message: null,
       newPostTimestamp: '',
       imagePath: localStorage.getItem(`RapidMarketingAI-mostRecentImagePath`)
-        ? localStorage.getItem(`RapidMarketingAI-mostRecentImagePath`)
+        ? localStorage.getItem(`RapidMarketingAI-mostRecentImagePath`) +
+          '?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200'
         : '',
       imgSrchArr: '',
       endPts: {
