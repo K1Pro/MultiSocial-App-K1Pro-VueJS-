@@ -105,7 +105,7 @@ export default {
 
 <style>
 .Post {
-  padding: 0px 0px;
+  /* padding: 0px 0px; */
 }
 
 .Post textarea {
@@ -154,7 +154,7 @@ export default {
   }
 
   .Post {
-    padding: 0px 10px;
+    /* padding: 0px 10px; */
   }
 }
 </style>

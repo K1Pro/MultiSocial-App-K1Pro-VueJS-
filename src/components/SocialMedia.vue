@@ -251,10 +251,6 @@ export default {
   /* height: 100%; */
 }
 
-.socialmedia input[type='text'] {
-  width: 100%;
-}
-
 .tablinks {
   padding: 15px 70% 15px 30%;
   font-size: 30px;
@@ -263,8 +259,26 @@ export default {
   text-decoration: none;
 }
 
+.socialmedia input[type='text'] {
+  width: 100%;
+  padding-left: 5px;
+  background: #f1f1f1;
+  border: 1px solid black;
+  padding: 6px;
+}
+
 .socialmedia input[type='datetime-local'] {
   width: 100%;
+  padding-left: 5px;
+  background: #f1f1f1;
+  border: 1px solid black;
+  padding: 6px;
+}
+
+.socialmedia input[type='checkbox'] {
+  border: 1px solid black;
+  width: 16px;
+  height: 16px;
 }
 
 @media only screen and (min-width: 768px) {

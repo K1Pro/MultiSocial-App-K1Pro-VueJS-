@@ -126,19 +126,20 @@ export default {
 .Gallery {
   padding: 20px 20px;
   box-sizing: border-box;
-  text-align: center;
+  /* text-align: center; */
 }
 
 .Gallery input[type='search'] {
-  width: 71%;
+  width: 48.5%;
   background: #f1f1f1;
   border: 1px solid black;
   padding: 6px;
   font-weight: bold;
+  margin-left: 8px;
 }
 
 .Gallery button {
-  width: 25%;
+  width: 20%;
   padding: 6px;
   border: 1px solid black;
 }
