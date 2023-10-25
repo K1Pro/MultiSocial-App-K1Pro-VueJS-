@@ -60,8 +60,8 @@ export default {
   methods: {
     async imageSearch() {
       if (this.imageSearchInput) {
-        localStorage.setItem(`Multisocial-mostRecentSearch`, this.imageSearchInput.toLowerCase());
-        const prevSrchTtlRslts = localStorage.getItem(`Multisocial-${this.imageSearchInput.toLowerCase()}`);
+        localStorage.setItem(`RapidMarketingAI-mostRecentSearch`, this.imageSearchInput.toLowerCase());
+        const prevSrchTtlRslts = localStorage.getItem(`RapidMarketingAI-${this.imageSearchInput.toLowerCase()}`);
         const prevSrchTtlRsltsMax =
           prevSrchTtlRslts && prevSrchTtlRslts != 'undefined' ? Math.floor(prevSrchTtlRslts / 80) : 1;
         const randomPage = Math.floor(Math.random() * (prevSrchTtlRsltsMax - 1 + 1) + 1);
@@ -79,16 +79,23 @@ export default {
           );
           const imageSearchJSON = await response.json();
           if (imageSearchJSON && Number.isInteger(+imageSearchJSON.total_results)) {
-            // console.log(imageSearchJSON.photos);
+            console.log(imageSearchJSON.photos);
             this.userStore.imgSrchArr = imageSearchJSON.photos;
             const max = imageSearchJSON.total_results > 80 ? 80 : imageSearchJSON.total_results;
             const randomImage = Math.floor(Math.random() * (max - 1 + 1) + 1);
-            localStorage.setItem(`Multisocial-${this.imageSearchInput.toLowerCase()}`, imageSearchJSON.total_results);
             localStorage.setItem(
-              `Multisocial-mostRecentImagePath`,
-              imageSearchJSON.photos[randomImage].src['landscape']
+              `RapidMarketingAI-${this.imageSearchInput.toLowerCase()}`,
+              imageSearchJSON.total_results
             );
-            this.userStore.imagePath = imageSearchJSON.photos[randomImage].src['landscape'];
+            let rep = 0;
+            imageSearchJSON.photos.forEach((element) => {
+              rep++;
+              localStorage.setItem(
+                `RapidMarketingAI-${this.imageSearchInput.toLowerCase()}-imgPath-${rep}`,
+                element.src.original
+              );
+            });
+            // this.userStore.imagePath = imageSearchJSON.photos[randomImage].src['landscape'];
           }
         } catch (error) {
           console.log(error.toString());
@@ -103,7 +110,7 @@ export default {
       let confirmPostText = 'Are you sure you would like to post?\nClick OK or Cancel.';
       if (confirm(confirmPostText) == true) {
         try {
-          const response = await fetch(servrURL + this.userStore.endPts.posted, {
+          const response = await fetch(servrURL + this.userStore.endPts.post, {
             method: 'POST',
             headers: {
               Authorization: this.userStore.accessToken,
@@ -137,16 +144,16 @@ export default {
   },
 
   created() {
-    this.imageSearchInput = localStorage.getItem(`Multisocial-mostRecentSearch`)
-      ? localStorage.getItem(`Multisocial-mostRecentSearch`)
+    this.imageSearchInput = localStorage.getItem(`RapidMarketingAI-mostRecentSearch`)
+      ? localStorage.getItem(`RapidMarketingAI-mostRecentSearch`)
       : '';
-    this.postTitle = localStorage.getItem(`Multisocial-mostRecentSearch`)
-      ? localStorage.getItem(`Multisocial-mostRecentSearch`).charAt(0).toUpperCase() +
-        localStorage.getItem(`Multisocial-mostRecentSearch`).slice(1)
+    this.postTitle = localStorage.getItem(`RapidMarketingAI-mostRecentSearch`)
+      ? localStorage.getItem(`RapidMarketingAI-mostRecentSearch`).charAt(0).toUpperCase() +
+        localStorage.getItem(`RapidMarketingAI-mostRecentSearch`).slice(1)
       : '';
-    this.postBody = localStorage.getItem(`Multisocial-mostRecentSearch`)
-      ? localStorage.getItem(`Multisocial-mostRecentSearch`).charAt(0).toUpperCase() +
-        localStorage.getItem(`Multisocial-mostRecentSearch`).slice(1)
+    this.postBody = localStorage.getItem(`RapidMarketingAI-mostRecentSearch`)
+      ? localStorage.getItem(`RapidMarketingAI-mostRecentSearch`).charAt(0).toUpperCase() +
+        localStorage.getItem(`RapidMarketingAI-mostRecentSearch`).slice(1)
       : '';
     this.postLink = this.userStore.userData ? this.userStore.userData.Website : '';
     this.postLinkDesc = this.userStore.userData ? 'This is a link to ' + this.userStore.userData.Organization : '';

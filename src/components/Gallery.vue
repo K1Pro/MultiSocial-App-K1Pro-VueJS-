@@ -3,7 +3,7 @@
     <h2>Choose an image</h2>
 
     <div>
-      <img v-for="value in this.imgSrchArr" :src="value.src.medium" @click="clickImg(value.src.landscape)" />
+      <img v-for="value in this.imgSrchArr" :src="value.src.medium" @click="selectImg(value.src.original)" />
     </div>
   </div>
 </template>
@@ -17,13 +17,36 @@ export default {
   },
 
   computed: {
-    ...Pinia.mapWritableState(useUserStore, ['imagePath', 'imgSrchArr']),
+    ...Pinia.mapWritableState(useUserStore, ['imagePath', 'imgSrchArr', 'vars']),
   },
 
   methods: {
-    clickImg(srchdImgPath) {
-      this.imagePath = srchdImgPath;
+    selectImg(selectedImgPath) {
+      this.imagePath = selectedImgPath + this.vars.landscape;
+      localStorage.setItem(`RapidMarketingAI-mostRecentImagePath`, selectedImgPath);
     },
+  },
+  created() {
+    // RapidMarketingAI-hockey-imgPath-17
+    let mostRecentSearch = localStorage.getItem(`RapidMarketingAI-mostRecentSearch`);
+    if (localStorage.getItem(`RapidMarketingAI-mostRecentSearch`)) {
+      let rep = 0;
+      const mostRcntSrchArr = [];
+      do {
+        rep++;
+        const obj = {
+          src: {
+            original: localStorage.getItem(`RapidMarketingAI-${mostRecentSearch}-imgPath-${rep}`),
+            medium: localStorage.getItem(`RapidMarketingAI-${mostRecentSearch}-imgPath-${rep}`) + this.vars.medium,
+            landscape:
+              localStorage.getItem(`RapidMarketingAI-${mostRecentSearch}-imgPath-${rep}`) + this.vars.landscape,
+          },
+        };
+        mostRcntSrchArr.push(obj);
+      } while (localStorage.getItem(`RapidMarketingAI-${mostRecentSearch}-imgPath-${rep}`));
+      this.imgSrchArr = mostRcntSrchArr;
+      console.log(mostRcntSrchArr);
+    }
   },
 };
 </script>

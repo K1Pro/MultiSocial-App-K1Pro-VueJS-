@@ -7,8 +7,8 @@ const useUserStore = Pinia.defineStore('user', {
       userData: '',
       message: null,
       newPostTimestamp: '',
-      imagePath: localStorage.getItem(`Multisocial-mostRecentImagePath`)
-        ? localStorage.getItem(`Multisocial-mostRecentImagePath`)
+      imagePath: localStorage.getItem(`RapidMarketingAI-mostRecentImagePath`)
+        ? localStorage.getItem(`RapidMarketingAI-mostRecentImagePath`)
         : '',
       imgSrchArr: '',
       endPts: {
@@ -17,7 +17,13 @@ const useUserStore = Pinia.defineStore('user', {
         logout: 'controller/sessions.php?sessionid=',
         socialMedia: 'controller/socialmedia.php',
         socialMediaParams: 'controller/smparams.php',
+        post: 'controller/post.php',
         posted: 'controller/posted.php',
+      },
+      vars: {
+        medium: '?auto=compress&cs=tinysrgb&h=350',
+        landscape: '?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
+        appName: 'RapidMarketingAI',
       },
     };
   },
