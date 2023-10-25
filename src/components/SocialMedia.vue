@@ -244,7 +244,7 @@ export default {
 /* Style the tab content */
 .socialmedia > .tabcontent {
   float: left;
-  padding: 0px 12px;
+  padding: 0px 0px 0px 32px;
   /* border: 1px solid #ccc; */
   width: 80%;
   border-left: none;

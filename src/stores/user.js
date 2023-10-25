@@ -12,6 +12,9 @@ const useUserStore = Pinia.defineStore('user', {
           '?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200'
         : '',
       imgSrchArr: '',
+      imgSrchArr1stPart: '',
+      imgSrchArr2ndPart: '',
+      totalImages: '',
       endPts: {
         userData: 'controller/users.php?userid=',
         login: 'controller/sessions.php',

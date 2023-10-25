@@ -19,7 +19,8 @@ button {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  /* background: #f1f1f1; original - looked good too */
+  background: #999999;
 }
 
 /* Handle */
@@ -29,7 +30,8 @@ button {
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #305eac;
+  /* background: #305eac; original - looked good too */
+  background: #f1f1f1;
 }
 
 a {
