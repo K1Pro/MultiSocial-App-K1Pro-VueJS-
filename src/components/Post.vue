@@ -6,17 +6,20 @@
     </h2>
     <!-- <h2>Rapid Marketing AI</h2> -->
 
-    <b>Title</b>
-    <input v-model="postTitle" type="text" name="postTitle" placeholder="Title..." /><br /><br />
+    <b>Title & Body text</b>
+    <input v-model="postTitle" type="text" name="postTitle" placeholder="Title..." style="border-bottom: none" /><br />
+    <textarea v-model="postBody" rows="3" name="postBody" placeholder="Body text..." style="border-top: none"></textarea
+    ><br /><br />
 
-    <b>Body text</b>
-    <textarea v-model="postBody" rows="2" name="postBody" placeholder="Body text..."></textarea><br /><br />
-
-    <b>Link</b>
-    <input v-model="postLink" type="text" name="postLink" placeholder="Link..." /><br /><br />
-
-    <b>Link description</b>
-    <input v-model="postLinkDesc" type="text" name="postLinkDesc" placeholder="Link description..." /><br /><br />
+    <b>Link & Description</b>
+    <input v-model="postLink" type="text" name="postLink" placeholder="Link..." style="border-bottom: none" /><br />
+    <input
+      v-model="postLinkDesc"
+      type="text"
+      name="postLinkDesc"
+      placeholder="Link description..."
+      style="border-top: none"
+    /><br /><br />
 
     <b>Hashtags</b>
     <input v-model="postHashtags" type="text" name="postHashtags" placeholder="Hashtags..." /><br />
@@ -95,7 +98,8 @@ export default {
         localStorage.getItem(`RapidMarketingAI-mostRecentSearch`).slice(1)
       : '';
     this.postBody = localStorage.getItem(`RapidMarketingAI-mostRecentSearch`)
-      ? localStorage.getItem(`RapidMarketingAI-mostRecentSearch`).charAt(0).toUpperCase() +
+      ? 'This post is about the following topic: ' +
+        localStorage.getItem(`RapidMarketingAI-mostRecentSearch`).charAt(0).toUpperCase() +
         localStorage.getItem(`RapidMarketingAI-mostRecentSearch`).slice(1)
       : '';
     this.postLink = this.userStore.userData ? this.userStore.userData.Website : '';
@@ -108,47 +112,30 @@ export default {
 </script>
 
 <style>
-.Post {
-  /* padding: 0px 0px; */
-}
-
 .Post textarea {
-  width: 100%;
+  width: 105%;
   padding-left: 5px;
   background: white;
   border: 1px solid black;
   padding: 6px;
-}
-
-.Post input[type='text'] {
-  width: 100%;
-  padding-left: 5px;
-  background: white;
-  border: 1px solid black;
-  padding: 6px;
-  /* border-radius: 4px; */
-  /* border: none; */
+  resize: none;
 }
 
 .Post input[type='file'] {
-  width: 100%;
+  width: 105%;
   background: white;
   padding: 6px;
   border: 1px solid black;
 }
 
-/* .centerSpan {
-  margin-left: 38%;
-} */
-
 .Post button {
-  width: 100%;
+  width: 105%;
   padding: 6px;
   border: 1px solid black;
 }
 
 .Post img {
-  width: 100%;
+  width: 105%;
 }
 
 @media only screen and (min-width: 768px) {

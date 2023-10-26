@@ -1,26 +1,12 @@
 <template>
-  <table>
-    <tr>
-      <th>Post Date</th>
-      <th>Post Link</th>
-    </tr>
-    <tr v-for="value in posted">
-      <td
-        v-for="(value, key) in Object.entries(value).filter(([key, val]) => {
-          return key === 'date';
-        })"
+  <div class="posted">
+    <a v-for="value in posted" :class="['postlinks fab fa-'] + value.website" :href="value.link" target="_blank">
+      <span
+        >{{ value.date.slice(5, 7) }}/{{ value.date.slice(8, 10) }}/{{ value.date.slice(2, 4) }}
+        {{ value.date.slice(10, 16) }}</span
       >
-        {{ value[1].slice(5, 7) }}/{{ value[1].slice(8, 10) }}/{{ value[1].slice(2, 4) }} {{ value[1].slice(10, 16) }}
-      </td>
-      <td
-        v-for="(value, key) in Object.entries(value).filter(([key, val]) => {
-          return key === 'link';
-        })"
-      >
-        <a :href="value[1]" :class="['postlinks fab fa-'] + value[1].split('.')[1]" target="_blank"></a>
-      </td>
-    </tr>
-  </table>
+    </a>
+  </div>
 </template>
 
 <script>
@@ -73,35 +59,26 @@ export default {
 </script>
 
 <style scoped>
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  /* table-layout: auto; */
-  width: 100%;
-  /* max-width: 100%; */
-  /* white-space: nowrap; */
-}
-
-th {
+.posted {
   text-align: center;
-  padding: 5px;
-  text-decoration: underline;
-  /* background-color: #f1f1f1; */
 }
-
-td {
-  /* border: 1px solid #dddddd; */
-  text-align: center;
-  padding: 5px;
+a {
+  text-decoration: none;
+}
+span {
+  font-size: 18px;
+  padding-left: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+  vertical-align: middle;
 }
 
 .postlinks {
-  padding: 5px 0px;
-  height: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 15px;
   font-size: 30px;
-  width: 100%;
-  text-align: center;
-  text-decoration: none;
+  width: 90%;
+  margin-top: 12px;
 }
 
 .fab {
@@ -185,10 +162,8 @@ td {
 }
 
 @media only screen and (min-width: 768px) {
-  table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    white-space: nowrap;
+  .postlinks {
+    width: 80%;
   }
 }
 </style>

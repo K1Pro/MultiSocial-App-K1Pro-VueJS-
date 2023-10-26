@@ -260,16 +260,14 @@ export default {
 }
 
 .socialmedia input[type='text'] {
-  width: 100%;
-  padding-left: 5px;
+  width: 105%;
   background: white;
   border: 1px solid black;
   padding: 6px;
 }
 
 .socialmedia input[type='datetime-local'] {
-  width: 100%;
-  padding-left: 5px;
+  width: 105%;
   background: white;
   border: 1px solid black;
   padding: 6px;

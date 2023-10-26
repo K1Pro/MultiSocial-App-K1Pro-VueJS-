@@ -112,7 +112,7 @@ export default {
   background: -moz-linear-gradient(left, #f1f1f1 50px, #999999 50px);
   background: -ms-linear-gradient(left, #f1f1f1 50px, #999999 50px);
   background: linear-gradient(left, #f1f1f1 50px, #999999 50px);
-  padding-right: 5px;
+  /* padding-right: 5px; */
   scrollbar-width: thin;
   overflow-y: hidden;
 }
@@ -134,7 +134,7 @@ export default {
   }
 
   .grid-container {
-    grid-template-columns: 40vw 40vw 20vw;
+    grid-template-columns: 42vw 42vw 16vw;
     grid-template-rows: 100vh;
   }
 
