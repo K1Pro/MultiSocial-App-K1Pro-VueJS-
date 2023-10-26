@@ -32,6 +32,7 @@ export default {
 
   computed: {
     ...Pinia.mapWritableState(useUserStore, [
+      'userData',
       'imagePath',
       'imgSrchArr',
       'imgSrchArr1stPart',
@@ -63,6 +64,10 @@ export default {
           );
           const imageSearchJSON = await response.json();
           if (imageSearchJSON && Number.isInteger(+imageSearchJSON.total_results)) {
+            if (!this.imagePath) {
+              this.imagePath = imageSearchJSON.photos[0].src.landscape;
+              localStorage.setItem(`RapidMarketingAI-mostRecentImagePath`, imageSearchJSON.photos[0].src.original);
+            }
             console.log(imageSearchJSON.photos);
             this.imgSrchArr = imageSearchJSON.photos;
             const max = imageSearchJSON.total_results > 80 ? 80 : imageSearchJSON.total_results;
@@ -97,8 +102,12 @@ export default {
   created() {
     this.imageSearchInput = localStorage.getItem(`RapidMarketingAI-mostRecentSearch`)
       ? localStorage.getItem(`RapidMarketingAI-mostRecentSearch`)
-      : '';
+      : this.userData.Tag1.replace(/([A-Z])/g, ' $1').trim();
     let mostRecentSearch = localStorage.getItem(`RapidMarketingAI-mostRecentSearch`);
+    if (!mostRecentSearch) {
+      this.imageSearch();
+      mostRecentSearch = localStorage.getItem(`RapidMarketingAI-mostRecentSearch`);
+    }
     if (localStorage.getItem(`RapidMarketingAI-mostRecentSearch`)) {
       let rep = 0;
       const mostRcntSrchArr = [];
@@ -131,7 +140,7 @@ export default {
 
 .Gallery input[type='search'] {
   width: 48.5%;
-  background: #f1f1f1;
+  background: white;
   border: 1px solid black;
   padding: 6px;
   font-weight: bold;

@@ -236,8 +236,8 @@ export default {
 .socialmedia > .tab {
   float: left;
   /* border: 1px solid #ccc; */
-  background-color: #f1f1f1;
-  width: 20%;
+  /* background-color: #f1f1f1; */
+  width: 50px;
   /* height: 100%; */
 }
 
@@ -246,13 +246,13 @@ export default {
   float: left;
   padding: 0px 0px 0px 32px;
   /* border: 1px solid #ccc; */
-  width: 80%;
+  width: 83%;
   border-left: none;
   /* height: 100%; */
 }
 
 .tablinks {
-  padding: 15px 70% 15px 30%;
+  padding: 15px 80% 15px 20%;
   font-size: 30px;
   width: 100%;
   text-align: center;
@@ -262,7 +262,7 @@ export default {
 .socialmedia input[type='text'] {
   width: 100%;
   padding-left: 5px;
-  background: #f1f1f1;
+  background: white;
   border: 1px solid black;
   padding: 6px;
 }
@@ -270,7 +270,7 @@ export default {
 .socialmedia input[type='datetime-local'] {
   width: 100%;
   padding-left: 5px;
-  background: #f1f1f1;
+  background: white;
   border: 1px solid black;
   padding: 6px;
 }
@@ -283,11 +283,11 @@ export default {
 
 @media only screen and (min-width: 768px) {
   .socialmedia > .tab {
-    width: 10%;
+    width: 50px;
   }
 
   .socialmedia > .tabcontent {
-    width: 90%;
+    width: 83%;
   }
 }
 </style>

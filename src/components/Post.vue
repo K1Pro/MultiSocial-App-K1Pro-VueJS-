@@ -115,7 +115,7 @@ export default {
 .Post textarea {
   width: 100%;
   padding-left: 5px;
-  background: #f1f1f1;
+  background: white;
   border: 1px solid black;
   padding: 6px;
 }
@@ -123,7 +123,7 @@ export default {
 .Post input[type='text'] {
   width: 100%;
   padding-left: 5px;
-  background: #f1f1f1;
+  background: white;
   border: 1px solid black;
   padding: 6px;
   /* border-radius: 4px; */
@@ -132,7 +132,7 @@ export default {
 
 .Post input[type='file'] {
   width: 100%;
-  background: #f1f1f1;
+  background: white;
   padding: 6px;
   border: 1px solid black;
 }

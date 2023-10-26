@@ -108,10 +108,10 @@ export default {
 
 .item1 {
   background-color: #999999;
-  background: -webkit-linear-gradient(left, #f1f1f1 20%, #999999 20%);
-  background: -moz-linear-gradient(left, #f1f1f1 20%, #999999 20%);
-  background: -ms-linear-gradient(left, #f1f1f1 20%, #999999 20%);
-  background: linear-gradient(left, #f1f1f1 20%, #999999 20%);
+  background: -webkit-linear-gradient(left, #f1f1f1 50px, #999999 50px);
+  background: -moz-linear-gradient(left, #f1f1f1 50px, #999999 50px);
+  background: -ms-linear-gradient(left, #f1f1f1 50px, #999999 50px);
+  background: linear-gradient(left, #f1f1f1 50px, #999999 50px);
   padding-right: 5px;
   scrollbar-width: thin;
   overflow-y: hidden;
@@ -140,10 +140,10 @@ export default {
 
   .item1 {
     overflow-y: scroll;
-    background: -webkit-linear-gradient(left, #f1f1f1 10%, #999999 10%);
-    background: -moz-linear-gradient(left, #f1f1f1 10%, #999999 10%);
-    background: -ms-linear-gradient(left, #f1f1f1 10%, #999999 10%);
-    background: linear-gradient(left, #f1f1f1 10%, #999999 10%);
+    background: -webkit-linear-gradient(left, #f1f1f1 50px, #999999 50px);
+    background: -moz-linear-gradient(left, #f1f1f1 50px, #999999 50px);
+    background: -ms-linear-gradient(left, #f1f1f1 50px, #999999 50px);
+    background: linear-gradient(left, #f1f1f1 50px, #999999 50px);
   }
 
   .item2,
