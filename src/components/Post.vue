@@ -81,7 +81,11 @@ export default {
     },
 
     previewFiles(event) {
-      console.log(event.target.files);
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (e) => {
+        this.userStore.imagePath = e.target.result;
+      };
     },
   },
 

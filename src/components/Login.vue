@@ -92,7 +92,7 @@ export default {
 }
 
 .loginform {
-  text-align: center;
+  text-align: right;
   margin: auto;
 }
 
@@ -110,6 +110,31 @@ export default {
 .inputs {
   /* background: white; */
   padding: 10px;
+}
+
+.inputs input[type='text'] {
+  /* width: 100%; */
+  padding-left: 5px;
+  background: #f1f1f1;
+  border: 1px solid black;
+  padding: 6px;
+  /* border-radius: 4px; */
+  /* border: none; */
+}
+.inputs input[type='password'] {
+  /* width: 100%; */
+  padding-left: 5px;
+  background: #f1f1f1;
+  border: 1px solid black;
+  padding: 6px;
+  /* border-radius: 4px; */
+  /* border: none; */
+}
+
+.inputs button {
+  width: 55%;
+  padding: 6px;
+  border: 1px solid black;
 }
 
 @keyframes rotateAnimation {
