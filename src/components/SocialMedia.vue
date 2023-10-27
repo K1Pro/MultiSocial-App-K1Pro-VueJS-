@@ -287,6 +287,7 @@ export default {
 
   .socialmedia > .tabcontent {
     width: 83%;
+    padding: 0px 0px 0px 56px;
   }
 
   .socialmedia input[type='text'] {

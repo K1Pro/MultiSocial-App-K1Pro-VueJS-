@@ -143,14 +143,6 @@ export default {
         this.userStore.message = this.error;
       }
     },
-
-    savePostTitle() {
-      localStorage.setItem(`RapidMarketingAI-mostRecentTitle`, this.postTitle);
-    },
-
-    savePostBody() {
-      localStorage.setItem(`RapidMarketingAI-mostRecentBody`, this.postTitle);
-    },
   },
 
   watch: {
