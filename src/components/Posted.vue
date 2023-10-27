@@ -63,6 +63,8 @@ export default {
   text-align: center;
 }
 a {
+  outline: 1px solid black;
+  outline-offset: -1px;
   text-decoration: none;
 }
 span {

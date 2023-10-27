@@ -115,28 +115,30 @@ export default {
     },
 
     async uploadImage(event) {
-      const reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
-      reader.onload = (e) => {
-        console.log(e.target.result);
-        this.userStore.imagePath = e.target.result;
-      };
+      let files = event.target.files[0];
+      const formData = new FormData();
+      formData.append('sample_image', files);
+
+      // const reader = new FileReader();
+      // reader.readAsDataURL(event.target.files[0]);
+      // reader.onload = (e) => {
+      //   this.userStore.imagePath = e.target.result;
+      // };
 
       try {
         const response = await fetch(servrURL + this.userStore.endPts.uploadImage, {
           method: 'POST',
           headers: {
             Authorization: this.userStore.accessToken,
-            'Content-Type': 'application/json',
             'Cache-Control': 'no-store',
           },
-          body: JSON.stringify({
-            UploadedImage: 'nothing',
-          }),
+          body: formData,
         });
         const uploadImageJSON = await response.json();
         if (uploadImageJSON.success) {
           this.userStore.message = uploadImageJSON.messages[0];
+          this.userStore.imagePath = servrURL + '/images/upload.jpg';
+          localStorage.setItem(`RapidMarketingAI-mostRecentImagePath`, servrURL + '/images/upload.jpg');
         }
       } catch (error) {
         this.error = error.toString();
