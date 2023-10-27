@@ -260,21 +260,22 @@ export default {
 }
 
 .socialmedia input[type='text'] {
-  width: 105%;
+  width: 100%;
   background: white;
-  border: 1px solid black;
+  border: 0px;
+  /* border: 1px solid black; */
   padding: 6px;
 }
 
 .socialmedia input[type='datetime-local'] {
-  width: 105%;
+  width: 100%;
   background: white;
-  border: 1px solid black;
+  border: 0px;
   padding: 6px;
 }
 
 .socialmedia input[type='checkbox'] {
-  border: 1px solid black;
+  border: 0px;
   width: 16px;
   height: 16px;
 }
@@ -286,6 +287,14 @@ export default {
 
   .socialmedia > .tabcontent {
     width: 83%;
+  }
+
+  .socialmedia input[type='text'] {
+    width: 105%;
+  }
+
+  .socialmedia input[type='datetime-local'] {
+    width: 105%;
   }
 }
 </style>

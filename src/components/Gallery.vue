@@ -2,14 +2,14 @@
   <div class="Gallery">
     <!-- <h2>{{ this.totalImages }} images:</h2> -->
 
+    <button type="button" @click.prevent="imageSearch()">Search</button>
     <input
       type="search"
       v-model="imageSearchInput"
       name="image-search"
       placeholder="Search for an image…"
       @keyup.enter="imageSearch()"
-    />
-    <button type="button" @click.prevent="imageSearch()">Search</button><br />
+    /><br />
 
     <div class="Gallery-Row">
       <div class="Gallery-Column">
@@ -139,18 +139,22 @@ export default {
 }
 
 .Gallery input[type='search'] {
-  width: 48.5%;
+  width: 70%;
   background: white;
-  border: 1px solid black;
-  padding: 6px;
+  border: 0px;
+  padding: 8px;
   font-weight: bold;
-  margin-left: 8px;
 }
 
 .Gallery button {
-  width: 20%;
+  margin-left: 8px;
+  width: 27%;
   padding: 6px;
-  border: 1px solid black;
+  border: 0px;
+  background-color: #f1f1f1;
+  color: black;
+  font-size: 16px;
+  font-weight: bold;
 }
 
 .Gallery-Row {
@@ -172,8 +176,8 @@ export default {
   margin-top: 8px;
   vertical-align: middle;
   width: 100%;
-  outline: 2px solid white;
-  outline-offset: -2px;
+  outline: 1px solid black;
+  outline-offset: -1px;
   /* width: 50%;
   display: inline;
   margin: auto; */
@@ -191,5 +195,13 @@ export default {
     /* outline: 8px solid white;
     outline-offset: -8px; */
   }
+
+  /* .Gallery input[type='search'] {
+    width: 33.5%;
+  }
+
+  .Gallery button {
+    width: 15%;
+  } */
 }
 </style>

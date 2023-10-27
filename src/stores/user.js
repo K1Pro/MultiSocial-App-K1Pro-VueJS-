@@ -4,14 +4,14 @@ const useUserStore = Pinia.defineStore('user', {
       accessToken: '',
       sessionID: '',
       loggedIn: null,
-      userData: '',
+      userData: [],
       message: null,
       newPostTimestamp: '',
       imagePath: localStorage.getItem(`RapidMarketingAI-mostRecentImagePath`)
         ? localStorage.getItem(`RapidMarketingAI-mostRecentImagePath`) +
           '?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200'
         : '',
-      imgSrchArr: '',
+      imgSrchArr: [],
       endPts: {
         userData: 'controller/users.php?userid=',
         login: 'controller/sessions.php',
