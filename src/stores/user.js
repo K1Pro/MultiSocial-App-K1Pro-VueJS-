@@ -20,6 +20,7 @@ const useUserStore = Pinia.defineStore('user', {
         socialMediaParams: 'controller/smparams.php',
         post: 'controller/post.php',
         posted: 'controller/posted.php',
+        uploadImage: 'controller/imageupload.php',
       },
       vars: {
         medium: '?auto=compress&cs=tinysrgb&h=350',

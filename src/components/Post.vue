@@ -31,7 +31,7 @@
 
     <img v-if="this.userStore.imagePath" :src="this.userStore.imagePath" alt="random-image" /><br />
 
-    <input type="file" name="filename" @change="previewFiles" /><br /><br />
+    <input type="file" name="filename" @change="uploadImage" /><br /><br />
 
     <button type="button" @click.prevent="socialMediaPost()">Post</button><br /><br />
   </div>
@@ -114,13 +114,34 @@ export default {
       }
     },
 
-    previewFiles(event) {
+    async uploadImage(event) {
       const reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
       reader.onload = (e) => {
         console.log(e.target.result);
         this.userStore.imagePath = e.target.result;
       };
+
+      try {
+        const response = await fetch(servrURL + this.userStore.endPts.uploadImage, {
+          method: 'POST',
+          headers: {
+            Authorization: this.userStore.accessToken,
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-store',
+          },
+          body: JSON.stringify({
+            UploadedImage: 'nothing',
+          }),
+        });
+        const uploadImageJSON = await response.json();
+        if (uploadImageJSON.success) {
+          this.userStore.message = uploadImageJSON.messages[0];
+        }
+      } catch (error) {
+        this.error = error.toString();
+        this.userStore.message = this.error;
+      }
     },
 
     savePostTitle() {
