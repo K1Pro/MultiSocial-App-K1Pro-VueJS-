@@ -9,14 +9,20 @@
       name="image-search"
       placeholder="Search for an image…"
       @keyup.enter="imageSearch()"
-    /><br />
+    />
+    <select name="images-searched" @change="selectSearch">
+      <option v-for="searched in imageSearchInputs" :value="searched">
+        {{ searched }}
+      </option>
+    </select>
+    <br />
 
     <div class="Gallery-Row">
       <div class="Gallery-Column">
-        <img v-for="value in imgSrchArr1stPart" :src="value.src.medium" @click="selectImg(value.src.original)" />
+        <img v-for="images in imgSrchArr1stPart" :src="images.src.medium" @click="selectImg(images.src.original)" />
       </div>
       <div class="Gallery-Column">
-        <img v-for="value in imgSrchArr2ndPart" :src="value.src.medium" @click="selectImg(value.src.original)" />
+        <img v-for="images in imgSrchArr2ndPart" :src="images.src.medium" @click="selectImg(images.src.original)" />
       </div>
     </div>
   </div>
@@ -27,7 +33,7 @@ export default {
   name: 'Gallery',
 
   data() {
-    return { imageSearchInput: '' };
+    return { imageSearchInput: '', imageSearchInputs: [] };
   },
 
   computed: {
@@ -98,6 +104,15 @@ export default {
       this.imagePath = selectedImgPath + this.vars.landscape;
       localStorage.setItem(`RapidMarketingAI-mostRecentImagePath`, selectedImgPath);
     },
+
+    selectSearch(event) {
+      console.log(event.srcElement.selectedOptions[0]._value);
+      const transaction = this.xDB_galleryOnLoad.transaction(['galleryOnLoad_tb'], 'readwrite');
+      const objectStore = transaction.objectStore('galleryOnLoad_tb');
+      objectStore.get(event.srcElement.selectedOptions[0]._value).onsuccess = (event) => {
+        this.imgSrchArr = event.target.result;
+      };
+    },
   },
   created() {
     if (!('indexedDB' in window)) this.message = "This browser doesn't support IndexedDB";
@@ -126,10 +141,13 @@ export default {
 
         const transaction = db.transaction(['galleryOnLoad_tb'], 'readwrite');
         const objectStore = transaction.objectStore('galleryOnLoad_tb');
-        let customers;
 
         objectStore.get(this.imageSearchInput.replaceAll(' ', '_').toLowerCase()).onsuccess = (event) => {
           this.imgSrchArr = event.target.result;
+        };
+        objectStore.getAllKeys().onsuccess = (event) => {
+          this.imageSearchInputs = event.srcElement.result;
+          console.log(event.srcElement.result);
         };
       });
 
@@ -153,11 +171,24 @@ export default {
 }
 
 .Gallery input[type='search'] {
+  position: relative;
+  width: 65%;
+  background: white;
+  border: 0px;
+  padding: 7px;
+  margin-right: -65%;
+  z-index: 2;
+  /* font-weight: bold; */
+}
+
+.Gallery select {
+  position: relative;
   width: 70%;
   background: white;
   border: 0px;
-  padding: 8px;
-  font-weight: bold;
+  padding: 7px;
+  z-index: 1;
+  /* font-weight: bold; */
 }
 
 .Gallery button {
