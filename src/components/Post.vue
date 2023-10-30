@@ -116,7 +116,7 @@ export default {
 
     async uploadImage(event) {
       let files = event.target.files[0];
-      const formData = new FormData();
+      let formData = new FormData();
       formData.append('sample_image', files);
 
       // const reader = new FileReader();
@@ -137,8 +137,8 @@ export default {
         const uploadImageJSON = await response.json();
         if (uploadImageJSON.success) {
           this.userStore.message = uploadImageJSON.messages[0];
-          this.userStore.imagePath = servrURL + '/images/upload.jpg';
-          localStorage.setItem(`RapidMarketingAI-mostRecentImagePath`, servrURL + '/images/upload.jpg');
+          this.userStore.imagePath = servrURL + 'images/upload.jpg';
+          localStorage.setItem(`RapidMarketingAI-mostRecentImagePath`, servrURL + 'images/upload.jpg');
         }
       } catch (error) {
         this.error = error.toString();

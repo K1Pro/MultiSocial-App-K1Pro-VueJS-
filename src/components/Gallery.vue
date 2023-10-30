@@ -35,6 +35,7 @@ export default {
       'userData',
       'imagePath',
       'imgSrchArr',
+      'xDB_galleryOnLoad',
       'imgSrchArr1stPart',
       'imgSrchArr2ndPart',
       'vars',
@@ -46,10 +47,12 @@ export default {
     async imageSearch() {
       if (this.imageSearchInput) {
         localStorage.setItem(`RapidMarketingAI-mostRecentSearch`, this.imageSearchInput.toLowerCase());
+
         const prevSrchTtlRslts = localStorage.getItem(`RapidMarketingAI-${this.imageSearchInput.toLowerCase()}`);
         const prevSrchTtlRsltsMax =
           prevSrchTtlRslts && prevSrchTtlRslts != 'undefined' ? Math.floor(prevSrchTtlRslts / 80) : 1;
         const randomPage = Math.floor(Math.random() * (prevSrchTtlRsltsMax - 1 + 1) + 1);
+
         try {
           const response = await fetch(
             'https://api.pexels.com/v1/search?query=' +
@@ -68,7 +71,8 @@ export default {
               this.imagePath = imageSearchJSON.photos[0].src.landscape;
               localStorage.setItem(`RapidMarketingAI-mostRecentImagePath`, imageSearchJSON.photos[0].src.original);
             }
-            console.log(imageSearchJSON.photos);
+
+            // console.log(imageSearchJSON.photos);
             this.imgSrchArr = imageSearchJSON.photos;
             const max = imageSearchJSON.total_results > 80 ? 80 : imageSearchJSON.total_results;
             const randomImage = Math.floor(Math.random() * (max - 1 + 1) + 1);
@@ -76,14 +80,10 @@ export default {
               `RapidMarketingAI-${this.imageSearchInput.toLowerCase()}`,
               imageSearchJSON.total_results
             );
-            let rep = 0;
-            imageSearchJSON.photos.forEach((element) => {
-              rep++;
-              localStorage.setItem(
-                `RapidMarketingAI-${this.imageSearchInput.toLowerCase()}-imgPath-${rep}`,
-                element.src.original
-              );
-            });
+
+            const transaction = this.xDB_galleryOnLoad.transaction(['galleryOnLoad_tb'], 'readwrite');
+            const objectStore = transaction.objectStore('galleryOnLoad_tb');
+            objectStore.put(imageSearchJSON.photos, this.imageSearchInput.replaceAll(' ', '_').toLowerCase());
           }
         } catch (error) {
           console.log(error.toString());
@@ -100,32 +100,46 @@ export default {
     },
   },
   created() {
+    if (!('indexedDB' in window)) this.message = "This browser doesn't support IndexedDB";
+
     this.imageSearchInput = localStorage.getItem(`RapidMarketingAI-mostRecentSearch`)
       ? localStorage.getItem(`RapidMarketingAI-mostRecentSearch`)
       : this.userData.Tag1.replace(/([A-Z])/g, ' $1').trim();
     let mostRecentSearch = localStorage.getItem(`RapidMarketingAI-mostRecentSearch`);
+
     if (!mostRecentSearch) {
+      console.log('no most recent search');
       this.imageSearch();
       mostRecentSearch = localStorage.getItem(`RapidMarketingAI-mostRecentSearch`);
     }
+
     if (localStorage.getItem(`RapidMarketingAI-mostRecentSearch`)) {
-      let rep = 0;
-      const mostRcntSrchArr = [];
-      do {
-        rep++;
-        if (localStorage.getItem(`RapidMarketingAI-${mostRecentSearch}-imgPath-${rep}`)) {
-          const obj = {
-            src: {
-              original: localStorage.getItem(`RapidMarketingAI-${mostRecentSearch}-imgPath-${rep}`),
-              medium: localStorage.getItem(`RapidMarketingAI-${mostRecentSearch}-imgPath-${rep}`) + this.vars.medium,
-              landscape:
-                localStorage.getItem(`RapidMarketingAI-${mostRecentSearch}-imgPath-${rep}`) + this.vars.landscape,
-            },
-          };
-          mostRcntSrchArr.push(obj);
-        }
-      } while (localStorage.getItem(`RapidMarketingAI-${mostRecentSearch}-imgPath-${rep}`));
-      this.imgSrchArr = mostRcntSrchArr;
+      let db;
+      const openOrCreateDB = window.indexedDB.open('rapid-marketing-ai_db', 1);
+
+      openOrCreateDB.addEventListener('error', () => console.error('Error opening DB'));
+
+      openOrCreateDB.addEventListener('success', () => {
+        console.log('Successfully opened DB');
+        db = openOrCreateDB.result;
+        this.xDB_galleryOnLoad = db;
+
+        const transaction = db.transaction(['galleryOnLoad_tb'], 'readwrite');
+        const objectStore = transaction.objectStore('galleryOnLoad_tb');
+        let customers;
+
+        objectStore.get(this.imageSearchInput.replaceAll(' ', '_').toLowerCase()).onsuccess = (event) => {
+          this.imgSrchArr = event.target.result;
+        };
+      });
+
+      openOrCreateDB.addEventListener('upgradeneeded', (init) => {
+        db = init.target.result;
+        db.onerror = () => {
+          console.error('Error loading database.');
+        };
+        db.createObjectStore('galleryOnLoad_tb', { autoIncrement: false });
+      });
     }
   },
 };
