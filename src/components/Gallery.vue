@@ -109,6 +109,9 @@ export default {
     },
 
     selectSearch(event) {
+      this.imageSearchInput = event.srcElement.selectedOptions[0]._value.replaceAll('_', ' ');
+      console.log(event);
+      localStorage.setItem(`RapidMarketingAI-mostRecentSearch`, event.srcElement.selectedOptions[0]._value);
       const transaction = this.xDB_galleryOnLoad.transaction(['galleryOnLoad_tb'], 'readwrite');
       const objectStore = transaction.objectStore('galleryOnLoad_tb');
       objectStore.get(event.srcElement.selectedOptions[0]._value).onsuccess = (event) => {
@@ -120,7 +123,7 @@ export default {
     if (!('indexedDB' in window)) this.message = "This browser doesn't support IndexedDB";
 
     this.imageSearchInput = localStorage.getItem(`RapidMarketingAI-mostRecentSearch`)
-      ? localStorage.getItem(`RapidMarketingAI-mostRecentSearch`)
+      ? localStorage.getItem(`RapidMarketingAI-mostRecentSearch`).replaceAll('_', ' ').toLowerCase()
       : this.userData.Tag1.replace(/([A-Z])/g, ' $1').trim();
     let mostRecentSearch = localStorage.getItem(`RapidMarketingAI-mostRecentSearch`);
 
@@ -173,11 +176,11 @@ export default {
 
 .Gallery input[type='search'] {
   position: relative;
-  width: 65%;
+  width: 67%;
   background: white;
   border: 0px;
   padding: 7px;
-  margin-right: -65%;
+  margin-right: -67%;
   z-index: 2;
   /* font-weight: bold; */
 }
