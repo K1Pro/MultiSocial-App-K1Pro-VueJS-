@@ -31,7 +31,7 @@ export default {
   border-radius: 2px;
   padding: 16px;
   position: fixed;
-  z-index: 1;
+  z-index: 5;
   left: 50%;
   top: 30px;
   font-size: 17px;
