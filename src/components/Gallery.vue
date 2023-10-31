@@ -12,7 +12,7 @@
     />
     <select name="images-searched" @change="selectSearch">
       <option v-for="searched in imageSearchInputs" :value="searched">
-        {{ searched }}
+        {{ searched.replaceAll('_', ' ') }}
       </option>
     </select>
     <br />
@@ -90,9 +90,12 @@ export default {
             const transaction = this.xDB_galleryOnLoad.transaction(['galleryOnLoad_tb'], 'readwrite');
             const objectStore = transaction.objectStore('galleryOnLoad_tb');
             objectStore.put(imageSearchJSON.photos, this.imageSearchInput.replaceAll(' ', '_').toLowerCase());
+
+            objectStore.getAllKeys().onsuccess = (event) => {
+              this.imageSearchInputs = event.srcElement.result;
+            };
           }
         } catch (error) {
-          console.log(error.toString());
           this.message = error.toString();
         }
       } else {
@@ -106,7 +109,6 @@ export default {
     },
 
     selectSearch(event) {
-      console.log(event.srcElement.selectedOptions[0]._value);
       const transaction = this.xDB_galleryOnLoad.transaction(['galleryOnLoad_tb'], 'readwrite');
       const objectStore = transaction.objectStore('galleryOnLoad_tb');
       objectStore.get(event.srcElement.selectedOptions[0]._value).onsuccess = (event) => {
@@ -147,7 +149,6 @@ export default {
         };
         objectStore.getAllKeys().onsuccess = (event) => {
           this.imageSearchInputs = event.srcElement.result;
-          console.log(event.srcElement.result);
         };
       });
 
