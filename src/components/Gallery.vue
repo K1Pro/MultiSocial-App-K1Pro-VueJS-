@@ -176,11 +176,11 @@ export default {
 
 .Gallery input[type='search'] {
   position: relative;
-  width: 67%;
+  width: 65%;
   background: white;
   border: 0px;
   padding: 7px;
-  margin-right: -67%;
+  margin-right: -65%;
   z-index: 2;
   /* font-weight: bold; */
 }

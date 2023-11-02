@@ -4,32 +4,18 @@
       {{ this.userStore.userData.Organization ? this.userStore.userData.Organization + ' # ' : ''
       }}{{ this.userStore.userData.FirstName }}
     </h2>
-    <!-- <h2>Rapid Marketing AI</h2> -->
 
     <b>Title | Body text</b>
-    <input v-model="postTitle" type="text" name="postTitle" placeholder="Title..." style="border-bottom: none" /><br />
-    <textarea v-model="postBody" rows="6" name="postBody" placeholder="Body text..." style="border-top: none"></textarea
-    ><br />
+    <input v-model="postTitle" type="text" name="postTitle" placeholder="Title..." />
+    <textarea v-model="postBody" rows="6" name="postBody" placeholder="Body text..."></textarea>
     <button type="button" @click.prevent="generateText()">Generate Text</button><br /><br />
 
     <b>Link | Description | Tags</b>
-    <input v-model="postLink" type="text" name="postLink" placeholder="Link..." style="border-bottom: none" /><br />
-    <input
-      v-model="postLinkDesc"
-      type="text"
-      name="postLinkDesc"
-      placeholder="Link description..."
-      style="border-top: none; border-bottom: none"
-    /><br />
-    <input
-      v-model="postHashtags"
-      type="text"
-      name="postHashtags"
-      placeholder="Hashtags..."
-      style="border-top: none"
-    /><br /><br />
+    <input v-model="postLink" type="text" name="postLink" placeholder="Link..." />
+    <input v-model="postLinkDesc" type="text" name="postLinkDesc" placeholder="Link description..." />
+    <input v-model="postHashtags" type="text" name="postHashtags" placeholder="Hashtags..." />
 
-    <img v-if="this.userStore.imagePath" :src="this.userStore.imagePath" alt="random-image" /><br />
+    <img v-if="this.userStore.imagePath" :src="this.userStore.imagePath" alt="random-image" />
 
     <input type="file" name="filename" @change="uploadImage" /><br /><br />
 
@@ -180,6 +166,7 @@ export default {
   background: white;
   border: 0px;
   /* border: 1px solid black; */
+  margin-bottom: -4px;
   padding: 6px;
   resize: none;
 }
@@ -203,6 +190,7 @@ export default {
 
 .Post img {
   width: 100%;
+  margin-bottom: -3px;
 }
 
 @media only screen and (min-width: 768px) {
