@@ -122,7 +122,7 @@ export default {
 
     async getSocialMedia(endPt) {
       try {
-        const response = await fetch(servrURL + this.userStore.endPts.socialMedia + '?smwebsite=' + endPt, {
+        const response = await fetch(servrURL + this.userStore.endPts.socialMedia + '/' + endPt, {
           method: 'GET',
           headers: {
             Authorization: this.userStore.accessToken,
