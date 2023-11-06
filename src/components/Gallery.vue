@@ -67,7 +67,7 @@ export default {
             {
               method: 'GET',
               headers: {
-                Authorization: pexelsKey,
+                Authorization: this.userData.Pexels,
               },
             }
           );
