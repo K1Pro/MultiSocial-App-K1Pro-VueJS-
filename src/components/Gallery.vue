@@ -161,6 +161,7 @@ export default {
           console.error('Error loading database.');
         };
         db.createObjectStore('galleryOnLoad_tb', { autoIncrement: false });
+        db.createObjectStore('generatedText_tb', { autoIncrement: false });
       });
     }
   },
