@@ -57,8 +57,12 @@ export default {
           });
           const generateTextJSON = await response.json();
           if (generateTextJSON[0].meanings[0].definitions[0].definition) {
+            console.log(generateTextJSON[0]);
             generatedBodyText.push(generateTextJSON[0].meanings[0].definitions[0].definition);
           }
+          const transaction = this.userStore.xDB_galleryOnLoad.transaction(['generatedText_tb'], 'readwrite');
+          const objectStore = transaction.objectStore('generatedText_tb');
+          objectStore.put(generateTextJSON[0], keyWords.replaceAll(' ', '_').toLowerCase());
         } catch (error) {
           console.log(error);
           // this.userStore.message = error.toString();
