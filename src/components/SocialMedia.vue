@@ -21,9 +21,13 @@
 
     <div class="tabcontent" v-if="chosenSocialMedia != 'home' && chosenSocialMedia != 'sign-out'">
       <h2>
-        <input type="checkbox" id="active" v-model="active" @click="patchSocialMedia" />{{
-          chosenSocialMedia.charAt(0).toUpperCase()
-        }}{{ chosenSocialMedia.slice(1) }}
+        <input
+          type="checkbox"
+          id="active"
+          v-model="this.userStore.userData.SMParams[chosenSocialMedia]['active']"
+          @click="patchSocialMedia"
+        />
+        {{ chosenSocialMedia.charAt(0).toUpperCase() }}{{ chosenSocialMedia.slice(1) }}
       </h2>
 
       <div
@@ -64,21 +68,6 @@ export default {
       socialMediaParams: '',
       chosenSocialMedia: 'home',
       active: false,
-      smSchema: {
-        Access_Token: '',
-        Access_Token_Expiry: '',
-        Access_Token_Secret: '',
-        App_ID: '',
-        App_Secret: '',
-        API_Key: '',
-        API_Key_Secret: '',
-        Bearer_Token: '',
-        Client_ID: '',
-        Client_Secret: '',
-        IG_User_ID: '',
-        Page_ID: '',
-        URN: '',
-      },
     };
   },
 
@@ -90,13 +79,6 @@ export default {
     openTab(event) {
       const selectedTab = event.target.classList.value.substring(event.target.classList.value.indexOf('fa-') + 3);
       this.chosenSocialMedia = selectedTab;
-      if (selectedTab != 'home' && selectedTab != 'sign-out') {
-        // this.getSocialMedia(selectedTab);
-
-        Object.values(this.userStore.userData.SMParams[selectedTab]).forEach((smParam) => {
-          console.log(smParam);
-        });
-      }
     },
 
     async patchSocialMedia(event) {
@@ -125,54 +107,6 @@ export default {
       }
     },
 
-    async getSocialMedia(endPt) {
-      try {
-        const response = await fetch(servrURL + this.userStore.endPts.socialMedia + '/' + endPt, {
-          method: 'GET',
-          headers: {
-            Authorization: this.userStore.accessToken,
-            'Content-Type': 'application/json',
-            'Cache-Control': 'no-store',
-          },
-        });
-        const getSocialMediaJSON = await response.json();
-        if (getSocialMediaJSON.success) {
-          const SMData = getSocialMediaJSON.data.sm_group;
-          this.active = SMData.active;
-          this.smSchema.Access_Token = SMData.Access_Token;
-          this.smSchema.Access_Token_Expiry = SMData.Access_Token_Expiry;
-          this.smSchema.Access_Token_Secret = SMData.Access_Token_Secret;
-          this.smSchema.App_ID = SMData.App_ID;
-          this.smSchema.App_Secret = SMData.App_Secret;
-          this.smSchema.API_Key = SMData.API_Key;
-          this.smSchema.API_Key_Secret = SMData.API_Key_Secret;
-          this.smSchema.Bearer_Token = SMData.Bearer_Token;
-          this.smSchema.Client_ID = SMData.Client_ID;
-          this.smSchema.Client_Secret = SMData.Client_Secret;
-          this.smSchema.IG_User_ID = SMData.IG_User_ID;
-          this.smSchema.Page_ID = SMData.Page_ID;
-          this.smSchema.URN = SMData.URN;
-        } else {
-          this.active = false;
-          this.smSchema.Access_Token = '';
-          this.smSchema.Access_Token_Expiry = '';
-          this.smSchema.Access_Token_Secret = '';
-          this.smSchema.App_ID = '';
-          this.smSchema.App_Secret = '';
-          this.smSchema.API_Key = '';
-          this.smSchema.API_Key_Secret = '';
-          this.smSchema.Bearer_Token = '';
-          this.smSchema.Client_ID = '';
-          this.smSchema.Client_Secret = '';
-          this.smSchema.IG_User_ID = '';
-          this.smSchema.Page_ID = '';
-          this.smSchema.URN = '';
-        }
-      } catch (error) {
-        this.error = error.toString();
-      }
-    },
-
     async getSocialMediaParams() {
       try {
         const response = await fetch(servrURL + this.userStore.endPts.socialMediaParams, {
@@ -188,7 +122,6 @@ export default {
 
   created() {
     this.getSocialMediaParams();
-    // this.getSocialMedia(this.chosenSocialMedia);
   },
 };
 </script>
