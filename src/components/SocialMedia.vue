@@ -40,7 +40,7 @@
           <input
             :type="smKey.includes('Expiry') ? 'datetime-local' : 'text'"
             :id="smKey"
-            v-model="smSchema[smKey]"
+            v-model="this.userStore.userData.SMParams[chosenSocialMedia][smKey]"
             @change="patchSocialMedia"
           /><br /><br />
         </div>
@@ -91,7 +91,11 @@ export default {
       const selectedTab = event.target.classList.value.substring(event.target.classList.value.indexOf('fa-') + 3);
       this.chosenSocialMedia = selectedTab;
       if (selectedTab != 'home' && selectedTab != 'sign-out') {
-        this.getSocialMedia(selectedTab);
+        // this.getSocialMedia(selectedTab);
+
+        Object.values(this.userStore.userData.SMParams[selectedTab]).forEach((smParam) => {
+          console.log(smParam);
+        });
       }
     },
 
