@@ -5,7 +5,7 @@
     <ul>
       <li
         v-for="value in Object.keys(this.userStore.userData).filter((e) => {
-          return e !== 'LoginActivity';
+          return e !== 'SMParams';
         })"
       >
         {{ value }}: {{ this.userStore.userData[value] }}
