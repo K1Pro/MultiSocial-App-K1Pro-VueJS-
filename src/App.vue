@@ -63,6 +63,7 @@ export default {
         if (userDataResJSON.success) {
           this.loggedIn = true;
           this.userData = userDataResJSON.data.user;
+          console.log(userDataResJSON.data.user);
         } else {
           this.loggedIn = false;
           document.cookie = `_a_t=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${cookiePath};`;

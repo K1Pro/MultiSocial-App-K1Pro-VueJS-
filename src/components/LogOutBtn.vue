@@ -1,5 +1,5 @@
 <template>
-  <button :style="logoutBtn" type="button" @click="logoutFunc(this.endPts.logout)">Log Out</button>
+  <button type="button" @click="logoutFunc(this.endPts.logout)">Log Out</button>
 </template>
 
 <script>

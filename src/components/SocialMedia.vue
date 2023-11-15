@@ -113,6 +113,7 @@ export default {
         const patchSocialMediaJSON = await response.json();
         if (patchSocialMediaJSON.success) {
           this.userStore.message = patchSocialMediaJSON.messages[0];
+          console.log(patchSocialMediaJSON);
         }
       } catch (error) {
         this.error = error.toString();
