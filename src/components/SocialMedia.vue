@@ -24,7 +24,12 @@
         <input
           type="checkbox"
           id="active"
-          v-model="this.userStore.userData.SMParams[chosenSocialMedia]['active']"
+          :checked="
+            this.userStore.userData.SMParams[chosenSocialMedia]?.['active'] == '1' ||
+            this.userStore.userData.SMParams[chosenSocialMedia]?.['active'] === true
+              ? true
+              : null
+          "
           @click="patchSocialMedia"
         />
         {{ chosenSocialMedia.charAt(0).toUpperCase() }}{{ chosenSocialMedia.slice(1) }}
@@ -44,7 +49,7 @@
           <input
             :type="smKey.includes('Expiry') ? 'datetime-local' : 'text'"
             :id="smKey"
-            v-model="this.userStore.userData.SMParams[chosenSocialMedia][smKey]"
+            :value="this.userStore.userData.SMParams[chosenSocialMedia]?.[smKey]"
             @change="patchSocialMedia"
           /><br /><br />
         </div>
@@ -82,7 +87,19 @@ export default {
     },
 
     async patchSocialMedia(event) {
-      const inputValue = event.target.type == 'checkbox' ? `${event.target.checked}` : event.target.value;
+      // This checks if the social media groups properties exists already, if not it is created, ex: SMParams.facebook.App_ID; otherise key is modified
+      if (!this.userStore.userData.SMParams[this.chosenSocialMedia]) {
+        // key is created
+        event.target.type == 'checkbox'
+          ? (this.userStore.userData.SMParams[this.chosenSocialMedia] = { [event.target.id]: event.target.checked })
+          : (this.userStore.userData.SMParams[this.chosenSocialMedia] = { [event.target.id]: event.target.value });
+      } else {
+        // key is modified
+        event.target.type == 'checkbox'
+          ? (this.userStore.userData.SMParams[this.chosenSocialMedia][event.target.id] = event.target.checked)
+          : (this.userStore.userData.SMParams[this.chosenSocialMedia][event.target.id] = event.target.value);
+      }
+      const inputValue = event.target.type == 'checkbox' ? event.target.checked : event.target.value;
       try {
         const response = await fetch(servrURL + this.userStore.endPts.socialMedia, {
           method: 'PATCH',
@@ -114,6 +131,7 @@ export default {
         });
         const SocialMediaParamsJSON = await response.json();
         if (SocialMediaParamsJSON.success) this.socialMediaParams = SocialMediaParamsJSON.data.sm_params;
+        console.log(SocialMediaParamsJSON);
       } catch (error) {
         this.error = error.toString();
       }
