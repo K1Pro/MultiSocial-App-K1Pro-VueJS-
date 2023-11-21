@@ -1,6 +1,11 @@
 <template>
   <div class="posted">
-    <a v-for="value in posted" :class="['postlinks fab fa-'] + value.website" :href="value.link" target="_blank">
+    <a
+      v-for="value in userData.SMPosts"
+      :class="['postlinks fab fa-'] + value.website"
+      :href="value.link"
+      target="_blank"
+    >
       <span
         >{{ value.date.slice(5, 7) }}/{{ value.date.slice(8, 10) }}/{{ value.date.slice(2, 4) }}
         {{ value.date.slice(10, 16) }}</span
@@ -13,47 +18,8 @@
 export default {
   name: 'Posted',
 
-  data() {
-    return { posted: '' };
-  },
-
   computed: {
-    ...Pinia.mapWritableState(useUserStore, ['accessToken', 'newPostTimestamp', 'endPts']),
-  },
-
-  methods: {
-    async getPosted() {
-      try {
-        const response = await fetch(servrURL + this.endPts.posted, {
-          method: 'GET',
-          headers: {
-            Authorization: this.accessToken,
-            'Cache-Control': 'no-store',
-          },
-        });
-        const getPostedJSON = await response.json();
-        if (getPostedJSON.success) {
-          this.posted = getPostedJSON.data.posted;
-          console.log(getPostedJSON);
-        } else {
-          console.log('no posts retrieved');
-        }
-      } catch (error) {
-        this.error = error.toString();
-        console.log(error.toString());
-      }
-    },
-  },
-
-  watch: {
-    newPostTimestamp(newTS, oldTS) {
-      console.log(newTS);
-      this.getPosted();
-    },
-  },
-
-  created() {
-    this.getPosted();
+    ...Pinia.mapWritableState(useUserStore, ['userData']),
   },
 };
 </script>

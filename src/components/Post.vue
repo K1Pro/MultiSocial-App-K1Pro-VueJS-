@@ -96,7 +96,8 @@ export default {
           // if (socialMediaPostJSON.success) {
           console.log(socialMediaPostJSON);
           this.userStore.message = socialMediaPostJSON.messages[0];
-          this.userStore.newPostTimestamp = Date.now();
+          // this.userStore.newPostTimestamp = Date.now(); // newPostTimestamp is deprecated
+          // after JSON transition, retrieved posts push to userData.SMPosts
           // }
         } catch (error) {
           this.userStore.message = error.toString();

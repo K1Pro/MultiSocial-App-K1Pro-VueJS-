@@ -44,7 +44,7 @@ export default {
   methods: {
     async loginFunc(endPt) {
       try {
-        const response = await fetch(servrURL + endPt, {
+        const response = await fetch(loginURL + endPt, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
