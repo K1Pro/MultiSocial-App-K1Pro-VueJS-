@@ -93,12 +93,13 @@ export default {
             }),
           });
           const socialMediaPostJSON = await response.json();
-          // if (socialMediaPostJSON.success) {
           console.log(socialMediaPostJSON);
           this.userStore.message = socialMediaPostJSON.messages[0];
-          // this.userStore.newPostTimestamp = Date.now(); // newPostTimestamp is deprecated
-          // after JSON transition, retrieved posts push to userData.SMPosts
-          // }
+          if (socialMediaPostJSON.data.sm_responses) {
+            socialMediaPostJSON.data.sm_responses.forEach((sm_response) => {
+              this.userStore.userData.SMPosts.unshift(sm_response);
+            });
+          }
         } catch (error) {
           this.userStore.message = error.toString();
         }
