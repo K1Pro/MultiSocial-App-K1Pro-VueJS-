@@ -25,8 +25,8 @@
           type="checkbox"
           id="active"
           :checked="
-            this.userStore.userData.SMParams[chosenSocialMedia]?.['active'] == '1' ||
-            this.userStore.userData.SMParams[chosenSocialMedia]?.['active'] === true
+            this.userStore.userData.SMParams?.[chosenSocialMedia]?.['active'] == '1' ||
+            this.userStore.userData.SMParams?.[chosenSocialMedia]?.['active'] === true
               ? true
               : null
           "
@@ -49,7 +49,7 @@
           <input
             :type="smKey.includes('Expiry') ? 'datetime-local' : 'text'"
             :id="smKey"
-            :value="this.userStore.userData.SMParams[chosenSocialMedia]?.[smKey]"
+            :value="this.userStore.userData.SMParams?.[chosenSocialMedia]?.[smKey]"
             @change="patchSocialMedia"
           /><br /><br />
         </div>
@@ -83,6 +83,10 @@ export default {
   methods: {
     openTab(event) {
       const selectedTab = event.target.classList.value.substring(event.target.classList.value.indexOf('fa-') + 3);
+      if (!this.userStore.userData.SMParams?.[selectedTab]) {
+        const mergedObj = Object.assign({ [selectedTab]: '' }, this.userStore.userData.SMParams);
+        this.userStore.userData.SMParams = mergedObj;
+      }
       this.chosenSocialMedia = selectedTab;
     },
 
@@ -117,6 +121,7 @@ export default {
         if (patchSocialMediaJSON.success) {
           this.userStore.message = patchSocialMediaJSON.messages[0];
         }
+        console.log(patchSocialMediaJSON);
       } catch (error) {
         this.error = error.toString();
         this.userStore.message = this.error;
