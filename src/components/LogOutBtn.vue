@@ -13,7 +13,7 @@ export default {
   methods: {
     async logoutFunc(endPt) {
       try {
-        const response = await fetch(servrURL + endPt + this.sessionID, {
+        const response = await fetch(loginURL + endPt + this.sessionID, {
           method: 'DELETE',
           headers: {
             Authorization: this.accessToken,
