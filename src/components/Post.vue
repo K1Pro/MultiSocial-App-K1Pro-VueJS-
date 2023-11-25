@@ -57,12 +57,35 @@ export default {
           });
           const generateTextJSON = await response.json();
           if (generateTextJSON[0].meanings[0].definitions[0].definition) {
-            console.log(generateTextJSON[0]);
+            // console.log(generateTextJSON[0]);
             generatedBodyText.push(generateTextJSON[0].meanings[0].definitions[0].definition);
           }
           const transaction = this.userStore.xDB_galleryOnLoad.transaction(['generatedText_tb'], 'readwrite');
           const objectStore = transaction.objectStore('generatedText_tb');
           objectStore.put(generateTextJSON[0], keyWords.replaceAll(' ', '_').toLowerCase());
+
+          try {
+            // console.log(keyWords.replaceAll(' ', '_').toLowerCase());
+            // console.log(generateTextJSON[0]);
+            const generatedTextResponse = await fetch(servrURL + this.userStore.endPts.generatedText, {
+              method: 'POST',
+              headers: {
+                Authorization: this.userStore.accessToken,
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-store',
+              },
+              body: JSON.stringify({
+                Keyword: keyWords.replaceAll(' ', '_').toLowerCase(),
+                GeneratedText: generateTextJSON[0],
+              }),
+            });
+            const postGenerateTextJSON = await generatedTextResponse.json();
+            if (postGenerateTextJSON.success) {
+              console.log(postGenerateTextJSON);
+            }
+          } catch (error) {
+            console.log(error);
+          }
         } catch (error) {
           console.log(error);
           // this.userStore.message = error.toString();
