@@ -45,50 +45,63 @@ export default {
     async generateText() {
       const keyWordsArray = this.postTitle.split(/[\s-_]+|(?=[A-Z])/);
       const uniqueKeyWords = [...new Set(keyWordsArray)];
-      const uniKeyWordsNoArtsPreps = uniqueKeyWords.filter((keyWords) => {
-        return !artsPreps.has(keyWords.toLowerCase());
+
+      // Create an array of previously generated text
+      const prevGeneratedTextArray = [];
+      Object.keys(this.userStore.userData.GeneratedText).forEach((prevGeneratedText) => {
+        prevGeneratedTextArray.push(prevGeneratedText);
       });
-      const generatedBodyText = [];
+      const prevGeneratedTextString = prevGeneratedTextArray.join(' ');
 
-      for (const keyWords of uniKeyWordsNoArtsPreps) {
-        try {
-          const response = await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + keyWords, {
-            method: 'GET',
-          });
-          const generateTextJSON = await response.json();
-          if (generateTextJSON[0].meanings[0].definitions[0].definition) {
-            // console.log(generateTextJSON[0]);
-            generatedBodyText.push(generateTextJSON[0].meanings[0].definitions[0].definition);
+      // Filter out previously generated text and new text that will be generated
+      const newFilteredGeneratedText = [];
+      const prevGeneratedTextFinalArray = [];
+      uniqueKeyWords.forEach((uniqueKeyWord) => {
+        if (!prevGeneratedTextString.includes(uniqueKeyWord.toLowerCase())) {
+          newFilteredGeneratedText.push(uniqueKeyWord.toLowerCase());
+        } else {
+          if (this.userStore.userData.GeneratedText[uniqueKeyWord.toLowerCase()]) {
+            prevGeneratedTextFinalArray.push(
+              this.userStore.userData.GeneratedText[uniqueKeyWord.toLowerCase()].meanings[0].definitions[0].definition
+            );
           }
-          const transaction = this.userStore.xDB_galleryOnLoad.transaction(['generatedText_tb'], 'readwrite');
-          const objectStore = transaction.objectStore('generatedText_tb');
-          objectStore.put(generateTextJSON[0], keyWords.replaceAll(' ', '_').toLowerCase());
+        }
+      });
+      const newFilteredGeneratedString = newFilteredGeneratedText.join(' ');
+      const prevGeneratedTextFinalString = prevGeneratedTextFinalArray.join(' ');
 
-          try {
-            // console.log(keyWords.replaceAll(' ', '_').toLowerCase());
-            // console.log(generateTextJSON[0]);
-            const generatedTextResponse = await fetch(servrURL + this.userStore.endPts.generatedText, {
-              method: 'POST',
-              headers: {
-                Authorization: this.userStore.accessToken,
-                'Content-Type': 'application/json',
-                'Cache-Control': 'no-store',
-              },
-              body: JSON.stringify({
-                Keyword: keyWords.replaceAll(' ', '_').toLowerCase(),
-                GeneratedText: generateTextJSON[0],
-              }),
+      // insert previously generated text into body
+      const generatedBodyText = [];
+      generatedBodyText.push(prevGeneratedTextFinalString);
+
+      if (newFilteredGeneratedString) {
+        try {
+          const generatedTextResponse = await fetch(servrURL + this.userStore.endPts.generatedText, {
+            method: 'POST',
+            headers: {
+              Authorization: this.userStore.accessToken,
+              'Content-Type': 'application/json',
+              'Cache-Control': 'no-store',
+            },
+            body: JSON.stringify({
+              Keyword: newFilteredGeneratedString,
+            }),
+          });
+          const postGenerateTextJSON = await generatedTextResponse.json();
+          if (postGenerateTextJSON.success) {
+            postGenerateTextJSON.data.generated_text.forEach((generatedText) => {
+              generatedBodyText.push(generatedText.meanings[0].definitions[0].definition);
+              this.userStore.userData.GeneratedText[generatedText.word] = generatedText;
+              // This is for pushing results into IndexedDB possibly for future use.
+              // const transaction = this.userStore.xDB_galleryOnLoad.transaction(['generatedText_tb'], 'readwrite');
+              // const objectStore = transaction.objectStore('generatedText_tb');
+              // objectStore.put(generatedText, this.postTitle.replaceAll(' ', '_').toLowerCase());
             });
-            const postGenerateTextJSON = await generatedTextResponse.json();
-            if (postGenerateTextJSON.success) {
-              console.log(postGenerateTextJSON);
-            }
-          } catch (error) {
-            console.log(error);
+
+            this.userStore.message = postGenerateTextJSON.messages[0];
           }
         } catch (error) {
-          console.log(error);
-          // this.userStore.message = error.toString();
+          this.userStore.message = error.toString();
         }
       }
 
