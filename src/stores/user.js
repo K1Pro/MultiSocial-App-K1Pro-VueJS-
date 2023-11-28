@@ -22,6 +22,7 @@ const useUserStore = Pinia.defineStore('user', {
         posted: 'posted',
         uploadImage: 'imageupload',
         generatedText: 'generatedtext',
+        searchedPhotos: 'searchedphotos',
       },
       vars: {
         medium: '?auto=compress&cs=tinysrgb&h=350',

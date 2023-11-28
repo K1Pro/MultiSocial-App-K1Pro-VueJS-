@@ -135,7 +135,6 @@ export default {
         });
         const SocialMediaParamsJSON = await response.json();
         if (SocialMediaParamsJSON.success) this.socialMediaParams = SocialMediaParamsJSON.data.sm_params;
-        console.log(SocialMediaParamsJSON);
       } catch (error) {
         this.error = error.toString();
       }

@@ -97,15 +97,16 @@ export default {
               // const objectStore = transaction.objectStore('generatedText_tb');
               // objectStore.put(generatedText, this.postTitle.replaceAll(' ', '_').toLowerCase());
             });
-
             this.userStore.message = postGenerateTextJSON.messages[0];
           }
         } catch (error) {
           this.userStore.message = error.toString();
         }
+      } else {
+        this.userStore.message = 'No new generated text';
       }
 
-      this.postBody = generatedBodyText.join(' ');
+      this.postBody = generatedBodyText.join(' ').trim();
     },
 
     async socialMediaPost() {

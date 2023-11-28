@@ -38,6 +38,7 @@ export default {
 
   computed: {
     ...Pinia.mapWritableState(useUserStore, [
+      'accessToken',
       'userData',
       'imagePath',
       'imgSrchArr',
@@ -46,58 +47,77 @@ export default {
       'imgSrchArr2ndPart',
       'vars',
       'message',
+      'endPts',
     ]),
   },
 
   methods: {
     async imageSearch() {
+      this.userData.MostRecentSearch = this.imageSearchInput.replaceAll(' ', '_').toLowerCase().trim();
       if (this.imageSearchInput) {
         localStorage.setItem(`RapidMarketingAI-mostRecentSearch`, this.imageSearchInput.toLowerCase());
-
         const prevSrchTtlRslts = localStorage.getItem(`RapidMarketingAI-${this.imageSearchInput.toLowerCase()}`);
-        const prevSrchTtlRsltsMax =
-          prevSrchTtlRslts && prevSrchTtlRslts != 'undefined' ? Math.floor(prevSrchTtlRslts / 80) : 1;
-        const randomPage = Math.floor(Math.random() * (prevSrchTtlRsltsMax - 1 + 1) + 1);
+        // const prevSrchTtlRsltsMax =
+        //   prevSrchTtlRslts && prevSrchTtlRslts != 'undefined' ? Math.floor(prevSrchTtlRslts / 80) : 1;
+        // const randomPage = Math.floor(Math.random() * (prevSrchTtlRsltsMax - 1 + 1) + 1);
 
         try {
-          const response = await fetch(
-            'https://api.pexels.com/v1/search?query=' +
-              this.imageSearchInput.toLowerCase() +
-              `&page=${randomPage}&per_page=80`,
-            {
-              method: 'GET',
-              headers: {
-                Authorization: this.userData.Pexels,
-              },
-            }
-          );
+          const response = await fetch(servrURL + this.endPts.searchedPhotos, {
+            method: 'POST',
+            headers: {
+              Authorization: this.accessToken,
+              'Content-Type': 'application/json',
+              'Cache-Control': 'no-store',
+            },
+            body: JSON.stringify({
+              PhotoSearch: this.imageSearchInput.toLowerCase(),
+            }),
+          });
           const imageSearchJSON = await response.json();
-          if (imageSearchJSON && Number.isInteger(+imageSearchJSON.total_results)) {
-            if (!this.imagePath) {
-              this.imagePath = imageSearchJSON.photos[0].src.landscape;
-              localStorage.setItem(`RapidMarketingAI-mostRecentImagePath`, imageSearchJSON.photos[0].src.original);
-            }
-
-            // console.log(imageSearchJSON.photos);
-            this.imgSrchArr = imageSearchJSON.photos;
-            const max = imageSearchJSON.total_results > 80 ? 80 : imageSearchJSON.total_results;
-            const randomImage = Math.floor(Math.random() * (max - 1 + 1) + 1);
-            localStorage.setItem(
-              `RapidMarketingAI-${this.imageSearchInput.toLowerCase()}`,
-              imageSearchJSON.total_results
-            );
-
-            const transaction = this.xDB_galleryOnLoad.transaction(['galleryOnLoad_tb'], 'readwrite');
-            const objectStore = transaction.objectStore('galleryOnLoad_tb');
-            objectStore.put(imageSearchJSON.photos, this.imageSearchInput.replaceAll(' ', '_').toLowerCase());
-
-            objectStore.getAllKeys().onsuccess = (event) => {
-              this.imageSearchInputs = event.srcElement.result;
-            };
+          if (imageSearchJSON.success) {
+            console.log(imageSearchJSON);
           }
+          this.message = imageSearchJSON.messages[0];
         } catch (error) {
           this.message = error.toString();
         }
+
+        // try {
+        //   const response = await fetch(
+        //     'https://api.pexels.com/v1/search?query=' +
+        //       this.imageSearchInput.toLowerCase() +
+        //       `&page=${randomPage}&per_page=80`,
+        //     {
+        //       method: 'GET',
+        //       headers: {
+        //         Authorization: this.userData.Pexels,
+        //       },
+        //     }
+        //   );
+        //   const imageSearchJSON = await response.json();
+        //   if (imageSearchJSON && Number.isInteger(+imageSearchJSON.total_results)) {
+        //     if (!this.imagePath) {
+        //       this.imagePath = imageSearchJSON.photos[0].src.landscape;
+        //       localStorage.setItem(`RapidMarketingAI-mostRecentImagePath`, imageSearchJSON.photos[0].src.original);
+        //     }
+        //     // console.log(imageSearchJSON.photos);
+        //     this.imgSrchArr = imageSearchJSON.photos;
+        //     const max = imageSearchJSON.total_results > 80 ? 80 : imageSearchJSON.total_results;
+        //     const randomImage = Math.floor(Math.random() * (max - 1 + 1) + 1);
+        //     localStorage.setItem(
+        //       `RapidMarketingAI-${this.imageSearchInput.toLowerCase()}`,
+        //       imageSearchJSON.total_results
+        //     );
+        //     const transaction = this.xDB_galleryOnLoad.transaction(['galleryOnLoad_tb'], 'readwrite');
+        //     const objectStore = transaction.objectStore('galleryOnLoad_tb');
+        //     objectStore.put(imageSearchJSON.photos, this.imageSearchInput.replaceAll(' ', '_').toLowerCase());
+        //     objectStore.getAllKeys().onsuccess = (event) => {
+        //       this.imageSearchInputs = event.srcElement.result;
+        //     };
+        //   }
+        // } catch (error) {
+        //   this.message = error.toString();
+        // }
       } else {
         this.message = 'Image search cannot be blank';
       }
@@ -122,9 +142,13 @@ export default {
   created() {
     if (!('indexedDB' in window)) this.message = "This browser doesn't support IndexedDB";
 
-    this.imageSearchInput = localStorage.getItem(`RapidMarketingAI-mostRecentSearch`)
-      ? localStorage.getItem(`RapidMarketingAI-mostRecentSearch`).replaceAll('_', ' ').toLowerCase()
+    this.imageSearchInput = this.userData.MostRecentSearch
+      ? this.userData.MostRecentSearch
       : this.userData.Tag1.replace(/([A-Z])/g, ' $1').trim();
+
+    // this.imageSearchInput = localStorage.getItem(`RapidMarketingAI-mostRecentSearch`)
+    //   ? localStorage.getItem(`RapidMarketingAI-mostRecentSearch`).replaceAll('_', ' ').toLowerCase()
+    //   : this.userData.Tag1.replace(/([A-Z])/g, ' $1').trim();
     let mostRecentSearch = localStorage.getItem(`RapidMarketingAI-mostRecentSearch`);
 
     if (!mostRecentSearch) {
@@ -140,7 +164,7 @@ export default {
       openOrCreateDB.addEventListener('error', () => console.error('Error opening DB'));
 
       openOrCreateDB.addEventListener('success', () => {
-        console.log('Successfully opened DB');
+        // console.log('Successfully opened IndexedDB');
         db = openOrCreateDB.result;
         this.xDB_galleryOnLoad = db;
 
