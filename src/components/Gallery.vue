@@ -76,6 +76,8 @@ export default {
           const imageSearchJSON = await response.json();
           if (imageSearchJSON.success) {
             console.log(imageSearchJSON);
+            console.log(imageSearchJSON.data.keyword);
+            this.userData.SearchedPhotos[imageSearchJSON.data.keyword] = imageSearchJSON.data.Pexels_Response;
           }
           this.message = imageSearchJSON.messages[0];
         } catch (error) {

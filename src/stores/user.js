@@ -38,7 +38,17 @@ const useUserStore = Pinia.defineStore('user', {
     },
   },
   getters: {
-    imgSrchArr1stPart: (state) => state.imgSrchArr.slice(0, state.imgSrchArr.length / 2),
-    imgSrchArr2ndPart: (state) => state.imgSrchArr.slice(state.imgSrchArr.length / 2, state.imgSrchArr.length),
+    imgSrchArr1stPart: (state) =>
+      state.userData.SearchedPhotos[state.userData.MostRecentSearch].photos.slice(
+        0,
+        state.userData.SearchedPhotos[state.userData.MostRecentSearch].photos.length / 2
+      ),
+    imgSrchArr2ndPart: (state) =>
+      state.userData.SearchedPhotos[state.userData.MostRecentSearch].photos.slice(
+        state.userData.SearchedPhotos[state.userData.MostRecentSearch].photos.length / 2,
+        state.userData.SearchedPhotos[state.userData.MostRecentSearch].photos.length
+      ),
+    // imgSrchArr1stPart: (state) => state.imgSrchArr.slice(0, state.imgSrchArr.length / 2),
+    // imgSrchArr2ndPart: (state) => state.imgSrchArr.slice(state.imgSrchArr.length / 2, state.imgSrchArr.length),
   },
 });
