@@ -2,15 +2,10 @@ const useUserStore = Pinia.defineStore('user', {
   state: () => {
     return {
       accessToken: '',
-      sessionID: '',
       loggedIn: null,
-      userData: [],
       message: null,
-      imagePath: localStorage.getItem(`RapidMarketingAI-mostRecentImagePath`)
-        ? localStorage.getItem(`RapidMarketingAI-mostRecentImagePath`) +
-          '?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200'
-        : '',
-      xDB_galleryOnLoad: '',
+      sessionID: '',
+      userData: [],
       endPts: {
         userData: 'users',
         login: 'sessions',
@@ -31,6 +26,7 @@ const useUserStore = Pinia.defineStore('user', {
       this.sessionID = document.cookie.match(new RegExp(`(^| )${sessionID}=([^;]+)`))?.at(2);
     },
     async patchUserData(event) {
+      const inputValue = event.target.value ? event.target.value : event.target.src ? event.target.src : '';
       try {
         const response = await fetch(servrURL + this.endPts.userData, {
           method: 'PATCH',
@@ -40,7 +36,7 @@ const useUserStore = Pinia.defineStore('user', {
             'Cache-Control': 'no-store',
           },
           body: JSON.stringify({
-            [event.target.name]: event.target.value,
+            [event.target.name]: inputValue,
           }),
         });
         const patchUserDataResJSON = await response.json();

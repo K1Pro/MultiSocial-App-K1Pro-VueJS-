@@ -6,9 +6,15 @@
     </h2>
 
     <b>Title | Body text</b>
-    <input v-model="postTitle" type="text" name="postTitle" placeholder="Title..." />
+    <input
+      v-model="this.userStore.userData.PostTitle"
+      type="text"
+      name="postTitle"
+      placeholder="Title..."
+      @change="this.userStore.patchUserData"
+    />
     <textarea
-      v-model="postBody"
+      v-model="this.userStore.userData.PostBody"
       rows="6"
       name="PostBody"
       placeholder="Body text..."
@@ -21,7 +27,11 @@
     <input v-model="postLinkDesc" type="text" name="postLinkDesc" placeholder="Link description..." />
     <input v-model="postHashtags" type="text" name="postHashtags" placeholder="Hashtags..." />
 
-    <img v-if="this.userStore.imagePath" :src="this.userStore.imagePath" alt="random-image" />
+    <img
+      v-if="this.userStore.userData.MostRecentPhoto"
+      :src="this.userStore.userData.MostRecentPhoto"
+      alt="random-image"
+    />
 
     <input type="file" name="filename" @change="uploadImage" /><br /><br />
 
@@ -35,11 +45,9 @@ export default {
 
   data() {
     return {
-      postTitle: '',
       postLink: '',
       postLinkDesc: '',
       postHashtags: '',
-      postBody: '',
     };
   },
 
@@ -49,7 +57,7 @@ export default {
 
   methods: {
     async generateText() {
-      const keyWordsArray = this.postTitle.split(/[\s-_]+|(?=[A-Z])/);
+      const keyWordsArray = this.userStore.userData.PostTitle.split(/[\s-_]+|(?=[A-Z])/);
       const uniqueKeyWords = [...new Set(keyWordsArray)];
 
       // Create an array of previously generated text
@@ -112,7 +120,7 @@ export default {
         this.userStore.message = 'No new generated text';
       }
 
-      this.postBody = generatedBodyText.join(' ').trim();
+      this.userStore.userData.PostBody = generatedBodyText.join(' ').trim();
     },
 
     async socialMediaPost() {
@@ -127,12 +135,12 @@ export default {
               'Cache-Control': 'no-store',
             },
             body: JSON.stringify({
-              Title: this.postTitle,
+              Title: this.userStore.userData.PostTitle,
               Link: this.postLink,
               LinkDesc: this.postLinkDesc,
               Hashtags: this.postHashtags,
-              Body: this.postBody,
-              ImagePath: this.userStore.imagePath,
+              Body: this.userStore.userData.PostBody,
+              ImagePath: this.userStore.userData.MostRecentPhoto,
             }),
           });
           const socialMediaPostJSON = await response.json();
@@ -157,7 +165,7 @@ export default {
       // const reader = new FileReader();
       // reader.readAsDataURL(event.target.files[0]);
       // reader.onload = (e) => {
-      //   this.userStore.imagePath = e.target.result;
+      //   this.userStore.userData.MostRecentPhoto = e.target.result;
       // };
 
       try {
@@ -172,8 +180,7 @@ export default {
         const uploadImageJSON = await response.json();
         if (uploadImageJSON.success) {
           this.userStore.message = uploadImageJSON.messages[0];
-          this.userStore.imagePath = servrURL + 'images/upload.jpg';
-          localStorage.setItem(`RapidMarketingAI-mostRecentImagePath`, servrURL + 'images/upload.jpg');
+          this.userStore.userData.MostRecentPhoto = servrURL + 'images/upload.jpg';
         }
       } catch (error) {
         this.error = error.toString();
@@ -182,23 +189,7 @@ export default {
     },
   },
 
-  watch: {
-    postTitle(newTitle) {
-      localStorage.setItem(`RapidMarketingAI-mostRecentTitle`, newTitle);
-    },
-
-    postBody(newBody) {
-      localStorage.setItem(`RapidMarketingAI-mostRecentBody`, newBody);
-    },
-  },
-
   created() {
-    this.postTitle = localStorage.getItem(`RapidMarketingAI-mostRecentTitle`)
-      ? localStorage.getItem(`RapidMarketingAI-mostRecentTitle`)
-      : this.userStore.userData.Tag1;
-    this.postBody = this.userStore.userData.PostBody
-      ? this.userStore.userData.PostBody
-      : 'This post is about the following topic: ' + this.userStore.userData.Tag1;
     this.postLink = this.userStore.userData.Website ? this.userStore.userData.Website : '';
     this.postLinkDesc = this.userStore.userData ? 'This is a link to ' + this.userStore.userData.Organization : '';
     this.postHashtags = this.userStore.userData

@@ -1,7 +1,5 @@
 <template>
   <div class="Gallery">
-    <!-- <h2>{{ this.totalImages }} images:</h2> -->
-
     <button type="button" @click.prevent="imageSearch()">Search</button>
     <input
       type="search"
@@ -19,10 +17,20 @@
 
     <div class="Gallery-Row">
       <div class="Gallery-Column">
-        <img v-for="images in imgSrchArr1stPart" :src="images.src.medium" @click="selectImg(images.src.original)" />
+        <img
+          v-for="images in imgSrchArr1stPart"
+          :src="images.src.medium"
+          @click="selectImg($event, images.src.landscape)"
+          name="MostRecentPhoto"
+        />
       </div>
       <div class="Gallery-Column">
-        <img v-for="images in imgSrchArr2ndPart" :src="images.src.medium" @click="selectImg(images.src.original)" />
+        <img
+          v-for="images in imgSrchArr2ndPart"
+          :src="images.src.medium"
+          @click="selectImg($event, images.src.landscape)"
+          name="MostRecentPhoto"
+        />
       </div>
     </div>
   </div>
@@ -40,12 +48,11 @@ export default {
     ...Pinia.mapWritableState(useUserStore, [
       'accessToken',
       'userData',
-      'imagePath',
-      'xDB_galleryOnLoad',
       'imgSrchArr1stPart',
       'imgSrchArr2ndPart',
       'message',
       'endPts',
+      'patchUserData',
     ]),
   },
 
@@ -121,8 +128,9 @@ export default {
       }
     },
 
-    selectImg(selectedImgPath) {
-      this.imagePath = selectedImgPath;
+    selectImg(event, selectedImgPath) {
+      this.patchUserData(event);
+      this.userData.MostRecentPhoto = selectedImgPath;
     },
 
     selectSearch(event) {
