@@ -7,7 +7,13 @@
 
     <b>Title | Body text</b>
     <input v-model="postTitle" type="text" name="postTitle" placeholder="Title..." />
-    <textarea v-model="postBody" rows="6" name="postBody" placeholder="Body text..."></textarea>
+    <textarea
+      v-model="postBody"
+      rows="6"
+      name="PostBody"
+      placeholder="Body text..."
+      @change="this.userStore.patchUserData"
+    ></textarea>
     <button type="button" @click.prevent="generateText()">Generate Text</button><br /><br />
 
     <b>Link | Description | Tags</b>
@@ -190,10 +196,10 @@ export default {
     this.postTitle = localStorage.getItem(`RapidMarketingAI-mostRecentTitle`)
       ? localStorage.getItem(`RapidMarketingAI-mostRecentTitle`)
       : this.userStore.userData.Tag1;
-    this.postBody = localStorage.getItem(`RapidMarketingAI-mostRecentBody`)
-      ? localStorage.getItem(`RapidMarketingAI-mostRecentBody`)
+    this.postBody = this.userStore.userData.PostBody
+      ? this.userStore.userData.PostBody
       : 'This post is about the following topic: ' + this.userStore.userData.Tag1;
-    this.postLink = this.userStore.userData ? this.userStore.userData.Website : '';
+    this.postLink = this.userStore.userData.Website ? this.userStore.userData.Website : '';
     this.postLinkDesc = this.userStore.userData ? 'This is a link to ' + this.userStore.userData.Organization : '';
     this.postHashtags = this.userStore.userData
       ? `#${this.userStore.userData.Tag1} #${this.userStore.userData.Tag2} #${this.userStore.userData.Tag3}`

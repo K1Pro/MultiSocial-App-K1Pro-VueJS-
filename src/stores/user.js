@@ -10,7 +10,6 @@ const useUserStore = Pinia.defineStore('user', {
         ? localStorage.getItem(`RapidMarketingAI-mostRecentImagePath`) +
           '?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200'
         : '',
-      imgSrchArr: [],
       xDB_galleryOnLoad: '',
       endPts: {
         userData: 'users',
@@ -24,11 +23,6 @@ const useUserStore = Pinia.defineStore('user', {
         generatedText: 'generatedtext',
         searchedPhotos: 'searchedphotos',
       },
-      vars: {
-        medium: '?auto=compress&cs=tinysrgb&h=350',
-        landscape: '?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
-        appName: 'RapidMarketingAI',
-      },
     };
   },
   actions: {
@@ -36,19 +30,40 @@ const useUserStore = Pinia.defineStore('user', {
       this.accessToken = document.cookie.match(new RegExp(`(^| )${accessToken}=([^;]+)`))?.at(2);
       this.sessionID = document.cookie.match(new RegExp(`(^| )${sessionID}=([^;]+)`))?.at(2);
     },
+    async patchUserData(event) {
+      try {
+        const response = await fetch(servrURL + this.endPts.userData, {
+          method: 'PATCH',
+          headers: {
+            Authorization: this.accessToken,
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-store',
+          },
+          body: JSON.stringify({
+            [event.target.name]: event.target.value,
+          }),
+        });
+        const patchUserDataResJSON = await response.json();
+        if (patchUserDataResJSON.success) {
+          console.log(patchUserDataResJSON);
+        }
+        this.message = patchUserDataResJSON.messages[0];
+      } catch (error) {
+        this.error = error.toString();
+        this.message = this.error;
+      }
+    },
   },
   getters: {
     imgSrchArr1stPart: (state) =>
-      state.userData.SearchedPhotos[state.userData.MostRecentSearch].photos.slice(
+      state.userData.SearchedPhotos[state.userData.MostRecentSearch]?.photos.slice(
         0,
-        state.userData.SearchedPhotos[state.userData.MostRecentSearch].photos.length / 2
+        state.userData.SearchedPhotos[state.userData.MostRecentSearch]?.photos.length / 2
       ),
     imgSrchArr2ndPart: (state) =>
-      state.userData.SearchedPhotos[state.userData.MostRecentSearch].photos.slice(
-        state.userData.SearchedPhotos[state.userData.MostRecentSearch].photos.length / 2,
-        state.userData.SearchedPhotos[state.userData.MostRecentSearch].photos.length
+      state.userData.SearchedPhotos[state.userData.MostRecentSearch]?.photos.slice(
+        state.userData.SearchedPhotos[state.userData.MostRecentSearch]?.photos.length / 2,
+        state.userData.SearchedPhotos[state.userData.MostRecentSearch]?.photos.length
       ),
-    // imgSrchArr1stPart: (state) => state.imgSrchArr.slice(0, state.imgSrchArr.length / 2),
-    // imgSrchArr2ndPart: (state) => state.imgSrchArr.slice(state.imgSrchArr.length / 2, state.imgSrchArr.length),
   },
 });
