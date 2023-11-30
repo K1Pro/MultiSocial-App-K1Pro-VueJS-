@@ -31,8 +31,20 @@
       v-model="this.userStore.userData.Website"
       @change="this.userStore.patchUserData"
     />
-    <input v-model="postLinkDesc" type="text" name="postLinkDesc" placeholder="Link description..." />
-    <input v-model="postHashtags" type="text" name="postHashtags" placeholder="Hashtags..." />
+    <input
+      type="text"
+      name="WebsiteDesc"
+      placeholder="Link description..."
+      v-model="this.userStore.userData.WebsiteDesc"
+      @change="this.userStore.patchUserData"
+    />
+    <input
+      type="text"
+      name="Tags"
+      placeholder="Hashtags..."
+      v-model="this.userStore.userData.Tags"
+      @change="this.userStore.patchUserData"
+    />
 
     <img
       v-if="this.userStore.userData.MostRecentPhoto"
@@ -49,14 +61,6 @@
 <script>
 export default {
   name: 'Post',
-
-  data() {
-    return {
-      postLink: '',
-      postLinkDesc: '',
-      postHashtags: '',
-    };
-  },
 
   computed: {
     ...Pinia.mapStores(useUserStore),
@@ -145,8 +149,8 @@ export default {
             body: JSON.stringify({
               Title: this.userStore.userData.PostTitle,
               Link: this.userStore.userData.Website,
-              LinkDesc: this.postLinkDesc,
-              Hashtags: this.postHashtags,
+              LinkDesc: this.userStore.userData.WebsiteDesc,
+              Hashtags: this.userStore.userData.Tags,
               Body: this.userStore.userData.PostBody,
               ImagePath: this.userStore.userData.MostRecentPhoto,
             }),
@@ -197,12 +201,7 @@ export default {
     },
   },
 
-  created() {
-    this.postLinkDesc = this.userStore.userData ? 'This is a link to ' + this.userStore.userData.Organization : '';
-    this.postHashtags = this.userStore.userData
-      ? `#${this.userStore.userData.Tag1} #${this.userStore.userData.Tag2} #${this.userStore.userData.Tag3}`
-      : '';
-  },
+  created() {},
 };
 </script>
 
