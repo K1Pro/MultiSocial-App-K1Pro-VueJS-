@@ -7,23 +7,30 @@
 
     <b>Title | Body text</b>
     <input
-      v-model="this.userStore.userData.PostTitle"
       type="text"
       name="postTitle"
       placeholder="Title..."
+      v-model="this.userStore.userData.PostTitle"
       @change="this.userStore.patchUserData"
     />
     <textarea
-      v-model="this.userStore.userData.PostBody"
+      id="PostBody"
       rows="6"
       name="PostBody"
       placeholder="Body text..."
+      v-model="this.userStore.userData.PostBody"
       @change="this.userStore.patchUserData"
     ></textarea>
     <button type="button" @click.prevent="generateText()">Generate Text</button><br /><br />
 
     <b>Link | Description | Tags</b>
-    <input v-model="postLink" type="text" name="postLink" placeholder="Link..." />
+    <input
+      type="text"
+      name="Website"
+      placeholder="Link..."
+      v-model="this.userStore.userData.Website"
+      @change="this.userStore.patchUserData"
+    />
     <input v-model="postLinkDesc" type="text" name="postLinkDesc" placeholder="Link description..." />
     <input v-model="postHashtags" type="text" name="postHashtags" placeholder="Hashtags..." />
 
@@ -106,20 +113,21 @@ export default {
             postGenerateTextJSON.data.generated_text.forEach((generatedText) => {
               generatedBodyText.push(generatedText.meanings[0].definitions[0].definition);
               this.userStore.userData.GeneratedText[generatedText.word] = generatedText;
-              // This is for pushing results into IndexedDB possibly for future use.
-              // const transaction = this.userStore.xDB_galleryOnLoad.transaction(['generatedText_tb'], 'readwrite');
-              // const objectStore = transaction.objectStore('generatedText_tb');
-              // objectStore.put(generatedText, this.postTitle.replaceAll(' ', '_').toLowerCase());
             });
-            this.userStore.message = postGenerateTextJSON.messages[0];
           }
+          this.userStore.message = postGenerateTextJSON.messages[0];
         } catch (error) {
           this.userStore.message = error.toString();
         }
+        if (this.userStore.userData.PostBody) {
+          setTimeout(() => {
+            PostBody.dispatchEvent(new Event('change'));
+          }, 10);
+        }
       } else {
-        this.userStore.message = 'No new generated text';
+        // In the future we can add randomness when generating text without changing keywords
+        this.userStore.message = 'No new generated text - Algorithm here';
       }
-
       this.userStore.userData.PostBody = generatedBodyText.join(' ').trim();
     },
 
@@ -136,7 +144,7 @@ export default {
             },
             body: JSON.stringify({
               Title: this.userStore.userData.PostTitle,
-              Link: this.postLink,
+              Link: this.userStore.userData.Website,
               LinkDesc: this.postLinkDesc,
               Hashtags: this.postHashtags,
               Body: this.userStore.userData.PostBody,
@@ -190,7 +198,6 @@ export default {
   },
 
   created() {
-    this.postLink = this.userStore.userData.Website ? this.userStore.userData.Website : '';
     this.postLinkDesc = this.userStore.userData ? 'This is a link to ' + this.userStore.userData.Organization : '';
     this.postHashtags = this.userStore.userData
       ? `#${this.userStore.userData.Tag1} #${this.userStore.userData.Tag2} #${this.userStore.userData.Tag3}`
