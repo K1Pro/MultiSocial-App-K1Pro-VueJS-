@@ -27,7 +27,7 @@ const useUserStore = Pinia.defineStore('user', {
     },
     async patchUserData(event, key, value) {
       const patchKey = key ? key : event.target.name ? event.target.name : event.target.id ? event.target.id : '';
-      const patchValue = value ? value : event.target.nodeName == 'IMG' ? event.target.src : event.target.value;
+      const patchValue = value ? value : event?.target.nodeName == 'IMG' ? event?.target.src : event?.target.value;
       if (patchKey && patchValue) {
         try {
           const response = await fetch(servrURL + this.endPts.userData, {

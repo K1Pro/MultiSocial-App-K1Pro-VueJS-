@@ -47,8 +47,8 @@
 
     <img
       v-if="this.userStore.userData.MostRecentPhoto"
-      :src="this.userStore.userData.MostRecentPhoto"
       alt="random-image"
+      :src="this.userStore.userData.MostRecentPhoto"
     />
 
     <input type="file" name="filename" @change="uploadImage" /><br /><br />

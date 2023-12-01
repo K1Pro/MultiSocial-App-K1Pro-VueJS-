@@ -59,14 +59,13 @@ export default {
   methods: {
     async imageSearch() {
       const imageSearched = this.imageSearchInput.replaceAll(' ', '_').toLowerCase().trim();
-      this.userData.MostRecentSearch = this.imageSearchInput.replaceAll(' ', '_').toLowerCase().trim();
-      this.patchUserData(null, 'MostRecentSearch', this.imageSearchInput.replaceAll(' ', '_').toLowerCase().trim());
-      if (this.imageSearchInput) {
-        const prevSrchTtlRslts = localStorage.getItem(`RapidMarketingAI-${this.imageSearchInput.toLowerCase()}`);
-        // const prevSrchTtlRsltsMax =
-        //   prevSrchTtlRslts && prevSrchTtlRslts != 'undefined' ? Math.floor(prevSrchTtlRslts / 80) : 1;
-        // const randomPage = Math.floor(Math.random() * (prevSrchTtlRsltsMax - 1 + 1) + 1);
+      this.userData.MostRecentSearch = imageSearched;
 
+      if (
+        this.imageSearchInput &&
+        (this.userData.SearchedPhotos[imageSearched]?.total_results == undefined ||
+          this.userData.SearchedPhotos[imageSearched]?.total_results > 80)
+      ) {
         try {
           const response = await fetch(servrURL + this.endPts.searchedPhotos, {
             method: 'POST',
@@ -76,7 +75,7 @@ export default {
               'Cache-Control': 'no-store',
             },
             body: JSON.stringify({
-              PhotoSearch: this.imageSearchInput.toLowerCase().replaceAll('_', ' '),
+              PhotoSearch: this.imageSearchInput.replaceAll('_', ' ').toLowerCase().trim(),
             }),
           });
           const imageSearchJSON = await response.json();
@@ -89,50 +88,17 @@ export default {
         } catch (error) {
           this.message = error.toString();
         }
-        // try {
-        //   const response = await fetch(
-        //     'https://api.pexels.com/v1/search?query=' +
-        //       this.imageSearchInput.toLowerCase() +
-        //       `&page=${randomPage}&per_page=80`,
-        //     {
-        //       method: 'GET',
-        //       headers: {
-        //         Authorization: this.userData.Pexels,
-        //       },
-        //     }
-        //   );
-        //   const imageSearchJSON = await response.json();
-        //   if (imageSearchJSON && Number.isInteger(+imageSearchJSON.total_results)) {
-        //     if (!this.imagePath) {
-        //       this.imagePath = imageSearchJSON.photos[0].src.landscape;
-        //       localStorage.setItem(`RapidMarketingAI-mostRecentImagePath`, imageSearchJSON.photos[0].src.original);
-        //     }
-        //     // console.log(imageSearchJSON.photos);
-        //     this.imgSrchArr = imageSearchJSON.photos;
-        //     const max = imageSearchJSON.total_results > 80 ? 80 : imageSearchJSON.total_results;
-        //     const randomImage = Math.floor(Math.random() * (max - 1 + 1) + 1);
-        //     localStorage.setItem(
-        //       `RapidMarketingAI-${this.imageSearchInput.toLowerCase()}`,
-        //       imageSearchJSON.total_results
-        //     );
-        //     const transaction = this.xDB_galleryOnLoad.transaction(['galleryOnLoad_tb'], 'readwrite');
-        //     const objectStore = transaction.objectStore('galleryOnLoad_tb');
-        //     objectStore.put(imageSearchJSON.photos, this.imageSearchInput.replaceAll(' ', '_').toLowerCase());
-        //     objectStore.getAllKeys().onsuccess = (event) => {
-        //       this.imageSearchInputs = event.srcElement.result;
-        //     };
-        //   }
-        // } catch (error) {
-        //   this.message = error.toString();
-        // }
       } else {
-        this.message = 'Image search cannot be blank';
+        this.message = 'No additional search results';
+        this.patchUserData(null, 'MostRecentSearch', imageSearched);
       }
     },
 
     selectImg(event, selectedImgPath) {
+      console.log(selectedImgPath);
       this.userData.MostRecentPhoto = selectedImgPath;
-      this.patchUserData(event);
+      this.patchUserData(null, 'MostRecentPhoto', selectedImgPath);
+      // this.patchUserData(event); // Use this if you want the original to be saved not the landscape
     },
 
     selectSearch(event) {
