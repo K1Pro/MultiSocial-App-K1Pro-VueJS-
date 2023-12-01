@@ -1,16 +1,16 @@
 <template>
   <div class="Gallery">
-    <button type="button" @click.prevent="imageSearch()">Search</button>
+    <button type="button" @click.prevent="imageSearch">Search</button>
     <input
+      name="MostRecentSearch"
       type="search"
-      v-model="imageSearchInput"
-      name="image-search"
       placeholder="Search for an image…"
-      @keyup.enter="imageSearch()"
+      v-model="imageSearchInput"
+      @keyup.enter="imageSearch"
     />
     <select name="images-searched" @change="selectSearch">
       <option v-for="searched in Object.keys(this.userData.SearchedPhotos)" :value="searched">
-        {{ searched.replaceAll('_', ' ') }}
+        {{ searched.charAt(0).toUpperCase() }}{{ searched.slice(1).replaceAll('_', ' ') }}
       </option>
     </select>
     <br />
@@ -19,17 +19,17 @@
       <div class="Gallery-Column">
         <img
           v-for="images in imgSrchArr1stPart"
+          name="MostRecentPhoto"
           :src="images.src.medium"
           @click="selectImg($event, images.src.landscape)"
-          name="MostRecentPhoto"
         />
       </div>
       <div class="Gallery-Column">
         <img
           v-for="images in imgSrchArr2ndPart"
+          name="MostRecentPhoto"
           :src="images.src.medium"
           @click="selectImg($event, images.src.landscape)"
-          name="MostRecentPhoto"
         />
       </div>
     </div>
@@ -58,7 +58,9 @@ export default {
 
   methods: {
     async imageSearch() {
+      const imageSearched = this.imageSearchInput.replaceAll(' ', '_').toLowerCase().trim();
       this.userData.MostRecentSearch = this.imageSearchInput.replaceAll(' ', '_').toLowerCase().trim();
+      this.patchUserData(null, 'MostRecentSearch', this.imageSearchInput.replaceAll(' ', '_').toLowerCase().trim());
       if (this.imageSearchInput) {
         const prevSrchTtlRslts = localStorage.getItem(`RapidMarketingAI-${this.imageSearchInput.toLowerCase()}`);
         // const prevSrchTtlRsltsMax =
@@ -129,18 +131,25 @@ export default {
     },
 
     selectImg(event, selectedImgPath) {
-      this.patchUserData(event);
       this.userData.MostRecentPhoto = selectedImgPath;
+      this.patchUserData(event);
     },
 
     selectSearch(event) {
-      this.imageSearchInput = event.srcElement.selectedOptions[0]._value.replaceAll('_', ' ');
-      this.userData.MostRecentSearch = event.srcElement.selectedOptions[0]._value.replaceAll(' ', '_');
+      this.imageSearchInput =
+        event.srcElement.selectedOptions[0]._value.charAt(0).toUpperCase() +
+        event.srcElement.selectedOptions[0]._value.slice(1).toLowerCase().replaceAll('_', ' ');
+      this.userData.MostRecentSearch = event.srcElement.selectedOptions[0]._value
+        .replaceAll(' ', '_')
+        .toLowerCase()
+        .trim();
+      this.patchUserData(null, 'MostRecentSearch', this.imageSearchInput.replaceAll(' ', '_').toLowerCase().trim());
     },
   },
   created() {
     this.imageSearchInput = this.userData.MostRecentSearch
-      ? this.userData.MostRecentSearch.replaceAll('_', ' ')
+      ? this.userData.MostRecentSearch.charAt(0).toUpperCase() +
+        this.userData.MostRecentSearch.slice(1).toLowerCase().replaceAll('_', ' ')
       : this.userData.Tag1.replace(/([A-Z])/g, ' $1').trim();
 
     if (!this.userData.MostRecentSearch) {

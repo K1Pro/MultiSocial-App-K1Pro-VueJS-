@@ -6,17 +6,17 @@
         <form>
           <label for="email">E-mail: </label>
           <input
+            name="email"
             type="text"
-            v-model="email"
-            id="email"
             autocomplete="email"
+            v-model="email"
             @keyup.enter="loginFunc(this.userStore.endPts.login)"
           /><br /><br />
           <label for="password">Password: </label>
           <input
+            name="password"
             type="password"
             v-model="password"
-            id="password"
             @keyup.enter="loginFunc(this.userStore.endPts.login)"
           /><br /><br />
           <button type="button" @click.prevent="loginFunc(this.userStore.endPts.login)">Log In</button>

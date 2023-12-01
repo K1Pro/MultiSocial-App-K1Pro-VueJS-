@@ -14,7 +14,6 @@
       @change="this.userStore.patchUserData"
     />
     <textarea
-      id="PostBody"
       rows="6"
       name="PostBody"
       placeholder="Body text..."
@@ -123,16 +122,18 @@ export default {
         } catch (error) {
           this.userStore.message = error.toString();
         }
-        if (this.userStore.userData.PostBody) {
-          setTimeout(() => {
-            PostBody.dispatchEvent(new Event('change'));
-          }, 10);
-        }
+        // after a few tests, delete this code below
+        // if (this.userStore.userData.PostBody) {
+        //   setTimeout(() => {
+        //     PostBody.dispatchEvent(new Event('change'));
+        //   }, 10);
+        // }
       } else {
         // In the future we can add randomness when generating text without changing keywords
         this.userStore.message = 'No new generated text - Algorithm here';
       }
       this.userStore.userData.PostBody = generatedBodyText.join(' ').trim();
+      this.userStore.patchUserData(null, 'PostBody', this.userStore.userData.PostBody);
     },
 
     async socialMediaPost() {

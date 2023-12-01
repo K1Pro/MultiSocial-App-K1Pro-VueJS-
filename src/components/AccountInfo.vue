@@ -5,7 +5,19 @@
     <ul>
       <li
         v-for="value in Object.keys(this.userStore.userData).filter((e) => {
-          return e !== 'SMParams' && e !== 'SMPosts' && e !== 'GeneratedText' && e !== 'SearchedPhotos';
+          return (
+            e !== 'PostTitle' &&
+            e !== 'PostBody' &&
+            e !== 'Website' &&
+            e !== 'WebsiteDesc' &&
+            e !== 'Tags' &&
+            e !== 'MostRecentSearch' &&
+            e !== 'MostRecentPhoto' &&
+            e !== 'SMParams' &&
+            e !== 'SMPosts' &&
+            e !== 'GeneratedText' &&
+            e !== 'SearchedPhotos'
+          );
         })"
       >
         {{ value }}: {{ this.userStore.userData[value] }}
