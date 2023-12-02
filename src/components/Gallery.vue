@@ -116,12 +116,7 @@ export default {
     this.imageSearchInput = this.userData.MostRecentSearch
       ? this.userData.MostRecentSearch.charAt(0).toUpperCase() +
         this.userData.MostRecentSearch.slice(1).toLowerCase().replaceAll('_', ' ')
-      : this.userData.Tag1.replace(/([A-Z])/g, ' $1').trim();
-
-    if (!this.userData.MostRecentSearch) {
-      console.log('no most recent search');
-      this.imageSearch();
-    }
+      : '';
   },
 };
 </script>
