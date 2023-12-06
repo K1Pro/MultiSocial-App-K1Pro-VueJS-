@@ -2,9 +2,9 @@ const useUserStore = Pinia.defineStore('user', {
   state: () => {
     return {
       accessToken: '',
+      sessionID: '',
       loggedIn: null,
       message: null,
-      sessionID: '',
       userData: [],
       endPts: {
         userData: 'users',

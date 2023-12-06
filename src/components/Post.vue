@@ -122,12 +122,6 @@ export default {
         } catch (error) {
           this.userStore.message = error.toString();
         }
-        // after a few tests, delete this code below
-        // if (this.userStore.userData.PostBody) {
-        //   setTimeout(() => {
-        //     PostBody.dispatchEvent(new Event('change'));
-        //   }, 10);
-        // }
       } else {
         // In the future we can add randomness when generating text without changing keywords
         this.userStore.message = 'No new generated text - Algorithm here';
