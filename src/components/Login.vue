@@ -16,6 +16,7 @@
           <input
             name="password"
             type="password"
+            minlength="8"
             v-model="password"
             @keyup.enter="loginFunc(this.userStore.endPts.login)"
           /><br /><br />
