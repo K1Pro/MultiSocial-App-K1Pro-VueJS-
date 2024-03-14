@@ -1,76 +1,93 @@
 <template>
-  <div class="socialmedia">
-    <div class="tab">
-      <a
-        :class="{ active: chosenSocialMedia == 'home' }"
-        class="tablinks fa fa-home"
-        @click="openTab"
-      ></a>
-      <a
-        :class="['tablinks fab fa-'] + smParam.website.toLowerCase()"
-        v-for="smParam in socialMediaParams"
-        @click="openTab"
-      ></a>
-      <a
-        :class="{ active: chosenSocialMedia == 'logout' }"
-        class="tablinks fa fa-sign-out"
-        @click="openTab"
-      ></a>
+  <div class="side-panel">
+    <div class="tab-title-container">
+      <div class="tab-title"></div>
     </div>
 
-    <div class="tabcontent" v-if="chosenSocialMedia == 'home'">
-      <post></post>
-    </div>
-
-    <div class="tabcontent" v-if="chosenSocialMedia == 'sign-out'">
-      <accountinfo></accountinfo>
-      <logoutbtn>></logoutbtn>
-    </div>
-
-    <div
-      class="tabcontent"
-      v-if="chosenSocialMedia != 'home' && chosenSocialMedia != 'sign-out'"
-    >
-      <h2>
-        <input
-          type="checkbox"
-          id="active"
-          :checked="
-            this.userStore.userData.SMParams?.[chosenSocialMedia]?.['active'] ==
-              '1' ||
-            this.userStore.userData.SMParams?.[chosenSocialMedia]?.[
-              'active'
-            ] === true
-              ? true
-              : null
+    <div class="tab-body-container">
+      <div class="tab">
+        <button
+          title="Home"
+          class="fa fa-home"
+          :class="{ 'tab-active': chosenSocialMedia == 'home' }"
+          @click="openTab"
+        ></button>
+        <button
+          v-for="smParam in socialMediaParams"
+          :title="
+            smParam.website.charAt(0).toUpperCase() + smParam.website.slice(1)
           "
-          @click="patchSocialMedia"
-        />
-        {{ chosenSocialMedia.charAt(0).toUpperCase()
-        }}{{ chosenSocialMedia.slice(1) }}
-      </h2>
+          :class="[
+            ['fab fa-'] + smParam.website.toLowerCase(),
+            {
+              'tab-active': chosenSocialMedia == smParam.website.toLowerCase(),
+            },
+          ]"
+          @click="openTab"
+        ></button>
+        <button
+          title="Log out"
+          class="fa fa-sign-out"
+          :class="{ 'tab-active': chosenSocialMedia == 'logout' }"
+          @click="openTab"
+        ></button>
+      </div>
+
+      <div class="tab-content" v-if="chosenSocialMedia == 'home'">
+        <post></post>
+      </div>
+
+      <div class="tab-content" v-if="chosenSocialMedia == 'sign-out'">
+        <accountinfo></accountinfo>
+        <logoutbtn>></logoutbtn>
+      </div>
 
       <div
-        v-for="selectedWebsite in Object.values(socialMediaParams).filter(
-          (smParam) => {
-            return smParam.website == chosenSocialMedia;
-          }
-        )"
+        class="tab-content"
+        v-if="chosenSocialMedia != 'home' && chosenSocialMedia != 'sign-out'"
       >
-        <div
-          v-for="smKey in Object.values(selectedWebsite).filter((smValue) => {
-            return smValue != chosenSocialMedia;
-          })"
-        >
-          <b>{{ smKey.replaceAll('_', ' ') }}</b>
+        <h2>
           <input
-            :type="smKey.includes('Expiry') ? 'datetime-local' : 'text'"
-            :id="smKey"
-            :value="
-              this.userStore.userData.SMParams?.[chosenSocialMedia]?.[smKey]
+            type="checkbox"
+            id="active"
+            :checked="
+              this.userStore.userData.SMParams?.[chosenSocialMedia]?.[
+                'active'
+              ] == '1' ||
+              this.userStore.userData.SMParams?.[chosenSocialMedia]?.[
+                'active'
+              ] === true
+                ? true
+                : null
             "
-            @change="patchSocialMedia"
-          /><br /><br />
+            @click="patchSocialMedia"
+          />
+          {{ chosenSocialMedia.charAt(0).toUpperCase()
+          }}{{ chosenSocialMedia.slice(1) }}
+        </h2>
+
+        <div
+          v-for="selectedWebsite in Object.values(socialMediaParams).filter(
+            (smParam) => {
+              return smParam.website == chosenSocialMedia;
+            }
+          )"
+        >
+          <div
+            v-for="smKey in Object.values(selectedWebsite).filter((smValue) => {
+              return smValue != chosenSocialMedia;
+            })"
+          >
+            <b>{{ smKey.replaceAll('_', ' ') }}</b>
+            <input
+              :type="smKey.includes('Expiry') ? 'datetime-local' : 'text'"
+              :id="smKey"
+              :value="
+                this.userStore.userData.SMParams?.[chosenSocialMedia]?.[smKey]
+              "
+              @change="patchSocialMedia"
+            /><br /><br />
+          </div>
         </div>
       </div>
     </div>
@@ -190,6 +207,11 @@ export default {
 </script>
 
 <style>
+.tab-body-container {
+  display: flex;
+  height: 100%;
+}
+
 .fa {
   color: black;
   /* padding: 20px; */
@@ -201,9 +223,9 @@ export default {
   /* margin: 5px 2px; */
 }
 
-.fa:hover {
+/* .fa:hover {
   opacity: 0.7;
-}
+} */
 
 .fab {
   color: black;
@@ -216,9 +238,9 @@ export default {
   /* margin: 5px 2px; */
 }
 
-.fab:hover {
+/* .fab:hover {
   opacity: 0.7;
-}
+} */
 
 .fa-pexels:before {
   content: 'P';
@@ -229,74 +251,80 @@ export default {
   color: white;
 } */
 
-/* Style the tab */
-.socialmedia * {
+.tab {
   box-sizing: border-box;
-}
-
-.socialmedia > .tab {
   float: left;
-  /* border: 1px solid #ccc; */
-  /* background-color: #f1f1f1; */
   width: 50px;
-  /* height: 100%; */
+  height: 100%;
+  background-color: #f1f1f1;
 }
 
-/* Style the tab content */
-.socialmedia > .tabcontent {
+.tab button {
+  display: block;
+  color: black;
+  padding: 22px 13px;
+  width: 100%;
+  border: none;
+  outline: none;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 20px;
+}
+
+.tab button:hover {
+  background-color: #ddd;
+}
+
+.tab-active {
+  background-color: #bbbbbb;
+}
+
+.tab-content {
+  box-sizing: border-box;
+  flex-grow: 1;
   float: left;
-  padding: 0px 0px 0px 32px;
-  /* border: 1px solid #ccc; */
-  width: 83%;
-  border-left: none;
-  /* height: 100%; */
+  height: 100%;
+  overflow-y: scroll;
+  width: calc(100% - 50px);
+  padding: 0px 30px;
 }
 
-.tablinks {
-  padding: 15px 80% 15px 20%;
-  font-size: 30px;
-  width: 100%;
-  text-align: center;
-  text-decoration: none;
-}
-
-.socialmedia input[type='text'] {
-  width: 100%;
-  background: white;
-  border: 0px;
-  /* border: 1px solid black; */
-  padding: 6px;
-}
-
-.socialmedia input[type='datetime-local'] {
+.side-panel input[type='text'] {
   width: 100%;
   background: white;
   border: 0px;
   padding: 6px;
 }
 
-.socialmedia input[type='checkbox'] {
+.side-panel input[type='datetime-local'] {
+  width: 100%;
+  background: white;
+  border: 0px;
+  padding: 6px;
+}
+
+.side-panel input[type='checkbox'] {
   border: 0px;
   width: 16px;
   height: 16px;
 }
 
 @media only screen and (min-width: 768px) {
-  .socialmedia > .tab {
-    width: 50px;
+  .tab-content {
+    height: 100vh;
   }
 
-  .socialmedia > .tabcontent {
-    width: 83%;
-    padding: 0px 0px 0px 56px;
+  .tab {
+    height: 100vh;
   }
 
-  .socialmedia input[type='text'] {
+  /* .side-panel input[type='text'] {
     width: 105%;
   }
 
-  .socialmedia input[type='datetime-local'] {
+  .side-panel input[type='datetime-local'] {
     width: 105%;
-  }
+  } */
 }
 </style>

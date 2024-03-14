@@ -109,18 +109,18 @@ export default {
   grid-template-rows: auto;
   grid-row-gap: 10px;
   background-color: #c6c6c6;
-  word-break: break-all;
+  /* word-break: break-all; */
 }
 
 .app-grid-item1 {
+  height: 100%;
   background-color: #999999;
+  overflow-y: hidden;
+  overflow-x: hidden;
   background: -webkit-linear-gradient(left, #f1f1f1 50px, #999999 50px);
   background: -moz-linear-gradient(left, #f1f1f1 50px, #999999 50px);
   background: -ms-linear-gradient(left, #f1f1f1 50px, #999999 50px);
   background: linear-gradient(left, #f1f1f1 50px, #999999 50px);
-  /* padding-right: 5px; */
-  scrollbar-width: thin;
-  overflow-y: hidden;
 }
 
 .app-grid-item2,
@@ -145,7 +145,6 @@ export default {
   }
 
   .app-grid-item1 {
-    overflow-y: scroll;
     background: -webkit-linear-gradient(left, #f1f1f1 50px, #999999 50px);
     background: -moz-linear-gradient(left, #f1f1f1 50px, #999999 50px);
     background: -ms-linear-gradient(left, #f1f1f1 50px, #999999 50px);
