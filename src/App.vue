@@ -2,14 +2,14 @@
   <snackbar> </snackbar>
 
   <template v-if="loggedIn === true">
-    <div class="grid-container">
-      <div class="item1">
+    <div class="app-grid-container">
+      <div class="app-grid-item1">
         <socialmedia> </socialmedia>
       </div>
-      <div class="item2">
+      <div class="app-grid-item2">
         <gallery> </gallery>
       </div>
-      <div class="item3">
+      <div class="app-grid-item3">
         <posted> </posted>
       </div>
     </div>
@@ -46,7 +46,13 @@ export default {
 
   computed: {
     ...Pinia.mapStores(useUserStore),
-    ...Pinia.mapWritableState(useUserStore, ['accessToken', 'sessionID', 'loggedIn', 'userData', 'endPts']),
+    ...Pinia.mapWritableState(useUserStore, [
+      'accessToken',
+      'sessionID',
+      'loggedIn',
+      'userData',
+      'endPts',
+    ]),
   },
 
   methods: {
@@ -72,8 +78,7 @@ export default {
           this.sessionID = undefined;
         }
       } catch (error) {
-        this.error = error.toString();
-        this.message = this.error;
+        this.message = error.toString();
       }
     },
   },
@@ -98,7 +103,7 @@ export default {
 </script>
 
 <style>
-.grid-container {
+.app-grid-container {
   display: grid;
   grid-template-columns: 98.5vw;
   grid-template-rows: auto;
@@ -107,7 +112,7 @@ export default {
   word-break: break-all;
 }
 
-.item1 {
+.app-grid-item1 {
   background-color: #999999;
   background: -webkit-linear-gradient(left, #f1f1f1 50px, #999999 50px);
   background: -moz-linear-gradient(left, #f1f1f1 50px, #999999 50px);
@@ -118,14 +123,14 @@ export default {
   overflow-y: hidden;
 }
 
-.item2,
-.item3 {
+.app-grid-item2,
+.app-grid-item3 {
   background-color: #999999;
   scrollbar-width: thin;
   overflow-y: hidden;
 }
 
-.item3 {
+.app-grid-item3 {
   padding: 5px;
 }
 
@@ -134,12 +139,12 @@ export default {
     overflow-y: hidden;
   }
 
-  .grid-container {
+  .app-grid-container {
     grid-template-columns: 42vw 42vw 16vw;
     grid-template-rows: 100vh;
   }
 
-  .item1 {
+  .app-grid-item1 {
     overflow-y: scroll;
     background: -webkit-linear-gradient(left, #f1f1f1 50px, #999999 50px);
     background: -moz-linear-gradient(left, #f1f1f1 50px, #999999 50px);
@@ -147,8 +152,8 @@ export default {
     background: linear-gradient(left, #f1f1f1 50px, #999999 50px);
   }
 
-  .item2,
-  .item3 {
+  .app-grid-item2,
+  .app-grid-item3 {
     overflow-y: scroll;
   }
 }

@@ -9,8 +9,12 @@
       @keyup.enter="imageSearch"
     />
     <select name="images-searched" @change="selectSearch">
-      <option v-for="searched in Object.keys(this.userData.SearchedPhotos)" :value="searched">
-        {{ searched.charAt(0).toUpperCase() }}{{ searched.slice(1).replaceAll('_', ' ') }}
+      <option
+        v-for="searched in Object.keys(this.userData.SearchedPhotos)"
+        :value="searched"
+      >
+        {{ searched.charAt(0).toUpperCase()
+        }}{{ searched.slice(1).replaceAll('_', ' ') }}
       </option>
     </select>
     <br />
@@ -58,12 +62,16 @@ export default {
 
   methods: {
     async imageSearch() {
-      const imageSearched = this.imageSearchInput.replaceAll(' ', '_').toLowerCase().trim();
+      const imageSearched = this.imageSearchInput
+        .replaceAll(' ', '_')
+        .toLowerCase()
+        .trim();
       this.userData.MostRecentSearch = imageSearched;
 
       if (
         this.imageSearchInput &&
-        (this.userData.SearchedPhotos[imageSearched]?.total_results == undefined ||
+        (this.userData.SearchedPhotos[imageSearched]?.total_results ==
+          undefined ||
           this.userData.SearchedPhotos[imageSearched]?.total_results > 80)
       ) {
         try {
@@ -75,14 +83,18 @@ export default {
               'Cache-Control': 'no-store',
             },
             body: JSON.stringify({
-              PhotoSearch: this.imageSearchInput.replaceAll('_', ' ').toLowerCase().trim(),
+              PhotoSearch: this.imageSearchInput
+                .replaceAll('_', ' ')
+                .toLowerCase()
+                .trim(),
             }),
           });
           const imageSearchJSON = await response.json();
           if (imageSearchJSON.success) {
             console.log(imageSearchJSON);
             console.log(imageSearchJSON.data.keyword);
-            this.userData.SearchedPhotos[imageSearchJSON.data.keyword] = imageSearchJSON.data.Pexels_Response;
+            this.userData.SearchedPhotos[imageSearchJSON.data.keyword] =
+              imageSearchJSON.data.Pexels_Response;
           }
           this.message = imageSearchJSON.messages[0];
         } catch (error) {
@@ -104,18 +116,28 @@ export default {
     selectSearch(event) {
       this.imageSearchInput =
         event.srcElement.selectedOptions[0]._value.charAt(0).toUpperCase() +
-        event.srcElement.selectedOptions[0]._value.slice(1).toLowerCase().replaceAll('_', ' ');
-      this.userData.MostRecentSearch = event.srcElement.selectedOptions[0]._value
-        .replaceAll(' ', '_')
-        .toLowerCase()
-        .trim();
-      this.patchUserData(null, 'MostRecentSearch', this.imageSearchInput.replaceAll(' ', '_').toLowerCase().trim());
+        event.srcElement.selectedOptions[0]._value
+          .slice(1)
+          .toLowerCase()
+          .replaceAll('_', ' ');
+      this.userData.MostRecentSearch =
+        event.srcElement.selectedOptions[0]._value
+          .replaceAll(' ', '_')
+          .toLowerCase()
+          .trim();
+      this.patchUserData(
+        null,
+        'MostRecentSearch',
+        this.imageSearchInput.replaceAll(' ', '_').toLowerCase().trim()
+      );
     },
   },
   created() {
     this.imageSearchInput = this.userData.MostRecentSearch
       ? this.userData.MostRecentSearch.charAt(0).toUpperCase() +
-        this.userData.MostRecentSearch.slice(1).toLowerCase().replaceAll('_', ' ')
+        this.userData.MostRecentSearch.slice(1)
+          .toLowerCase()
+          .replaceAll('_', ' ')
       : '';
   },
 };

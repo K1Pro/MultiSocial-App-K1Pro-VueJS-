@@ -20,7 +20,12 @@
             v-model="password"
             @keyup.enter="loginFunc(this.userStore.endPts.login)"
           /><br /><br />
-          <button type="button" @click.prevent="loginFunc(this.userStore.endPts.login)">Log In</button>
+          <button
+            type="button"
+            @click.prevent="loginFunc(this.userStore.endPts.login)"
+          >
+            Log In
+          </button>
         </form>
       </div>
     </div>
@@ -54,7 +59,8 @@ export default {
           body: JSON.stringify({
             Email: this.email.toLowerCase(),
             Password: this.password,
-            IP_Address: userIP,
+            Referer: url,
+            AppName: app_name,
           }),
         });
         const logInResJSON = await response.json();
@@ -63,8 +69,12 @@ export default {
           this.userStore.sessionID = logInResJSON.data.session_id;
           const tomorrow = new Date();
           tomorrow.setDate(tomorrow.getDate() + 1);
-          document.cookie = `_a_t=${logInResJSON.data.accesstoken}; expires=${tomorrow.toString()};`;
-          document.cookie = `_s_i=${logInResJSON.data.session_id}; expires=${tomorrow.toString()};`;
+          document.cookie = `_a_t=${
+            logInResJSON.data.accesstoken
+          }; expires=${tomorrow.toString()};`;
+          document.cookie = `_s_i=${
+            logInResJSON.data.session_id
+          }; expires=${tomorrow.toString()};`;
         }
         this.userStore.message = logInResJSON.messages[0];
       } catch (error) {

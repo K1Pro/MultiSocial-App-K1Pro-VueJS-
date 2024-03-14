@@ -1,13 +1,21 @@
 <template>
   <div class="socialmedia">
     <div class="tab">
-      <a :class="{ active: chosenSocialMedia == 'home' }" class="tablinks fa fa-home" @click="openTab"></a>
+      <a
+        :class="{ active: chosenSocialMedia == 'home' }"
+        class="tablinks fa fa-home"
+        @click="openTab"
+      ></a>
       <a
         :class="['tablinks fab fa-'] + smParam.website.toLowerCase()"
         v-for="smParam in socialMediaParams"
         @click="openTab"
       ></a>
-      <a :class="{ active: chosenSocialMedia == 'logout' }" class="tablinks fa fa-sign-out" @click="openTab"></a>
+      <a
+        :class="{ active: chosenSocialMedia == 'logout' }"
+        class="tablinks fa fa-sign-out"
+        @click="openTab"
+      ></a>
     </div>
 
     <div class="tabcontent" v-if="chosenSocialMedia == 'home'">
@@ -19,26 +27,35 @@
       <logoutbtn>></logoutbtn>
     </div>
 
-    <div class="tabcontent" v-if="chosenSocialMedia != 'home' && chosenSocialMedia != 'sign-out'">
+    <div
+      class="tabcontent"
+      v-if="chosenSocialMedia != 'home' && chosenSocialMedia != 'sign-out'"
+    >
       <h2>
         <input
           type="checkbox"
           id="active"
           :checked="
-            this.userStore.userData.SMParams?.[chosenSocialMedia]?.['active'] == '1' ||
-            this.userStore.userData.SMParams?.[chosenSocialMedia]?.['active'] === true
+            this.userStore.userData.SMParams?.[chosenSocialMedia]?.['active'] ==
+              '1' ||
+            this.userStore.userData.SMParams?.[chosenSocialMedia]?.[
+              'active'
+            ] === true
               ? true
               : null
           "
           @click="patchSocialMedia"
         />
-        {{ chosenSocialMedia.charAt(0).toUpperCase() }}{{ chosenSocialMedia.slice(1) }}
+        {{ chosenSocialMedia.charAt(0).toUpperCase()
+        }}{{ chosenSocialMedia.slice(1) }}
       </h2>
 
       <div
-        v-for="selectedWebsite in Object.values(socialMediaParams).filter((smParam) => {
-          return smParam.website == chosenSocialMedia;
-        })"
+        v-for="selectedWebsite in Object.values(socialMediaParams).filter(
+          (smParam) => {
+            return smParam.website == chosenSocialMedia;
+          }
+        )"
       >
         <div
           v-for="smKey in Object.values(selectedWebsite).filter((smValue) => {
@@ -49,7 +66,9 @@
           <input
             :type="smKey.includes('Expiry') ? 'datetime-local' : 'text'"
             :id="smKey"
-            :value="this.userStore.userData.SMParams?.[chosenSocialMedia]?.[smKey]"
+            :value="
+              this.userStore.userData.SMParams?.[chosenSocialMedia]?.[smKey]
+            "
             @change="patchSocialMedia"
           /><br /><br />
         </div>
@@ -82,9 +101,14 @@ export default {
 
   methods: {
     openTab(event) {
-      const selectedTab = event.target.classList.value.substring(event.target.classList.value.indexOf('fa-') + 3);
+      const selectedTab = event.target.classList.value.substring(
+        event.target.classList.value.indexOf('fa-') + 3
+      );
       if (!this.userStore.userData.SMParams?.[selectedTab]) {
-        const mergedObj = Object.assign({ [selectedTab]: '' }, this.userStore.userData.SMParams);
+        const mergedObj = Object.assign(
+          { [selectedTab]: '' },
+          this.userStore.userData.SMParams
+        );
         this.userStore.userData.SMParams = mergedObj;
       }
       this.chosenSocialMedia = selectedTab;
@@ -95,28 +119,42 @@ export default {
       if (!this.userStore.userData.SMParams[this.chosenSocialMedia]) {
         // key is created
         event.target.type == 'checkbox'
-          ? (this.userStore.userData.SMParams[this.chosenSocialMedia] = { [event.target.id]: event.target.checked })
-          : (this.userStore.userData.SMParams[this.chosenSocialMedia] = { [event.target.id]: event.target.value });
+          ? (this.userStore.userData.SMParams[this.chosenSocialMedia] = {
+              [event.target.id]: event.target.checked,
+            })
+          : (this.userStore.userData.SMParams[this.chosenSocialMedia] = {
+              [event.target.id]: event.target.value,
+            });
       } else {
         // key is modified
         event.target.type == 'checkbox'
-          ? (this.userStore.userData.SMParams[this.chosenSocialMedia][event.target.id] = event.target.checked)
-          : (this.userStore.userData.SMParams[this.chosenSocialMedia][event.target.id] = event.target.value);
+          ? (this.userStore.userData.SMParams[this.chosenSocialMedia][
+              event.target.id
+            ] = event.target.checked)
+          : (this.userStore.userData.SMParams[this.chosenSocialMedia][
+              event.target.id
+            ] = event.target.value);
       }
-      const inputValue = event.target.type == 'checkbox' ? event.target.checked : event.target.value;
+      const inputValue =
+        event.target.type == 'checkbox'
+          ? event.target.checked
+          : event.target.value;
       try {
-        const response = await fetch(servrURL + this.userStore.endPts.socialMedia, {
-          method: 'PATCH',
-          headers: {
-            Authorization: this.userStore.accessToken,
-            'Content-Type': 'application/json',
-            'Cache-Control': 'no-store',
-          },
-          body: JSON.stringify({
-            website: this.chosenSocialMedia,
-            [event.target.id]: inputValue,
-          }),
-        });
+        const response = await fetch(
+          servrURL + this.userStore.endPts.socialMedia,
+          {
+            method: 'PATCH',
+            headers: {
+              Authorization: this.userStore.accessToken,
+              'Content-Type': 'application/json',
+              'Cache-Control': 'no-store',
+            },
+            body: JSON.stringify({
+              website: this.chosenSocialMedia,
+              [event.target.id]: inputValue,
+            }),
+          }
+        );
         const patchSocialMediaJSON = await response.json();
         if (patchSocialMediaJSON.success) {
           this.userStore.message = patchSocialMediaJSON.messages[0];
@@ -130,11 +168,15 @@ export default {
 
     async getSocialMediaParams() {
       try {
-        const response = await fetch(servrURL + this.userStore.endPts.socialMediaParams, {
-          method: 'GET',
-        });
+        const response = await fetch(
+          servrURL + this.userStore.endPts.socialMediaParams,
+          {
+            method: 'GET',
+          }
+        );
         const SocialMediaParamsJSON = await response.json();
-        if (SocialMediaParamsJSON.success) this.socialMediaParams = SocialMediaParamsJSON.data.sm_params;
+        if (SocialMediaParamsJSON.success)
+          this.socialMediaParams = SocialMediaParamsJSON.data.sm_params;
       } catch (error) {
         this.error = error.toString();
       }
