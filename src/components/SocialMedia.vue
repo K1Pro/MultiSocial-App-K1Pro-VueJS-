@@ -8,8 +8,8 @@
       <div class="tab">
         <button
           title="Home"
-          class="fa fa-home"
           :class="{ 'tab-active': activeTab == 'home' }"
+          class="fa fa-home"
           @click="openTab"
         ></button>
         <button
@@ -18,17 +18,17 @@
             smParam.website.charAt(0).toUpperCase() + smParam.website.slice(1)
           "
           :class="[
-            ['fab fa-'] + smParam.website.toLowerCase(),
             {
               'tab-active': activeTab == smParam.website.toLowerCase(),
             },
+            ['fab fa-'] + smParam.website.toLowerCase(),
           ]"
           @click="openTab"
         ></button>
         <button
           title="Log out"
-          class="fa fa-sign-out"
           :class="{ 'tab-active': activeTab == 'logout' }"
+          class="fa fa-sign-out"
           @click="openTab"
         ></button>
       </div>
@@ -112,17 +112,17 @@ export default {
 
   methods: {
     openTab(event) {
-      const selectedTab = event.target.classList.value.substring(
-        event.target.classList.value.indexOf('fa-') + 3
-      );
-      if (!this.userStore.userData.SMParams?.[selectedTab]) {
-        const mergedObj = Object.assign(
-          { [selectedTab]: '' },
-          this.userStore.userData.SMParams
-        );
-        this.userStore.userData.SMParams = mergedObj;
+      if (event.target.className.split('fa-')[1] != this.activeTab) {
+        const selectedTab = event.target.className.split('fa-')[1];
+        if (!this.userStore.userData.SMParams?.[selectedTab]) {
+          const mergedObj = Object.assign(
+            { [selectedTab]: '' },
+            this.userStore.userData.SMParams
+          );
+          this.userStore.userData.SMParams = mergedObj;
+        }
+        this.activeTab = selectedTab;
       }
-      this.activeTab = selectedTab;
     },
 
     async patchSocialMedia(event) {
@@ -227,14 +227,15 @@ export default {
   border: none;
   outline: none;
   text-align: left;
-  cursor: pointer;
+  cursor: default;
   transition: 0.3s;
   font-size: 20px;
   border-bottom: 1px solid black;
 }
 
-.tab button:hover {
+.tab button:hover:not(.tab-active) {
   background-color: #ddd;
+  cursor: pointer;
 }
 
 .tab-active {
