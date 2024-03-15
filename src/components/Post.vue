@@ -17,7 +17,6 @@
       @change="this.userStore.patchUserData"
     />
     <textarea
-      rows="6"
       name="PostBody"
       placeholder="Body text..."
       v-model="this.userStore.userData.PostBody"
@@ -231,42 +230,74 @@ export default {
 
 <style>
 .Post textarea {
-  width: 100%;
-  padding-left: 5px;
   background: white;
-  border: 0px;
-  /* border: 1px solid black; */
-  margin-bottom: -4px;
+  width: calc(100% - 12px);
   padding: 6px;
+  border: 0px;
+  margin-bottom: -4px;
   resize: none;
+  height: 45vw;
 }
 
 .Post input[type='file'] {
-  width: 100%;
   background: white;
+  width: calc(100% - 12px);
   padding: 6px;
-  border: 1px solid black;
 }
 
 .Post button {
+  background-color: #f1f1f1;
+  color: black;
   width: 100%;
   padding: 6px;
   border: 0px;
-  background-color: #f1f1f1;
-  color: black;
   font-size: 16px;
   font-weight: bold;
 }
 
 .Post img {
   width: 100%;
-  margin-bottom: -3px;
+  margin-bottom: -4px;
+}
+
+@media only screen and (min-width: 350px) {
+  .Post textarea {
+    height: 35vw;
+  }
+}
+
+@media only screen and (min-width: 576px) {
+  .Post textarea {
+    height: 20vw;
+  }
 }
 
 @media only screen and (min-width: 768px) {
   .Post img {
     outline: 1px solid black;
     outline-offset: -1px;
+  }
+
+  .Post textarea {
+    height: 40vw;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .Post textarea {
+    height: 30vw;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .Post textarea {
+    height: 20vw;
+  }
+}
+
+@media only screen and (min-width: 1600px) {
+  .Post textarea {
+    height: 10vw;
   }
 }
 </style>

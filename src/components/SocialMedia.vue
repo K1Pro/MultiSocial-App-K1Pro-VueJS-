@@ -9,7 +9,7 @@
         <button
           title="Home"
           class="fa fa-home"
-          :class="{ 'tab-active': chosenSocialMedia == 'home' }"
+          :class="{ 'tab-active': activeTab == 'home' }"
           @click="openTab"
         ></button>
         <button
@@ -20,7 +20,7 @@
           :class="[
             ['fab fa-'] + smParam.website.toLowerCase(),
             {
-              'tab-active': chosenSocialMedia == smParam.website.toLowerCase(),
+              'tab-active': activeTab == smParam.website.toLowerCase(),
             },
           ]"
           @click="openTab"
@@ -28,63 +28,57 @@
         <button
           title="Log out"
           class="fa fa-sign-out"
-          :class="{ 'tab-active': chosenSocialMedia == 'logout' }"
+          :class="{ 'tab-active': activeTab == 'logout' }"
           @click="openTab"
         ></button>
       </div>
 
-      <div class="tab-content" v-if="chosenSocialMedia == 'home'">
+      <div class="tab-content" v-if="activeTab == 'home'">
         <post></post>
       </div>
 
-      <div class="tab-content" v-if="chosenSocialMedia == 'sign-out'">
+      <div class="tab-content" v-if="activeTab == 'sign-out'">
         <accountinfo></accountinfo>
         <logoutbtn>></logoutbtn>
       </div>
 
       <div
         class="tab-content"
-        v-if="chosenSocialMedia != 'home' && chosenSocialMedia != 'sign-out'"
+        v-if="activeTab != 'home' && activeTab != 'sign-out'"
       >
         <h2>
           <input
             type="checkbox"
             id="active"
             :checked="
-              this.userStore.userData.SMParams?.[chosenSocialMedia]?.[
-                'active'
-              ] == '1' ||
-              this.userStore.userData.SMParams?.[chosenSocialMedia]?.[
-                'active'
-              ] === true
+              this.userStore.userData.SMParams?.[activeTab]?.['active'] ==
+                '1' ||
+              this.userStore.userData.SMParams?.[activeTab]?.['active'] === true
                 ? true
                 : null
             "
             @click="patchSocialMedia"
           />
-          {{ chosenSocialMedia.charAt(0).toUpperCase()
-          }}{{ chosenSocialMedia.slice(1) }}
+          {{ activeTab.charAt(0).toUpperCase() }}{{ activeTab.slice(1) }}
         </h2>
 
         <div
           v-for="selectedWebsite in Object.values(socialMediaParams).filter(
             (smParam) => {
-              return smParam.website == chosenSocialMedia;
+              return smParam.website == activeTab;
             }
           )"
         >
           <div
             v-for="smKey in Object.values(selectedWebsite).filter((smValue) => {
-              return smValue != chosenSocialMedia;
+              return smValue != activeTab;
             })"
           >
             <b>{{ smKey.replaceAll('_', ' ') }}</b>
             <input
               :type="smKey.includes('Expiry') ? 'datetime-local' : 'text'"
               :id="smKey"
-              :value="
-                this.userStore.userData.SMParams?.[chosenSocialMedia]?.[smKey]
-              "
+              :value="this.userStore.userData.SMParams?.[activeTab]?.[smKey]"
               @change="patchSocialMedia"
             /><br /><br />
           </div>
@@ -107,7 +101,7 @@ export default {
   data() {
     return {
       socialMediaParams: '',
-      chosenSocialMedia: 'home',
+      activeTab: 'home',
       active: false,
     };
   },
@@ -128,29 +122,27 @@ export default {
         );
         this.userStore.userData.SMParams = mergedObj;
       }
-      this.chosenSocialMedia = selectedTab;
+      this.activeTab = selectedTab;
     },
 
     async patchSocialMedia(event) {
       // This checks if the social media groups properties exists already, if not it is created, ex: SMParams.facebook.App_ID; otherise key is modified
-      if (!this.userStore.userData.SMParams[this.chosenSocialMedia]) {
+      if (!this.userStore.userData.SMParams[this.activeTab]) {
         // key is created
         event.target.type == 'checkbox'
-          ? (this.userStore.userData.SMParams[this.chosenSocialMedia] = {
+          ? (this.userStore.userData.SMParams[this.activeTab] = {
               [event.target.id]: event.target.checked,
             })
-          : (this.userStore.userData.SMParams[this.chosenSocialMedia] = {
+          : (this.userStore.userData.SMParams[this.activeTab] = {
               [event.target.id]: event.target.value,
             });
       } else {
         // key is modified
         event.target.type == 'checkbox'
-          ? (this.userStore.userData.SMParams[this.chosenSocialMedia][
-              event.target.id
-            ] = event.target.checked)
-          : (this.userStore.userData.SMParams[this.chosenSocialMedia][
-              event.target.id
-            ] = event.target.value);
+          ? (this.userStore.userData.SMParams[this.activeTab][event.target.id] =
+              event.target.checked)
+          : (this.userStore.userData.SMParams[this.activeTab][event.target.id] =
+              event.target.value);
       }
       const inputValue =
         event.target.type == 'checkbox'
@@ -167,7 +159,7 @@ export default {
               'Cache-Control': 'no-store',
             },
             body: JSON.stringify({
-              website: this.chosenSocialMedia,
+              website: this.activeTab,
               [event.target.id]: inputValue,
             }),
           }
@@ -207,49 +199,16 @@ export default {
 </script>
 
 <style>
+.tab-title-container {
+}
+
+.tab-title {
+}
+
 .tab-body-container {
   display: flex;
   height: 100%;
 }
-
-.fa {
-  color: black;
-  /* padding: 20px; */
-  /* padding: 15px 70% 15px 30%;
-  font-size: 30px;
-  width: 100%;
-  text-align: center;
-  text-decoration: none; */
-  /* margin: 5px 2px; */
-}
-
-/* .fa:hover {
-  opacity: 0.7;
-} */
-
-.fab {
-  color: black;
-  /* padding: 20px; */
-  /* padding: 15px 70% 15px 30%;
-  font-size: 30px;
-  width: 100%;
-  text-align: center;
-  text-decoration: none; */
-  /* margin: 5px 2px; */
-}
-
-/* .fab:hover {
-  opacity: 0.7;
-} */
-
-.fa-pexels:before {
-  content: 'P';
-}
-
-/* .fa-sign-out {
-  background: #8400ff;
-  color: white;
-} */
 
 .tab {
   box-sizing: border-box;
@@ -285,21 +244,20 @@ export default {
   flex-grow: 1;
   float: left;
   height: 100%;
-  overflow-y: scroll;
   width: calc(100% - 50px);
   padding: 0px 30px;
 }
 
 .side-panel input[type='text'] {
-  width: 100%;
   background: white;
-  border: 0px;
+  width: calc(100% - 12px);
   padding: 6px;
+  border: 0px;
 }
 
 .side-panel input[type='datetime-local'] {
-  width: 100%;
   background: white;
+  width: calc(100% - 12px);
   border: 0px;
   padding: 6px;
 }
@@ -310,6 +268,10 @@ export default {
   height: 16px;
 }
 
+.fa-pexels:before {
+  content: 'P';
+}
+
 @media only screen and (min-width: 768px) {
   .tab-content {
     height: 100vh;
@@ -318,13 +280,5 @@ export default {
   .tab {
     height: 100vh;
   }
-
-  /* .side-panel input[type='text'] {
-    width: 105%;
-  }
-
-  .side-panel input[type='datetime-local'] {
-    width: 105%;
-  } */
 }
 </style>
