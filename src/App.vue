@@ -115,18 +115,22 @@ export default {
 .app-grid-item1 {
   height: 100%;
   background-color: #999999;
-  overflow-y: hidden;
+  border-right: none;
+  /* overflow-y: hidden; */
   overflow-x: hidden;
   background: -webkit-linear-gradient(left, #f1f1f1 50px, #999999 50px);
   background: -moz-linear-gradient(left, #f1f1f1 50px, #999999 50px);
   background: -ms-linear-gradient(left, #f1f1f1 50px, #999999 50px);
-  background: linear-gradient(left, #f1f1f1 50px, #999999 50px);
+  background: linear-gradient(left, #f1f1f1 49px, #999999 50px);
+}
+
+.app-grid-item2 {
+  border-right: none;
 }
 
 .app-grid-item2,
 .app-grid-item3 {
   background-color: #999999;
-  scrollbar-width: thin;
   overflow-y: hidden;
 }
 
@@ -145,10 +149,11 @@ export default {
   }
 
   .app-grid-item1 {
-    background: -webkit-linear-gradient(left, #f1f1f1 50px, #999999 50px);
-    background: -moz-linear-gradient(left, #f1f1f1 50px, #999999 50px);
-    background: -ms-linear-gradient(left, #f1f1f1 50px, #999999 50px);
-    background: linear-gradient(left, #f1f1f1 50px, #999999 50px);
+    border-right: 1px solid black;
+  }
+
+  .app-grid-item2 {
+    border-right: 1px solid black;
   }
 
   .app-grid-item2,

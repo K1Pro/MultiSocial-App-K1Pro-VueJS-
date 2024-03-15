@@ -1,8 +1,8 @@
 body {
-  background: #999999;
-  font-family: 'Helvetica', sans-serif;
   margin: 0;
   padding: 0;
+  background: #999999;
+  font-family: 'Helvetica', sans-serif;
   overflow-y: scroll;
   overflow-x: hidden;
 }
@@ -13,26 +13,22 @@ button {
   font-family: 'Helvetica', sans-serif;
 }
 
-/* width */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 11px;
+  height: 11px;
 }
 
-/* Track */
 ::-webkit-scrollbar-track {
-  /* background: #f1f1f1; original - looked good too */
   background: #999999;
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #555;
+  background: #f1f1f1;
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   /* background: #305eac; original - looked good too */
-  background: #f1f1f1;
+  background: #ddd;
 }
 
 a {

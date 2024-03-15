@@ -248,7 +248,7 @@ export default {
   float: left;
   height: 100%;
   width: calc(100% - 50px);
-  padding: 0px 30px;
+  padding: 0px 19px 0px 30px;
 }
 
 .side-panel input[type='text'] {
@@ -278,6 +278,7 @@ export default {
 @media only screen and (min-width: 768px) {
   .tab-content {
     height: 100vh;
+    padding: 0px 30px 0px 30px;
   }
 
   .tab {

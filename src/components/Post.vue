@@ -273,25 +273,25 @@ export default {
 }
 
 @media only screen and (min-width: 768px) {
-  .Post img {
+  /* .Post img {
     outline: 1px solid black;
     outline-offset: -1px;
-  }
+  } */
 
   .Post textarea {
-    height: 40vw;
+    height: 35vw;
   }
 }
 
 @media only screen and (min-width: 992px) {
   .Post textarea {
-    height: 30vw;
+    height: 25vw;
   }
 }
 
 @media only screen and (min-width: 1200px) {
   .Post textarea {
-    height: 20vw;
+    height: 7vw;
   }
 }
 
