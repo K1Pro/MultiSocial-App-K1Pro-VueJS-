@@ -216,6 +216,7 @@ export default {
   width: 50px;
   height: 100%;
   background-color: #f1f1f1;
+  border-right: 1px solid black;
 }
 
 .tab button {
@@ -229,6 +230,7 @@ export default {
   cursor: pointer;
   transition: 0.3s;
   font-size: 20px;
+  border-bottom: 1px solid black;
 }
 
 .tab button:hover {
