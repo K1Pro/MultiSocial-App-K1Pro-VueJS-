@@ -1,35 +1,36 @@
 <template>
-  <div class="content">
+  <!-- <div class="content">
     <div class="loginform">
       <div class="square"></div>
-      <div class="inputs">
-        <form>
-          <label for="email">E-mail: </label>
-          <input
-            name="email"
-            type="text"
-            autocomplete="email"
-            v-model="email"
-            @keyup.enter="loginFunc(this.userStore.endPts.login)"
-          /><br /><br />
-          <label for="password">Password: </label>
-          <input
-            name="password"
-            type="password"
-            minlength="8"
-            v-model="password"
-            @keyup.enter="loginFunc(this.userStore.endPts.login)"
-          /><br /><br />
-          <button
-            type="button"
-            @click.prevent="loginFunc(this.userStore.endPts.login)"
-          >
-            Log In
-          </button>
-        </form>
-      </div>
+      <div class="inputs"> -->
+  <form>
+    <input
+      type="text"
+      name="username"
+      placeholder="Username"
+      autocomplete="email"
+      v-model="email"
+      @keyup.enter="loginFunc(this.userStore.endPts.login)"
+    /><br /><br />
+    <input
+      type="password"
+      name="password"
+      placeholder="Password"
+      autocomplete="current-password"
+      minlength="8"
+      v-model="password"
+      @keyup.enter="loginFunc(this.userStore.endPts.login)"
+    /><br /><br />
+    <button
+      type="button"
+      @click.prevent="loginFunc(this.userStore.endPts.login)"
+    >
+      Log In
+    </button>
+  </form>
+  <!-- </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>

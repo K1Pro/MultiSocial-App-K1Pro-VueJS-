@@ -27,7 +27,6 @@ button {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  /* background: #305eac; original - looked good too */
   background: #ddd;
 }
 

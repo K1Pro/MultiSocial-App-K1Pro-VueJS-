@@ -16,12 +16,8 @@
   </template>
 
   <template v-else-if="loggedIn === false">
-    <login> </login>
-  </template>
-
-  <template v-else>
-    <div class="loader-container">
-      <div class="loader"></div>
+    <div id="loader-container">
+      <login> </login>
     </div>
   </template>
 </template>
@@ -92,6 +88,8 @@ export default {
   },
 
   created() {
+    const loaderElement = document.getElementById('loader-container');
+    loaderElement.remove();
     this.userStore.getCookie('_a_t', '_s_i');
     if (this.accessToken) {
       this.getUserData(this.endPts.userData);
