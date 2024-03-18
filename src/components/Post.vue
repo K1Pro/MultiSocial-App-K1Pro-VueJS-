@@ -137,13 +137,13 @@ export default {
               }
             );
           }
-          this.userStore.message = postGenerateTextJSON.messages[0];
+          this.userStore.msg.snackBar = postGenerateTextJSON.messages[0];
         } catch (error) {
-          this.userStore.message = error.toString();
+          this.userStore.msg.snackBar = error.toString();
         }
       } else {
         // In the future we can add randomness when generating text without changing keywords
-        this.userStore.message = 'No new generated text - Algorithm here';
+        this.userStore.msg.snackBar = 'No new generated text - Algorithm here';
       }
       this.userStore.userData.PostBody = generatedBodyText.join(' ').trim();
       this.userStore.patchUserData(
@@ -176,14 +176,14 @@ export default {
           });
           const socialMediaPostJSON = await response.json();
           console.log(socialMediaPostJSON);
-          this.userStore.message = socialMediaPostJSON.messages[0];
+          this.userStore.msg.snackBar = socialMediaPostJSON.messages[0];
           if (socialMediaPostJSON.data.sm_responses) {
             socialMediaPostJSON.data.sm_responses.forEach((sm_response) => {
               this.userStore.userData.SMPosts.unshift(sm_response);
             });
           }
         } catch (error) {
-          this.userStore.message = error.toString();
+          this.userStore.msg.snackBar = error.toString();
         }
       }
     },
@@ -213,13 +213,12 @@ export default {
         );
         const uploadImageJSON = await response.json();
         if (uploadImageJSON.success) {
-          this.userStore.message = uploadImageJSON.messages[0];
+          this.userStore.msg.snackBar = uploadImageJSON.messages[0];
           this.userStore.userData.MostRecentPhoto =
             servrURL + 'images/upload.jpg';
         }
       } catch (error) {
-        this.error = error.toString();
-        this.userStore.message = this.error;
+        this.userStore.msg.snackBar = error.toString();
       }
     },
   },

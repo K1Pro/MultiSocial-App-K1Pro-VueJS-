@@ -1,17 +1,19 @@
 <template>
-  <!-- <div class="content">
-    <div class="loginform">
-      <div class="square"></div>
-      <div class="inputs"> -->
-  <form>
+  <div class="login">
+    <div class="spinning-logo"></div>
+
     <input
       type="text"
       name="username"
       placeholder="Username"
       autocomplete="email"
       v-model="email"
-      @keyup.enter="loginFunc(this.userStore.endPts.login)"
-    /><br /><br />
+      :class="{
+        invalid: isUsernameValid,
+      }"
+      @keyup="removeInvalidLoginFn"
+      @keyup.enter="loginFn"
+    />
     <input
       type="password"
       name="password"
@@ -19,18 +21,19 @@
       autocomplete="current-password"
       minlength="8"
       v-model="password"
-      @keyup.enter="loginFunc(this.userStore.endPts.login)"
-    /><br /><br />
-    <button
-      type="button"
-      @click.prevent="loginFunc(this.userStore.endPts.login)"
-    >
-      Log In
+      :class="{
+        invalid: isPasswordValid,
+      }"
+      @keyup="removeInvalidLoginFn"
+      @keyup.enter="loginFn"
+    />
+    <button :disabled="spinLogin" @click.prevent="loginFn">
+      <i v-if="spinLogin" class="spin fa-sharp fa-solid fa-circle-notch"></i>
+      <span v-else>Log In</span>
     </button>
-  </form>
-  <!-- </div>
-    </div>
-  </div> -->
+    <button @click="goToURL" type="button" :disabled="loggedIn">Reset</button>
+    <div v-if="msg.login" class="validation-message">{{ msg.login }}</div>
+  </div>
 </template>
 
 <script>
@@ -41,17 +44,73 @@ export default {
     return {
       email: '',
       password: '',
+      spinLogin: false,
+      allInputsError: 'All inputs required',
+      loginUsernameErr: 'Username cannot be blank',
+      loginPasswordErr: 'Password cannot be blank',
+      loginUsernamePasswordErr: 'Username or password is incorrect',
     };
   },
 
   computed: {
-    ...Pinia.mapStores(useUserStore),
+    ...Pinia.mapWritableState(useUserStore, [
+      'accessToken',
+      'sessionID',
+      'loggedIn',
+      'msg',
+      'endPts',
+    ]),
+    isUsernameValid() {
+      return (
+        this.msg.login.toLowerCase().includes('incorrect') ||
+        (this.email.length < 1 &&
+          (this.msg.login == this.allInputsError ||
+            this.msg.login == this.loginUsernameErr))
+      );
+    },
+    isPasswordValid() {
+      return (
+        this.msg.login.toLowerCase().includes('incorrect') ||
+        (this.password.length < 1 &&
+          (this.msg.login == this.allInputsError ||
+            this.msg.login == this.loginPasswordErr))
+      );
+    },
   },
 
   methods: {
-    async loginFunc(endPt) {
+    async loginFn() {
+      if (
+        this.email != '' &&
+        this.password != '' &&
+        this.password.length < 20
+      ) {
+        this.msg.login = '';
+        this.spinLogin = true;
+        this.postLogin();
+      } else {
+        if (this.email == '' && this.password == '') {
+          this.msg.snackBar = this.allInputsError;
+          this.msg.login = this.allInputsError;
+        } else if (this.email == '') {
+          this.msg.snackBar = this.loginUsernameErr;
+          this.msg.login = this.loginUsernameErr;
+        } else if (this.password == '') {
+          this.msg.snackBar = this.loginPasswordErr;
+          this.msg.login = this.loginPasswordErr;
+        } else if (this.password.length >= 20) {
+          this.email = '';
+          this.password = '';
+          this.msg.snackBar = this.loginUsernamePasswordErr;
+          this.msg.login = this.loginUsernamePasswordErr;
+        }
+      }
+    },
+
+    async postLogin() {
+      this.spinLogin = true;
       try {
-        const response = await fetch(loginURL + endPt, {
+        const response = await fetch(loginURL + this.endPts.login, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -66,8 +125,8 @@ export default {
         });
         const logInResJSON = await response.json();
         if (logInResJSON.success) {
-          this.userStore.accessToken = logInResJSON.data.accesstoken;
-          this.userStore.sessionID = logInResJSON.data.session_id;
+          this.accessToken = logInResJSON.data.accesstoken;
+          this.sessionID = logInResJSON.data.session_id;
           const tomorrow = new Date();
           tomorrow.setDate(tomorrow.getDate() + 1);
           document.cookie = `_a_t=${
@@ -76,77 +135,63 @@ export default {
           document.cookie = `_s_i=${
             logInResJSON.data.session_id
           }; expires=${tomorrow.toString()};`;
+          this.msg.login = '';
+          this.msg.snackBar = 'Logged in';
+        } else {
+          this.msg.login = logInResJSON.messages[0];
+          this.msg.snackBar = logInResJSON.messages[0];
         }
-        this.userStore.message = logInResJSON.messages[0];
+        this.spinLogin = false;
       } catch (error) {
-        this.error = error.toString();
-        this.userStore.message = this.error;
+        this.msg.snackBar = error.toString();
+        this.spinLogin = false;
       }
+    },
+
+    removeInvalidLoginFn(event) {
+      if (this.msg.login.toLowerCase().includes(event.target.name)) {
+        if (event.target.value.length < 1) {
+          event.target.classList.add('invalid');
+        } else {
+          event.target.classList.remove('invalid');
+        }
+      }
+    },
+
+    goToURL() {
+      window.location.href = resetpassword_url;
     },
   },
 };
 </script>
 
 <style>
-/* div {
-  perspective: 500px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-} */
-
-.content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 90vh;
+.login {
+  width: 250px;
+  height: 500px;
 }
 
-.loginform {
-  text-align: right;
-  margin: auto;
+.login button {
+  width: 100%;
+  padding: 3px;
+  margin-bottom: 10px;
 }
 
-.square {
-  width: 300px;
-  height: 300px;
-  /* background: black; */
+.login input[type='text'],
+.login input[type='password'] {
+  width: calc(100% - 14px);
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.spinning-logo {
+  width: 250px;
+  height: 250px;
   background-image: url('./src/assets/images/K1logoBlack.png');
   background-repeat: no-repeat;
-  background-size: 300px 300px;
+  background-size: 250px 250px;
   transform: rotateY(45deg);
   animation: rotateAnimation 8s linear infinite;
-}
-
-.inputs {
-  /* background: white; */
-  padding: 10px;
-}
-
-.inputs input[type='text'] {
-  /* width: 100%; */
-  padding-left: 5px;
-  background: #f1f1f1;
-  border: 1px solid black;
-  padding: 6px;
-  /* border-radius: 4px; */
-  /* border: none; */
-}
-.inputs input[type='password'] {
-  /* width: 100%; */
-  padding-left: 5px;
-  background: #f1f1f1;
-  border: 1px solid black;
-  padding: 6px;
-  /* border-radius: 4px; */
-  /* border: none; */
-}
-
-.inputs button {
-  width: 55%;
-  padding: 6px;
-  border: 1px solid black;
 }
 
 @keyframes rotateAnimation {

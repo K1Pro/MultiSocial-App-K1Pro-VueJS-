@@ -54,7 +54,7 @@ export default {
       'userData',
       'imgSrchArr1stPart',
       'imgSrchArr2ndPart',
-      'message',
+      'msg',
       'endPts',
       'patchUserData',
     ]),
@@ -96,12 +96,12 @@ export default {
             this.userData.SearchedPhotos[imageSearchJSON.data.keyword] =
               imageSearchJSON.data.Pexels_Response;
           }
-          this.message = imageSearchJSON.messages[0];
+          this.msg.snackBar = imageSearchJSON.messages[0];
         } catch (error) {
-          this.message = error.toString();
+          this.msg.snackBar = error.toString();
         }
       } else {
-        this.message = 'No additional search results';
+        this.msg.snackBar = 'No additional search results';
         this.patchUserData(null, 'MostRecentSearch', imageSearched);
       }
     },

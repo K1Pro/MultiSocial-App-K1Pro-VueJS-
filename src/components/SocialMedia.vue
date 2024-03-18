@@ -166,12 +166,11 @@ export default {
         );
         const patchSocialMediaJSON = await response.json();
         if (patchSocialMediaJSON.success) {
-          this.userStore.message = patchSocialMediaJSON.messages[0];
+          this.userStore.msg.snackBar = patchSocialMediaJSON.messages[0];
         }
         console.log(patchSocialMediaJSON);
       } catch (error) {
-        this.error = error.toString();
-        this.userStore.message = this.error;
+        this.userStore.msg.snackBar = error.toString();
       }
     },
 
@@ -187,7 +186,7 @@ export default {
         if (SocialMediaParamsJSON.success)
           this.socialMediaParams = SocialMediaParamsJSON.data.sm_params;
       } catch (error) {
-        this.error = error.toString();
+        this.msg.snackBar = error.toString();
       }
     },
   },

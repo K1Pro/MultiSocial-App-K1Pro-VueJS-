@@ -7,7 +7,13 @@ export default {
   name: 'LogOutBtn',
 
   computed: {
-    ...Pinia.mapWritableState(useUserStore, ['accessToken', 'sessionID', 'loggedIn', 'message', 'endPts']),
+    ...Pinia.mapWritableState(useUserStore, [
+      'accessToken',
+      'sessionID',
+      'loggedIn',
+      'msg',
+      'endPts',
+    ]),
   },
 
   methods: {
@@ -28,10 +34,9 @@ export default {
           document.cookie = `_a_t=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${cookiePath};`;
           document.cookie = `_s_i=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${cookiePath};`;
         }
-        this.message = logOutResJSON.messages[0];
+        this.msg.snackBar = logOutResJSON.messages[0];
       } catch (error) {
-        this.error = error.toString();
-        this.message = this.error;
+        this.msg.snackBar = error.toString();
       }
     },
   },

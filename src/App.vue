@@ -15,7 +15,7 @@
     </div>
   </template>
 
-  <template v-else-if="loggedIn === false">
+  <template v-else>
     <div id="loader-container">
       <login> </login>
     </div>
@@ -46,6 +46,7 @@ export default {
       'accessToken',
       'sessionID',
       'loggedIn',
+      'msg',
       'userData',
       'endPts',
     ]),
@@ -74,7 +75,7 @@ export default {
           this.sessionID = undefined;
         }
       } catch (error) {
-        this.message = error.toString();
+        this.msg.snackBar = error.toString();
       }
     },
   },
