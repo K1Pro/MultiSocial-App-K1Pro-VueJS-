@@ -27,7 +27,7 @@
       @keyup="removeInvalidLoginFn"
       @keyup.enter="loginFn"
     />
-    <button :disabled="spinLogin" @click.prevent="loginFn">
+    <button :disabled="loggedIn || spinLogin" @click.prevent="loginFn">
       <i v-if="spinLogin" class="spin fa-sharp fa-solid fa-circle-notch"></i>
       <span v-else>Log In</span>
     </button>
@@ -45,7 +45,7 @@ export default {
       email: '',
       password: '',
       spinLogin: false,
-      allInputsError: 'All inputs required',
+      allInputsError: 'Username and password required',
       loginUsernameErr: 'Username cannot be blank',
       loginPasswordErr: 'Password cannot be blank',
       loginUsernamePasswordErr: 'Username or password is incorrect',
@@ -159,7 +159,7 @@ export default {
     },
 
     goToURL() {
-      window.location.href = resetpassword_url;
+      window.location.href = accountreset_url;
     },
   },
 };
