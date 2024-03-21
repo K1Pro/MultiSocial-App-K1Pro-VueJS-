@@ -1,6 +1,7 @@
 <template>
   <div class="login">
     <div class="spinning-logo"></div>
+    <h3>Rapid Marketing GT Login</h3>
 
     <input
       type="text"
@@ -168,7 +169,7 @@ export default {
 <style>
 .login {
   width: 250px;
-  height: 500px;
+  height: 525px;
 }
 
 .login button {

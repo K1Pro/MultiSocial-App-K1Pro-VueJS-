@@ -15,11 +15,13 @@
     </div>
   </template>
 
-  <template v-else>
+  <template v-if="loggedIn === false">
     <div id="loader-container">
       <login> </login>
     </div>
   </template>
+
+  <template v-else>Nothing</template>
 </template>
 
 <script>

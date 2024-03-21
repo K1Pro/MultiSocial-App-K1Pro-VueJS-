@@ -3,7 +3,7 @@ const useUserStore = Pinia.defineStore('user', {
     return {
       accessToken: '',
       sessionID: '',
-      loggedIn: false,
+      loggedIn: '',
       msg: {
         snackBar: '',
         login: '',
