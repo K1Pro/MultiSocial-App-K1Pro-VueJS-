@@ -21,6 +21,7 @@ const useUserStore = Pinia.defineStore('user', {
         generatedText: 'generatedtext',
         searchedPhotos: 'searchedphotos',
       },
+      appName: app_name,
     };
   },
   actions: {

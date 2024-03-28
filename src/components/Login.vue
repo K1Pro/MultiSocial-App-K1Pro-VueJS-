@@ -1,41 +1,60 @@
 <template>
   <div class="login">
-    <div class="spinning-logo">
-      <i class="fa-solid fa-envelopes-bulk"></i>
+    <div class="login-title">
+      <i style="font-size: 30px" class="ba-icons ba-k1pro-regular"></i>
+      <span style="font-size: 18px">Pro - {{ appName }}</span>
     </div>
-    <h3>Rapid Marketing GT Login</h3>
 
-    <input
-      type="text"
-      name="username"
-      placeholder="Username"
-      autocomplete="email"
-      v-model="email"
-      :class="{
-        invalid: isUsernameValid,
-      }"
-      @keyup="removeInvalidLoginFn"
-      @keyup.enter="loginFn"
-    />
-    <input
-      type="password"
-      name="password"
-      placeholder="Password"
-      autocomplete="current-password"
-      minlength="8"
-      v-model="password"
-      :class="{
-        invalid: isPasswordValid,
-      }"
-      @keyup="removeInvalidLoginFn"
-      @keyup.enter="loginFn"
-    />
-    <button :disabled="loggedIn || spinLogin" @click.prevent="loginFn">
-      <i v-if="spinLogin" class="spin fa-sharp fa-solid fa-circle-notch"></i>
-      <span v-else>Log In</span>
-    </button>
-    <button @click="goToURL" type="button" :disabled="loggedIn">Reset</button>
-    <div v-if="msg.login" class="validation-message">{{ msg.login }}</div>
+    <div class="login-body">
+      <div class="login-icon">
+        <i class="fa-solid fa-envelopes-bulk"></i>
+      </div>
+
+      <input
+        type="text"
+        name="username"
+        placeholder="Username"
+        autocomplete="email"
+        v-model="email"
+        :disabled="loggedIn"
+        :class="{
+          invalid: isUsernameValid,
+        }"
+        @keyup="removeInvalidLoginFn"
+        @keyup.enter="loginFn"
+      />
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        autocomplete="current-password"
+        minlength="8"
+        v-model="password"
+        :disabled="loggedIn"
+        :class="{
+          invalid: isPasswordValid,
+        }"
+        @keyup="removeInvalidLoginFn"
+        @keyup.enter="loginFn"
+      />
+      <button :disabled="loggedIn || spinLogin" @click.prevent="loginFn">
+        <i v-if="spinLogin" class="spin fa-sharp fa-solid fa-circle-notch"></i>
+        <span v-else>Log In</span>
+      </button>
+      <button @click="goToURL" type="button" :disabled="loggedIn">Reset</button>
+      <div
+        :style="{
+          'margin-bottom': msg.login ? '0px' : '25px',
+          padding: msg.login ? '5px' : '0px',
+        }"
+        class="validation-message"
+      >
+        {{ msg.login ? msg.login : '' }}
+      </div>
+      <div class="login-copyright">
+        © {{ new Date().getFullYear() }} K1Pro | All Rights Reserved
+      </div>
+    </div>
   </div>
 </template>
 
@@ -62,6 +81,7 @@ export default {
       'loggedIn',
       'msg',
       'endPts',
+      'appName',
     ]),
     isUsernameValid() {
       return (
@@ -170,43 +190,41 @@ export default {
 
 <style>
 .login {
-  width: 250px;
-  height: 350px;
+  border-radius: 5px;
+  background-color: white;
+  border: 1px solid grey;
 }
-
-.login button {
+.login-title {
+  width: 270px;
+  padding: 10px;
+  color: rgb(0, 0, 0);
+  border-bottom: 1px solid grey;
+  border-radius: 5px 5px 0px 0px;
+}
+.login-body {
+  width: 250px;
+  padding: 20px;
+  text-align: center;
+  border-radius: 0px 0px 5px 5px;
+}
+.login-icon {
+  font-size: 100px;
+  padding-bottom: 10px;
+}
+.login-body button {
   width: 100%;
   padding: 3px;
   margin-bottom: 10px;
 }
 
-.login input[type='text'],
-.login input[type='password'] {
+.login-body input[type='text'],
+.login-body input[type='password'] {
   width: calc(100% - 14px);
   padding: 5px;
   margin-bottom: 10px;
 }
-
-.spinning-logo {
-  font-size: 100px;
-  width: 250px;
-  text-align: center;
-  /* This was for a spinning logo
-  width: 250px;
-  height: 250px;
-  background-image: url('./src/assets/images/K1logoBlack.png');
-  background-repeat: no-repeat;
-  background-size: 250px 250px;
-  transform: rotateY(45deg);
-  animation: rotateAnimation 8s linear infinite; */
-}
-
-@keyframes rotateAnimation {
-  from {
-    transform: rotateY(45deg);
-  }
-  to {
-    transform: rotateY(405deg);
-  }
+.login-copyright {
+  font-size: 12px;
+  padding: 15px 0px 0px 0px;
 }
 </style>
