@@ -1,6 +1,8 @@
 <template>
   <div class="login">
-    <div class="spinning-logo"></div>
+    <div class="spinning-logo">
+      <i class="fa-solid fa-envelopes-bulk"></i>
+    </div>
     <h3>Rapid Marketing GT Login</h3>
 
     <input
@@ -169,7 +171,7 @@ export default {
 <style>
 .login {
   width: 250px;
-  height: 525px;
+  height: 350px;
 }
 
 .login button {
@@ -186,13 +188,17 @@ export default {
 }
 
 .spinning-logo {
+  font-size: 100px;
+  width: 250px;
+  text-align: center;
+  /* This was for a spinning logo
   width: 250px;
   height: 250px;
   background-image: url('./src/assets/images/K1logoBlack.png');
   background-repeat: no-repeat;
   background-size: 250px 250px;
   transform: rotateY(45deg);
-  animation: rotateAnimation 8s linear infinite;
+  animation: rotateAnimation 8s linear infinite; */
 }
 
 @keyframes rotateAnimation {

@@ -1,5 +1,9 @@
 <template>
-  <div class="snackbar" :class="{ show: msg.snackBar }">{{ msg.snackBar }}</div>
+  <Transition name="slide-fade">
+    <div v-if="msg.snackBar && loggedIn" class="snackbar">
+      {{ msg.snackBar }}
+    </div>
+  </Transition>
 </template>
 
 <script>
@@ -7,7 +11,7 @@ export default {
   name: 'Snackbar',
 
   computed: {
-    ...Pinia.mapWritableState(useUserStore, ['msg']),
+    ...Pinia.mapWritableState(useUserStore, ['msg', 'loggedIn']),
   },
 
   watch: {
@@ -21,69 +25,32 @@ export default {
 </script>
 
 <style>
+.slide-fade-enter-active {
+  transition: all 0.8s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.5s cubic-bezier(1, 1, 1, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateY(-20px);
+  opacity: 0;
+}
+
 .snackbar {
-  visibility: hidden;
-  min-width: 250px;
-  margin-left: -125px;
+  width: 250px;
+  padding: 16px;
+  margin-left: -141px;
   background-color: #333;
   color: #fff;
   text-align: center;
   border-radius: 2px;
-  padding: 16px;
   position: fixed;
   z-index: 5;
-  left: 50%;
+  left: 50vw;
   top: 30px;
   font-size: 17px;
-}
-
-.snackbar.show {
-  visibility: visible;
-  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-  animation: fadein 0.5s, fadeout 0.5s 2.5s;
-}
-
-@-webkit-keyframes fadein {
-  from {
-    top: 0;
-    opacity: 0;
-  }
-  to {
-    top: 30px;
-    opacity: 1;
-  }
-}
-
-@keyframes fadein {
-  from {
-    top: 0;
-    opacity: 0;
-  }
-  to {
-    top: 30px;
-    opacity: 1;
-  }
-}
-
-@-webkit-keyframes fadeout {
-  from {
-    top: 30px;
-    opacity: 1;
-  }
-  to {
-    top: 0;
-    opacity: 0;
-  }
-}
-
-@keyframes fadeout {
-  from {
-    top: 30px;
-    opacity: 1;
-  }
-  to {
-    top: 0;
-    opacity: 0;
-  }
 }
 </style>

@@ -21,7 +21,7 @@
     </div>
   </template>
 
-  <template v-else>Nothing</template>
+  <template v-else></template>
 </template>
 
 <script>

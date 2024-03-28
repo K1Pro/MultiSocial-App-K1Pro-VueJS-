@@ -9,6 +9,8 @@
 *.png
 *.ico
 *.env
+*.db
+*.psd
 /index.php
 /src/Template.Vue
 /sync.ffs_db
