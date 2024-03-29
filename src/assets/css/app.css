@@ -1,5 +1,7 @@
 body {
-  background: #999999;
+  /* background: #999999; */
+  background-image: linear-gradient(45deg, #9a55d2, #ff24a7);
+  /* background-image: linear-gradient(45deg, #6303b1, #ff0099); Very vibrant */
   overflow-y: scroll;
   overflow-x: hidden;
 }

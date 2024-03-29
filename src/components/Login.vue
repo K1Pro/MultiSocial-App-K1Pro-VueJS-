@@ -23,6 +23,7 @@
         @keyup="removeInvalidLoginFn"
         @keyup.enter="loginFn"
       />
+
       <input
         type="password"
         name="password"
@@ -37,20 +38,24 @@
         @keyup="removeInvalidLoginFn"
         @keyup.enter="loginFn"
       />
+
       <button :disabled="loggedIn || spinLogin" @click.prevent="loginFn">
         <i v-if="spinLogin" class="spin fa-sharp fa-solid fa-circle-notch"></i>
         <span v-else>Log In</span>
       </button>
+
       <button @click="goToURL" type="button" :disabled="loggedIn">Reset</button>
+
       <div
+        class="validation-message"
         :style="{
           'margin-bottom': msg.login ? '0px' : '25px',
           padding: msg.login ? '5px' : '0px',
         }"
-        class="validation-message"
       >
         {{ msg.login ? msg.login : '' }}
       </div>
+
       <div class="login-copyright">
         © {{ new Date().getFullYear() }} K1Pro | All Rights Reserved
       </div>
@@ -163,10 +168,15 @@ export default {
         } else {
           this.msg.login = logInResJSON.messages[0];
           this.msg.snackBar = logInResJSON.messages[0];
+          if (logInResJSON.messages[0].toLowerCase().includes('incorrect')) {
+            this.email = '';
+            this.password = '';
+          }
         }
         this.spinLogin = false;
       } catch (error) {
-        this.msg.snackBar = error.toString();
+        console.log(error);
+        this.msg.snackBar = 'Login error';
         this.spinLogin = false;
       }
     },
