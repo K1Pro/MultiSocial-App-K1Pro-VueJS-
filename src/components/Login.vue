@@ -6,10 +6,6 @@
     </div>
 
     <div class="login-body">
-      <div class="login-icon">
-        <i class="fa-solid fa-envelopes-bulk"></i>
-      </div>
-
       <input
         type="text"
         name="username"
@@ -45,6 +41,10 @@
       </button>
 
       <button @click="goToURL" type="button" :disabled="loggedIn">Reset</button>
+
+      <div class="login-remember">
+        <input type="checkbox" name="remember" />Remember me?
+      </div>
 
       <div
         class="validation-message"
@@ -200,38 +200,33 @@ export default {
 
 <style>
 .login {
-  border-radius: 5px;
-  background-color: white;
-  border: 1px solid grey;
+  width: 290px;
 }
 .login-title {
-  width: 270px;
-  padding: 10px;
+  padding: 20px;
   color: rgb(0, 0, 0);
-  border-bottom: 1px solid grey;
-  border-radius: 5px 5px 0px 0px;
 }
 .login-body {
-  width: 250px;
-  padding: 20px;
+  padding: 10px 20px 20px 20px;
   text-align: center;
-  border-radius: 0px 0px 5px 5px;
-}
-.login-icon {
-  font-size: 100px;
-  padding-bottom: 10px;
 }
 .login-body button {
   width: 100%;
   padding: 3px;
   margin-bottom: 10px;
 }
-
 .login-body input[type='text'],
 .login-body input[type='password'] {
   width: calc(100% - 14px);
   padding: 5px;
   margin-bottom: 10px;
+}
+.login-remember {
+  text-align: left;
+  padding: 0px 5px 5px 0px;
+}
+.login-remember input {
+  margin: 5px 5px 5px 2px;
 }
 .login-copyright {
   font-size: 12px;

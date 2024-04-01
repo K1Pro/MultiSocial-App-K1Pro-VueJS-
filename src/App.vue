@@ -109,20 +109,20 @@ export default {
   grid-template-columns: calc(100vw - 11px);
   grid-template-rows: auto;
   grid-row-gap: 10px;
-  /* background-color: #c6c6c6; */
+  background-color: #c6c6c6;
   /* word-break: break-all; */
 }
 
 .app-grid-item1 {
   height: 100%;
-  /* background-color: #999999; */
+  background-color: #999999;
   border-right: none;
   /* overflow-y: hidden; */
   overflow-x: hidden;
-  background: -webkit-linear-gradient(left, #f1f1f1 50px, #99999900 50px);
-  background: -moz-linear-gradient(left, #f1f1f1 50px, #99999900 50px);
-  background: -ms-linear-gradient(left, #f1f1f1 50px, #99999900 50px);
-  background: linear-gradient(left, #f1f1f1 49px, #99999900 50px);
+  background: -webkit-linear-gradient(left, #f1f1f1 50px, #999999 50px);
+  background: -moz-linear-gradient(left, #f1f1f1 50px, #999999 50px);
+  background: -ms-linear-gradient(left, #f1f1f1 50px, #999999 50px);
+  background: linear-gradient(left, #f1f1f1 49px, #999999 50px);
 }
 
 .app-grid-item2 {
@@ -131,7 +131,7 @@ export default {
 
 .app-grid-item2,
 .app-grid-item3 {
-  /* background-color: #999999; */
+  background-color: #999999;
   overflow-y: hidden;
 }
 
