@@ -49,7 +49,7 @@
       <div
         class="validation-message"
         :style="{
-          'margin-bottom': msg.login ? '0px' : '25px',
+          'margin-bottom': msg.login ? '0px' : '35px',
           padding: msg.login ? '5px' : '0px',
         }"
       >
@@ -204,7 +204,6 @@ export default {
 }
 .login-title {
   padding: 20px;
-  color: rgb(0, 0, 0);
 }
 .login-body {
   padding: 10px 20px 20px 20px;
@@ -222,11 +221,18 @@ export default {
   margin-bottom: 10px;
 }
 .login-remember {
+  padding: 6px;
   text-align: left;
-  padding: 0px 5px 5px 0px;
+  font-size: 12px;
+  border-width: 1px;
+  border-radius: 2px;
+  border-style: solid;
+  border-color: light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
+  background-color: white;
+  margin-bottom: 10px;
 }
 .login-remember input {
-  margin: 5px 5px 5px 2px;
+  margin: 0px 5px 0px 0px;
 }
 .login-copyright {
   font-size: 12px;
