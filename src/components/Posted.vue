@@ -7,7 +7,9 @@
       target="_blank"
     >
       <span
-        >{{ value.date.slice(5, 7) }}/{{ value.date.slice(8, 10) }}/{{ value.date.slice(2, 4) }}
+        >{{ value.date.slice(5, 7) }}/{{ value.date.slice(8, 10) }}/{{
+          value.date.slice(2, 4)
+        }}
         {{ value.date.slice(10, 16) }}</span
       >
     </a>
@@ -27,6 +29,7 @@ export default {
 <style scoped>
 .posted {
   text-align: center;
+  padding: 30px 30px;
 }
 a {
   outline: 1px solid black;
@@ -34,7 +37,7 @@ a {
   text-decoration: none;
 }
 span {
-  font-size: 18px;
+  font-size: 14px;
   padding-left: 10px;
   font-family: Arial, Helvetica, sans-serif;
   vertical-align: middle;
@@ -43,10 +46,10 @@ span {
 .postlinks {
   white-space: nowrap;
   overflow: hidden;
-  padding: 15px;
-  font-size: 30px;
-  width: 90%;
-  margin-top: 12px;
+  padding: 7px;
+  font-size: 18px;
+  width: 100%;
+  margin-bottom: 5px;
 }
 
 .fab {
@@ -127,11 +130,5 @@ span {
 }
 .fa-pexels {
   background: #07a081;
-}
-
-@media only screen and (min-width: 768px) {
-  .postlinks {
-    width: 80%;
-  }
 }
 </style>

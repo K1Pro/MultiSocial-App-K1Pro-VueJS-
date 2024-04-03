@@ -145,9 +145,7 @@ export default {
 
 <style>
 .Gallery {
-  padding: 20px 20px;
-  box-sizing: border-box;
-  /* text-align: center; */
+  padding: 30px 30px;
 }
 
 .Gallery input[type='search'] {
@@ -158,7 +156,6 @@ export default {
   padding: 7px;
   margin-right: -65%;
   z-index: 2;
-  /* font-weight: bold; */
 }
 
 .Gallery select {
@@ -168,12 +165,10 @@ export default {
   border: 0px;
   padding: 7px;
   z-index: 1;
-  /* font-weight: bold; */
 }
 
 .Gallery button {
-  margin-left: 8px;
-  width: 27%;
+  width: 30%;
   padding: 6px;
   border: 0px;
   background-color: #f1f1f1;
@@ -184,16 +179,11 @@ export default {
 
 .Gallery-Row {
   display: -ms-flexbox; /* IE10 */
-  display: flex;
-  -ms-flex-wrap: wrap; /* IE10 */
-  flex-wrap: wrap;
-  padding: 0 4px;
+  display: inline-flex;
+  gap: 8px;
 }
 .Gallery-Column {
-  -ms-flex: 48%;
-  flex: 48%;
-  max-width: 48%;
-  padding: 0 1%;
+  width: 50%;
 }
 
 .Gallery img {
@@ -203,30 +193,5 @@ export default {
   width: 100%;
   outline: 1px solid black;
   outline-offset: -1px;
-  /* width: 50%;
-  display: inline;
-  margin: auto; */
-
-  /* height: 60%;
-  outline: 4px solid white;
-  outline-offset: -4px; */
-}
-
-@media only screen and (min-width: 768px) {
-  /* .Gallery {
-    padding: 0px 20px;
-  } */
-  .Gallery img {
-    /* outline: 8px solid white;
-    outline-offset: -8px; */
-  }
-
-  /* .Gallery input[type='search'] {
-    width: 33.5%;
-  }
-
-  .Gallery button {
-    width: 15%;
-  } */
 }
 </style>

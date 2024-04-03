@@ -210,7 +210,6 @@ export default {
 }
 
 .tab {
-  box-sizing: border-box;
   float: left;
   width: 50px;
   height: 100%;
@@ -242,24 +241,23 @@ export default {
 }
 
 .tab-content {
-  box-sizing: border-box;
   flex-grow: 1;
   float: left;
   height: 100%;
-  width: calc(100% - 50px);
-  padding: 0px 19px 0px 30px;
+  width: 100%;
+  padding: 0px 30px 0px 30px;
 }
 
 .side-panel input[type='text'] {
   background: white;
-  width: calc(100% - 12px);
+  width: 100%;
   padding: 6px;
   border: 0px;
 }
 
 .side-panel input[type='datetime-local'] {
   background: white;
-  width: calc(100% - 12px);
+  width: 100%;
   border: 0px;
   padding: 6px;
 }

@@ -8,7 +8,7 @@
       }}{{ this.userStore.userData.FirstName }}
     </h2>
 
-    <b>Title | Body text</b>
+    <!-- <b>Title | Body text</b> -->
     <input
       type="text"
       name="postTitle"
@@ -25,7 +25,7 @@
     <button type="button" @click.prevent="generateText()">Generate Text</button
     ><br /><br />
 
-    <b>Link | Description | Tags</b>
+    <!-- <b>Link | Description | Tags</b> -->
     <input
       type="text"
       name="Website"
@@ -230,7 +230,7 @@ export default {
 <style>
 .Post textarea {
   background: white;
-  width: calc(100% - 12px);
+  width: 100%;
   padding: 6px;
   border: 0px;
   margin-bottom: -4px;
@@ -240,7 +240,7 @@ export default {
 
 .Post input[type='file'] {
   background: white;
-  width: calc(100% - 12px);
+  width: 100%;
   padding: 6px;
 }
 

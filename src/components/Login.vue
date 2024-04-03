@@ -216,7 +216,7 @@ export default {
 }
 .login-body input[type='text'],
 .login-body input[type='password'] {
-  width: calc(100% - 14px);
+  width: 100%;
   padding: 5px;
   margin-bottom: 10px;
 }

@@ -106,7 +106,7 @@ export default {
 <style>
 .app-grid-container {
   display: grid;
-  grid-template-columns: calc(100vw - 11px);
+  grid-template-columns: 100vw;
   grid-template-rows: auto;
   grid-row-gap: 10px;
   background-color: #c6c6c6;
@@ -117,7 +117,7 @@ export default {
   height: 100%;
   background-color: #999999;
   border-right: none;
-  /* overflow-y: hidden; */
+  overflow-y: hidden;
   overflow-x: hidden;
   background: -webkit-linear-gradient(left, #f1f1f1 50px, #999999 50px);
   background: -moz-linear-gradient(left, #f1f1f1 50px, #999999 50px);
@@ -135,10 +135,6 @@ export default {
   overflow-y: hidden;
 }
 
-.app-grid-item3 {
-  padding: 5px;
-}
-
 @media only screen and (min-width: 768px) {
   body {
     overflow-y: hidden;
@@ -149,14 +145,7 @@ export default {
     grid-template-rows: 100vh;
   }
 
-  .app-grid-item1 {
-    border-right: 1px solid black;
-  }
-
-  .app-grid-item2 {
-    border-right: 1px solid black;
-  }
-
+  .app-grid-item1,
   .app-grid-item2,
   .app-grid-item3 {
     overflow-y: scroll;
