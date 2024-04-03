@@ -26,7 +26,7 @@
       <div class="login-password">
         <i class="fa-solid fa-key" style="color: grey"></i>
         <input
-          type="password"
+          :type="loginPasswordInputType"
           name="password"
           placeholder="Password"
           autocomplete="current-password"
@@ -39,6 +39,18 @@
           @keyup="removeInvalidLoginFn"
           @keyup.enter="loginFn"
         />
+        <button @click="passwordReveal">
+          <span
+            v-if="loginPasswordInputType == 'password'"
+            class="fa-solid fa-eye"
+            style="color: grey"
+          ></span>
+          <span
+            v-if="loginPasswordInputType == 'text'"
+            class="fa-solid fa-eye-slash"
+            style="color: grey"
+          ></span>
+        </button>
       </div>
 
       <button :disabled="loggedIn || spinLogin" @click.prevent="loginFn">
@@ -82,6 +94,7 @@ export default {
       loginUsernameErr: 'Username cannot be blank',
       loginPasswordErr: 'Password cannot be blank',
       loginUsernamePasswordErr: 'Username or password is incorrect',
+      loginPasswordInputType: 'password',
     };
   },
 
@@ -200,6 +213,12 @@ export default {
     goToURL() {
       window.location.href = accountreset_url;
     },
+
+    passwordReveal() {
+      this.loginPasswordInputType == 'password'
+        ? (this.loginPasswordInputType = 'text')
+        : (this.loginPasswordInputType = 'password');
+    },
   },
 };
 </script>
@@ -226,10 +245,19 @@ export default {
 .login-password {
   position: relative;
 }
-.login-body i {
+.login-username i,
+.login-password i {
   position: absolute;
   top: 7px;
   left: 7px;
+}
+.login-password button {
+  width: 30px;
+  position: absolute;
+  top: 2px;
+  right: 0px;
+  background: none;
+  border: none;
 }
 .login-body input[type='text'],
 .login-body input[type='password'] {
