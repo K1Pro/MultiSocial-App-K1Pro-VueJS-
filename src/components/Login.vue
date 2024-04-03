@@ -6,34 +6,40 @@
     </div>
 
     <div class="login-body">
-      <input
-        type="text"
-        name="username"
-        placeholder="Username"
-        autocomplete="email"
-        v-model="email"
-        :disabled="loggedIn"
-        :class="{
-          invalid: isUsernameValid,
-        }"
-        @keyup="removeInvalidLoginFn"
-        @keyup.enter="loginFn"
-      />
+      <div class="login-username">
+        <i class="fa-solid fa-user" style="color: grey"></i>
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          autocomplete="email"
+          v-model="email"
+          :disabled="loggedIn"
+          :class="{
+            invalid: isUsernameValid,
+          }"
+          @keyup="removeInvalidLoginFn"
+          @keyup.enter="loginFn"
+        />
+      </div>
 
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        autocomplete="current-password"
-        minlength="8"
-        v-model="password"
-        :disabled="loggedIn"
-        :class="{
-          invalid: isPasswordValid,
-        }"
-        @keyup="removeInvalidLoginFn"
-        @keyup.enter="loginFn"
-      />
+      <div class="login-password">
+        <i class="fa-solid fa-key" style="color: grey"></i>
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          autocomplete="current-password"
+          minlength="8"
+          v-model="password"
+          :disabled="loggedIn"
+          :class="{
+            invalid: isPasswordValid,
+          }"
+          @keyup="removeInvalidLoginFn"
+          @keyup.enter="loginFn"
+        />
+      </div>
 
       <button :disabled="loggedIn || spinLogin" @click.prevent="loginFn">
         <i v-if="spinLogin" class="spin fa-sharp fa-solid fa-circle-notch"></i>
@@ -211,16 +217,29 @@ export default {
 }
 .login-body button {
   width: 100%;
-  padding: 3px;
+  padding: 5px;
   margin-bottom: 10px;
+}
+.login-username {
+  position: relative;
+}
+.login-password {
+  position: relative;
+}
+.login-body i {
+  position: absolute;
+  top: 7px;
+  left: 7px;
 }
 .login-body input[type='text'],
 .login-body input[type='password'] {
   width: 100%;
-  padding: 5px;
+  padding: 5px 0px 5px 30px;
   margin-bottom: 10px;
 }
 .login-remember {
+  white-space: nowrap;
+  overflow: hidden;
   padding: 6px;
   text-align: left;
   font-size: 12px;
