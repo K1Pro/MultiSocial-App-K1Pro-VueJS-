@@ -7,14 +7,13 @@
 
     <div class="login-body">
       <div class="login-username">
-        <i class="fa-solid fa-user" style="color: grey"></i>
+        <i class="fa-solid fa-user"></i>
         <input
           type="text"
           name="username"
           placeholder="Username"
           autocomplete="email"
           v-model="email"
-          :disabled="loggedIn"
           :class="{
             invalid: isUsernameValid,
           }"
@@ -24,7 +23,7 @@
       </div>
 
       <div class="login-password">
-        <i class="fa-solid fa-key" style="color: grey"></i>
+        <i class="fa-solid fa-key"></i>
         <input
           :type="loginPasswordInputType"
           name="password"
@@ -32,33 +31,35 @@
           autocomplete="current-password"
           minlength="8"
           v-model="password"
-          :disabled="loggedIn"
           :class="{
             invalid: isPasswordValid,
           }"
           @keyup="removeInvalidLoginFn"
           @keyup.enter="loginFn"
         />
-        <button @click="passwordReveal">
+        <button @click="passwordReveal" style="color: grey">
           <span
             v-if="loginPasswordInputType == 'password'"
             class="fa-solid fa-eye"
-            style="color: grey"
           ></span>
           <span
             v-if="loginPasswordInputType == 'text'"
             class="fa-solid fa-eye-slash"
-            style="color: grey"
           ></span>
         </button>
       </div>
 
-      <button :disabled="loggedIn || spinLogin" @click.prevent="loginFn">
+      <button :disabled="spinLogin" @click.prevent="loginFn">
         <i v-if="spinLogin" class="spin fa-sharp fa-solid fa-circle-notch"></i>
         <span v-else>Log In</span>
       </button>
 
-      <button @click="goToURL" type="button" :disabled="loggedIn">Reset</button>
+      <form :action="endPts.accountResetURL" method="post">
+        <input type="hidden" name="appName" :value="appName" />
+        <input type="hidden" name="referer" :value="endPts.url" />
+        <input type="submit" value="Reset" />
+        <!-- <button @click="goToURL" type="button">Reset</button>-->
+      </form>
 
       <div class="login-remember">
         <input type="checkbox" name="remember" />Remember me?
@@ -102,7 +103,6 @@ export default {
     ...Pinia.mapWritableState(useUserStore, [
       'accessToken',
       'sessionID',
-      'loggedIn',
       'msg',
       'endPts',
       'appName',
@@ -234,7 +234,8 @@ export default {
   padding: 10px 20px 20px 20px;
   text-align: center;
 }
-.login-body button {
+.login-body button,
+.login-body input[type='submit'] {
   width: 100%;
   padding: 5px;
   margin-bottom: 10px;
@@ -250,6 +251,7 @@ export default {
   position: absolute;
   top: 7px;
   left: 7px;
+  color: grey;
 }
 .login-password button {
   width: 30px;
