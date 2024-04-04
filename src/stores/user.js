@@ -10,6 +10,8 @@ const useUserStore = Pinia.defineStore('user', {
       },
       userData: [],
       endPts: {
+        url: url,
+        accountResetURL: accountreset_url,
         userData: 'users',
         login: 'sessions',
         logout: 'sessions/',
