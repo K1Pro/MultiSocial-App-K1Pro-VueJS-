@@ -1,69 +1,68 @@
-<template>
-  <div class="Post">
-    <h2>
-      {{
-        this.userStore.userData.Organization
-          ? this.userStore.userData.Organization + ' # '
-          : ''
-      }}{{ this.userStore.userData.FirstName }}
-    </h2>
-
-    <!-- <b>Title | Body text</b> -->
-    <input
-      type="text"
-      name="postTitle"
-      placeholder="Title..."
-      v-model="this.userStore.userData.PostTitle"
-      @change="this.userStore.patchUserData"
-    />
-    <textarea
-      name="PostBody"
-      placeholder="Body text..."
-      v-model="this.userStore.userData.PostBody"
-      @change="this.userStore.patchUserData"
-    ></textarea>
-    <button type="button" @click.prevent="generateText()">Generate Text</button
-    ><br /><br />
-
-    <!-- <b>Link | Description | Tags</b> -->
-    <input
-      type="text"
-      name="Website"
-      placeholder="Link..."
-      v-model="this.userStore.userData.Website"
-      @change="this.userStore.patchUserData"
-    />
-    <input
-      type="text"
-      name="WebsiteDesc"
-      placeholder="Link description..."
-      v-model="this.userStore.userData.WebsiteDesc"
-      @change="this.userStore.patchUserData"
-    />
-    <input
-      type="text"
-      name="Tags"
-      placeholder="Hashtags..."
-      v-model="this.userStore.userData.Tags"
-      @change="this.userStore.patchUserData"
-    />
-
-    <img
-      v-if="this.userStore.userData.MostRecentPhoto"
-      alt="random-image"
-      :src="this.userStore.userData.MostRecentPhoto"
-    />
-
-    <input type="file" name="filename" @change="uploadImage" /><br /><br />
-
-    <button type="button" @click.prevent="socialMediaPost()">Post</button
-    ><br /><br />
-  </div>
-</template>
-
-<script>
 export default {
   name: 'Post',
+
+  template: /*html*/ `
+    <div class="Post">
+      <h2>
+        {{
+          this.userStore.userData.Organization
+            ? this.userStore.userData.Organization + ' # '
+            : ''
+        }}{{ this.userStore.userData.FirstName }}
+      </h2>
+
+      <!-- <b>Title | Body text</b> -->
+      <input
+        type="text"
+        name="postTitle"
+        placeholder="Title..."
+        v-model="this.userStore.userData.PostTitle"
+        @change="this.userStore.patchUserData"
+      />
+      <textarea
+        name="PostBody"
+        placeholder="Body text..."
+        v-model="this.userStore.userData.PostBody"
+        @change="this.userStore.patchUserData"
+      ></textarea>
+      <button type="button" @click.prevent="generateText()">Generate Text</button
+      ><br /><br />
+
+      <!-- <b>Link | Description | Tags</b> -->
+      <input
+        type="text"
+        name="Website"
+        placeholder="Link..."
+        v-model="this.userStore.userData.Website"
+        @change="this.userStore.patchUserData"
+      />
+      <input
+        type="text"
+        name="WebsiteDesc"
+        placeholder="Link description..."
+        v-model="this.userStore.userData.WebsiteDesc"
+        @change="this.userStore.patchUserData"
+      />
+      <input
+        type="text"
+        name="Tags"
+        placeholder="Hashtags..."
+        v-model="this.userStore.userData.Tags"
+        @change="this.userStore.patchUserData"
+      />
+
+      <img
+        v-if="this.userStore.userData.MostRecentPhoto"
+        alt="random-image"
+        :src="this.userStore.userData.MostRecentPhoto"
+      />
+
+      <input type="file" name="filename" @change="uploadImage" /><br /><br />
+
+      <button type="button" @click.prevent="socialMediaPost()">Post</button
+      ><br /><br />
+    </div>
+  `,
 
   computed: {
     ...Pinia.mapStores(useUserStore),
@@ -223,11 +222,10 @@ export default {
     },
   },
 
-  created() {},
-};
-</script>
-
-<style>
+  mounted() {
+    style(
+      'Post',
+      /*css*/ `
 .Post textarea {
   background: white;
   width: 100%;
@@ -237,13 +235,11 @@ export default {
   resize: none;
   height: 45vw;
 }
-
 .Post input[type='file'] {
   background: white;
   width: 100%;
   padding: 6px;
 }
-
 .Post button {
   background-color: #f1f1f1;
   color: black;
@@ -253,50 +249,45 @@ export default {
   font-size: 16px;
   font-weight: bold;
 }
-
 .Post img {
   width: 100%;
   margin-bottom: -4px;
 }
-
 @media only screen and (min-width: 350px) {
   .Post textarea {
     height: 35vw;
   }
 }
-
 @media only screen and (min-width: 576px) {
   .Post textarea {
     height: 20vw;
   }
 }
-
 @media only screen and (min-width: 768px) {
   /* .Post img {
     outline: 1px solid black;
     outline-offset: -1px;
   } */
-
   .Post textarea {
     height: 35vw;
   }
 }
-
 @media only screen and (min-width: 992px) {
   .Post textarea {
     height: 25vw;
   }
 }
-
 @media only screen and (min-width: 1200px) {
   .Post textarea {
     height: 7vw;
   }
 }
-
 @media only screen and (min-width: 1600px) {
   .Post textarea {
     height: 10vw;
   }
 }
-</style>
+      `
+    );
+  },
+};

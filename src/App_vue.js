@@ -1,38 +1,37 @@
-<template>
-  <snackbar> </snackbar>
-
-  <template v-if="loggedIn === true">
-    <div class="app-grid-container">
-      <div class="app-grid-item1">
-        <socialmedia> </socialmedia>
-      </div>
-      <div class="app-grid-item2">
-        <gallery> </gallery>
-      </div>
-      <div class="app-grid-item3">
-        <posted> </posted>
-      </div>
-    </div>
-  </template>
-
-  <template v-if="loggedIn === false">
-    <div id="loader-container">
-      <login> </login>
-    </div>
-  </template>
-
-  <template v-else></template>
-</template>
-
-<script>
-import Snackbar from './components/Snackbar.vue';
-import Login from './components/Login.vue';
-import Posted from './components/Posted.vue';
-import Gallery from './components/Gallery.vue';
-import Socialmedia from './components/SocialMedia.vue';
+import Snackbar from './components/Snackbar_vue.js';
+import Login from './components/Login_vue.js';
+import Posted from './components/Posted_vue.js';
+import Gallery from './components/Gallery_vue.js';
+import Socialmedia from './components/SocialMedia_vue.js';
 
 export default {
   name: 'App',
+
+  template: /*html*/ `
+    <snackbar> </snackbar>
+
+    <template v-if="loggedIn === true">
+      <div class="app-grid-container">
+        <div class="app-grid-item1">
+          <socialmedia> </socialmedia>
+        </div>
+        <div class="app-grid-item2">
+          <gallery> </gallery>
+        </div>
+        <div class="app-grid-item3">
+          <posted> </posted>
+        </div>
+      </div>
+    </template>
+
+    <template v-if="loggedIn === false">
+      <div id="login-container">
+        <login> </login>
+      </div>
+    </template>
+
+    <template v-else></template>
+  `,
 
   components: {
     Snackbar,
@@ -91,8 +90,6 @@ export default {
   },
 
   created() {
-    const loaderElement = document.getElementById('loader-container');
-    loaderElement.remove();
     this.userStore.getCookie('_a_t', '_s_i');
     if (this.accessToken) {
       this.getUserData(this.endPts.userData);
@@ -100,10 +97,11 @@ export default {
       this.loggedIn = false;
     }
   },
-};
-</script>
 
-<style>
+  mounted() {
+    style(
+      'App',
+      /*css*/ `
 .app-grid-container {
   display: grid;
   grid-template-columns: 100vw;
@@ -151,4 +149,7 @@ export default {
     overflow-y: scroll;
   }
 }
-</style>
+      `
+    );
+  },
+};

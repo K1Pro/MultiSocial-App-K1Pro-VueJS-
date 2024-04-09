@@ -1,14 +1,13 @@
-<template>
-  <Transition name="slide-fade">
-    <div v-if="msg.snackBar && loggedIn" class="snackbar">
-      {{ msg.snackBar }}
-    </div>
-  </Transition>
-</template>
-
-<script>
 export default {
   name: 'Snackbar',
+
+  template: /*html*/ `
+    <Transition name="slide-fade">
+      <div v-if="msg.snackBar && loggedIn" class="snackbar">
+        {{ msg.snackBar }}
+      </div>
+    </Transition>
+  `,
 
   computed: {
     ...Pinia.mapWritableState(useUserStore, ['msg', 'loggedIn']),
@@ -21,10 +20,11 @@ export default {
       }, 3000);
     },
   },
-};
-</script>
 
-<style>
+  mounted() {
+    style(
+      'Snackbar',
+      /*css*/ `
 .slide-fade-enter-active {
   transition: all 0.8s ease-out;
 }
@@ -53,4 +53,7 @@ export default {
   top: 30px;
   font-size: 17px;
 }
-</style>
+      `
+    );
+  },
+};

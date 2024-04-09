@@ -1,90 +1,89 @@
-<template>
-  <div class="login">
-    <div class="login-title">
-      <i style="font-size: 30px" class="ba-icons ba-k1pro-regular"></i>
-      <span style="font-size: 18px">Pro - {{ appName }}</span>
-    </div>
-
-    <div class="login-body">
-      <div class="login-username">
-        <i class="fa-solid fa-user"></i>
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          autocomplete="email"
-          v-model="email"
-          :class="{
-            invalid: isUsernameValid,
-          }"
-          @keyup="removeInvalidLoginFn"
-          @keyup.enter="loginFn"
-        />
-      </div>
-
-      <div class="login-password">
-        <i class="fa-solid fa-key"></i>
-        <input
-          :type="loginPasswordInputType"
-          name="password"
-          placeholder="Password"
-          autocomplete="current-password"
-          minlength="8"
-          v-model="password"
-          :class="{
-            invalid: isPasswordValid,
-          }"
-          @keyup="removeInvalidLoginFn"
-          @keyup.enter="loginFn"
-        />
-        <button @click="passwordReveal" style="color: grey">
-          <span
-            v-if="loginPasswordInputType == 'password'"
-            class="fa-solid fa-eye"
-          ></span>
-          <span
-            v-if="loginPasswordInputType == 'text'"
-            class="fa-solid fa-eye-slash"
-          ></span>
-        </button>
-      </div>
-
-      <button :disabled="spinLogin" @click.prevent="loginFn">
-        <i v-if="spinLogin" class="spin fa-sharp fa-solid fa-circle-notch"></i>
-        <span v-else>Log In</span>
-      </button>
-
-      <form :action="endPts.accountResetURL" method="post">
-        <input type="hidden" name="appName" :value="appName" />
-        <input type="hidden" name="referer" :value="endPts.url" />
-        <input type="submit" value="Reset" />
-        <!-- <button @click="goToURL" type="button">Reset</button>-->
-      </form>
-
-      <div class="login-remember">
-        <input type="checkbox" name="remember" />Remember me?
-      </div>
-
-      <div
-        class="validation-message"
-        :style="{
-          'margin-bottom': msg.login ? '0px' : '35px',
-          padding: msg.login ? '5px' : '0px',
-        }"
-      >
-        {{ msg.login ? msg.login : '' }}
-      </div>
-
-      <div class="login-copyright">
-        © {{ new Date().getFullYear() }} K1Pro | All Rights Reserved
-      </div>
-    </div>
-  </div>
-</template>
-
-<script>
 export default {
   name: 'Login',
+
+  template: /*html*/ `
+    <div class="login">
+      <div class="login-title">
+        <i style="font-size: 30px" class="ba-icons ba-k1pro-regular"></i>
+        <span style="font-size: 18px">Pro - {{ appName }}</span>
+      </div>
+
+      <div class="login-body">
+        <div class="login-username">
+          <i class="fa-solid fa-user"></i>
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            autocomplete="email"
+            v-model="email"
+            :class="{
+              invalid: isUsernameValid,
+            }"
+            @keyup="removeInvalidLoginFn"
+            @keyup.enter="loginFn"
+          />
+        </div>
+
+        <div class="login-password">
+          <i class="fa-solid fa-key"></i>
+          <input
+            :type="loginPasswordInputType"
+            name="password"
+            placeholder="Password"
+            autocomplete="current-password"
+            minlength="8"
+            v-model="password"
+            :class="{
+              invalid: isPasswordValid,
+            }"
+            @keyup="removeInvalidLoginFn"
+            @keyup.enter="loginFn"
+          />
+          <button @click="passwordReveal" style="color: grey">
+            <span
+              v-if="loginPasswordInputType == 'password'"
+              class="fa-solid fa-eye"
+            ></span>
+            <span
+              v-if="loginPasswordInputType == 'text'"
+              class="fa-solid fa-eye-slash"
+            ></span>
+          </button>
+        </div>
+
+        <button :disabled="spinLogin" @click.prevent="loginFn">
+          <i v-if="spinLogin" class="spin fa-sharp fa-solid fa-circle-notch"></i>
+          <span v-else>Log In</span>
+        </button>
+
+        <form :action="endPts.accountResetURL" method="post">
+          <input type="hidden" name="appName" :value="appName" />
+          <input type="hidden" name="referer" :value="endPts.url" />
+          <input type="submit" value="Reset" />
+          <!-- <button @click="goToURL" type="button">Reset</button>-->
+        </form>
+
+        <div class="login-remember">
+          <input type="checkbox" name="remember" />Remember me?
+        </div>
+
+        <div
+          class="validation-message"
+          :style="{
+            'margin-bottom': msg.login ? '0px' : '35px',
+            padding: msg.login ? '5px' : '0px',
+          }"
+        >
+          {{ msg.login ? msg.login : '' }}
+        </div>
+
+        <div class="login-copyright">
+          © {{ new Date().getFullYear() }} K1Pro | All Rights Reserved
+        </div>
+      </div>
+    </div>
+  `,
 
   data() {
     return {
@@ -220,71 +219,75 @@ export default {
         : (this.loginPasswordInputType = 'password');
     },
   },
-};
-</script>
 
-<style>
+  mounted() {
+    style(
+      'Login',
+      /*css*/ `
 .login {
-  width: 290px;
+width: 290px;
 }
 .login-title {
-  padding: 20px;
+padding: 20px;
 }
 .login-body {
-  padding: 10px 20px 20px 20px;
-  text-align: center;
+padding: 10px 20px 20px 20px;
+text-align: center;
 }
 .login-body button,
 .login-body input[type='submit'] {
-  width: 100%;
-  padding: 5px;
-  margin-bottom: 10px;
+width: 100%;
+padding: 5px;
+margin-bottom: 10px;
 }
 .login-username {
-  position: relative;
+position: relative;
 }
 .login-password {
-  position: relative;
+position: relative;
 }
 .login-username i,
 .login-password i {
-  position: absolute;
-  top: 7px;
-  left: 7px;
-  color: grey;
+position: absolute;
+top: 7px;
+left: 7px;
+color: grey;
 }
 .login-password button {
-  width: 30px;
-  position: absolute;
-  top: 2px;
-  right: 0px;
-  background: none;
-  border: none;
+width: 30px;
+position: absolute;
+top: 2px;
+right: 0px;
+background: none;
+border: none;
 }
 .login-body input[type='text'],
 .login-body input[type='password'] {
-  width: 100%;
-  padding: 5px 0px 5px 30px;
-  margin-bottom: 10px;
+width: 100%;
+padding: 5px 0px 5px 30px;
+margin-bottom: 10px;
 }
 .login-remember {
-  white-space: nowrap;
-  overflow: hidden;
-  padding: 6px;
-  text-align: left;
-  font-size: 12px;
-  border-width: 1px;
-  border-radius: 2px;
-  border-style: solid;
-  border-color: light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
-  background-color: white;
-  margin-bottom: 10px;
+white-space: nowrap;
+overflow: hidden;
+padding: 6px;
+text-align: left;
+font-size: 12px;
+border-width: 1px;
+border-radius: 2px;
+border-style: solid;
+border-color: light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
+background-color: white;
+margin-bottom: 10px;
 }
 .login-remember input {
-  margin: 0px 5px 0px 0px;
+margin: 0px 5px 0px 0px;
 }
 .login-copyright {
-  font-size: 12px;
-  padding: 15px 0px 0px 0px;
+font-size: 12px;
+padding: 15px 0px 0px 0px;
 }
-</style>
+    `
+    );
+  },
+};

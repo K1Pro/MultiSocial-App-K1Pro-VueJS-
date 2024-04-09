@@ -1,10 +1,9 @@
-<template>
-  <button type="button" @click="logoutFunc(this.endPts.logout)">Log Out</button>
-</template>
-
-<script>
 export default {
   name: 'LogOutBtn',
+
+  template: /*html*/ `
+    <button type="button" @click="logoutFunc(this.endPts.logout)">Log Out</button>
+  `,
 
   computed: {
     ...Pinia.mapWritableState(useUserStore, [
@@ -41,4 +40,3 @@ export default {
     },
   },
 };
-</script>

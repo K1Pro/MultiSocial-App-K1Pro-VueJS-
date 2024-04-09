@@ -1,48 +1,47 @@
-<template>
-  <div class="Gallery">
-    <button type="button" @click.prevent="imageSearch">Search</button>
-    <input
-      name="MostRecentSearch"
-      type="search"
-      placeholder="Search for an image…"
-      v-model="imageSearchInput"
-      @keyup.enter="imageSearch"
-    />
-    <select name="images-searched" @change="selectSearch">
-      <option
-        v-for="searched in Object.keys(this.userData.SearchedPhotos)"
-        :value="searched"
-      >
-        {{ searched.charAt(0).toUpperCase()
-        }}{{ searched.slice(1).replaceAll('_', ' ') }}
-      </option>
-    </select>
-    <br />
-
-    <div class="Gallery-Row">
-      <div class="Gallery-Column">
-        <img
-          v-for="images in imgSrchArr1stPart"
-          name="MostRecentPhoto"
-          :src="images.src.medium"
-          @click="selectImg($event, images.src.landscape)"
-        />
-      </div>
-      <div class="Gallery-Column">
-        <img
-          v-for="images in imgSrchArr2ndPart"
-          name="MostRecentPhoto"
-          :src="images.src.medium"
-          @click="selectImg($event, images.src.landscape)"
-        />
-      </div>
-    </div>
-  </div>
-</template>
-
-<script>
 export default {
   name: 'Gallery',
+
+  template: /*html*/ `
+    <div class="Gallery">
+      <button type="button" @click.prevent="imageSearch">Search</button>
+      <input
+        name="MostRecentSearch"
+        type="search"
+        placeholder="Search for an image…"
+        v-model="imageSearchInput"
+        @keyup.enter="imageSearch"
+      />
+      <select name="images-searched" @change="selectSearch">
+        <option
+          v-for="searched in Object.keys(this.userData.SearchedPhotos)"
+          :value="searched"
+        >
+          {{ searched.charAt(0).toUpperCase()
+          }}{{ searched.slice(1).replaceAll('_', ' ') }}
+        </option>
+      </select>
+      <br />
+
+      <div class="Gallery-Row">
+        <div class="Gallery-Column">
+          <img
+            v-for="images in imgSrchArr1stPart"
+            name="MostRecentPhoto"
+            :src="images.src.medium"
+            @click="selectImg($event, images.src.landscape)"
+          />
+        </div>
+        <div class="Gallery-Column">
+          <img
+            v-for="images in imgSrchArr2ndPart"
+            name="MostRecentPhoto"
+            :src="images.src.medium"
+            @click="selectImg($event, images.src.landscape)"
+          />
+        </div>
+      </div>
+    </div>
+  `,
 
   data() {
     return { imageSearchInput: '', imageSearchInputs: [] };
@@ -140,14 +139,14 @@ export default {
           .replaceAll('_', ' ')
       : '';
   },
-};
-</script>
 
-<style>
+  mounted() {
+    style(
+      'Gallery',
+      /*css*/ `
 .Gallery {
   padding: 30px 30px;
 }
-
 .Gallery input[type='search'] {
   position: relative;
   width: 65%;
@@ -157,7 +156,6 @@ export default {
   margin-right: -65%;
   z-index: 2;
 }
-
 .Gallery select {
   position: relative;
   width: 70%;
@@ -166,7 +164,6 @@ export default {
   padding: 7px;
   z-index: 1;
 }
-
 .Gallery button {
   width: 30%;
   padding: 6px;
@@ -176,7 +173,6 @@ export default {
   font-size: 16px;
   font-weight: bold;
 }
-
 .Gallery-Row {
   display: -ms-flexbox; /* IE10 */
   display: inline-flex;
@@ -185,7 +181,6 @@ export default {
 .Gallery-Column {
   width: 50%;
 }
-
 .Gallery img {
   cursor: pointer;
   margin-top: 8px;
@@ -194,4 +189,7 @@ export default {
   outline: 1px solid black;
   outline-offset: -1px;
 }
-</style>
+      `
+    );
+  },
+};

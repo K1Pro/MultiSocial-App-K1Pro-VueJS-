@@ -5,14 +5,13 @@
 
     <!-- Basic CSS -->
     <link rel="stylesheet" href="./src/assets/css/body.css" />
-    <link rel="stylesheet" href="./src/assets/css/loader.css" />
     <link rel="stylesheet" href="./src/assets/css/default.css" />
     <link rel="stylesheet" href="./src/assets/css/app.css" />
 
     <!-- Icon package -->
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     />
     <link rel="stylesheet" href="./src/assets/css/icons.css" />
 
@@ -27,27 +26,18 @@
     <title>Rapid Marketing GT</title>
   </head>
   <body>
-    <!-- Loader -->
-    <div id="loader-container">
-      <div class="loader"></div>
-    </div>
-
-    <!-- App entry point -->
+    <!-- Entry point -->
     <div id="app" v-cloak></div>
 
-    <!-- Vue.JS and Single File Component Loader -->
+    <!-- Vue.JS -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader/dist/vue3-sfc-loader.js"></script>
-    <script src="./src/assets/js/vue3-sfc-loader/vue3-sfc-options.js"></script>
 
-    <!-- Pinia Dependencies -->
+    <!-- Pinia Dependencies and Stores -->
     <script src="https://unpkg.com/vue-demi@0/lib/index.iife.js"></script>
     <script src="https://unpkg.com/pinia@2/dist/pinia.iife.js"></script>
-
-    <!-- Pinia Stores -->
     <script src="./src/stores/user.js"></script>
 
-    <!-- Main Vue.JS App -->
-    <script src="./src/main.js"></script>
+    <!-- App -->
+    <script type="module" src="./src/main.js"></script>
   </body>
 </html>

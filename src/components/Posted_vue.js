@@ -1,48 +1,47 @@
-<template>
-  <div class="posted">
-    <a
-      v-for="value in userData.SMPosts"
-      :class="['postlinks fab fa-'] + value.website"
-      :href="value.link"
-      target="_blank"
-    >
-      <span
-        >{{ value.date.slice(5, 7) }}/{{ value.date.slice(8, 10) }}/{{
-          value.date.slice(2, 4)
-        }}
-        {{ value.date.slice(10, 16) }}</span
-      >
-    </a>
-  </div>
-</template>
-
-<script>
 export default {
   name: 'Posted',
+
+  template: /*html*/ `
+    <div class="posted">
+      <a
+        v-for="value in userData.SMPosts"
+        :class="['postlinks fab background-'] + value.website + [' fa-'] + value.website"
+        :href="value.link"
+        target="_blank"
+      >
+        <span>
+          {{ value.date.slice(5, 7) }}/
+          {{ value.date.slice(8, 10) }}/
+          {{ value.date.slice(2, 4)}}
+          {{ value.date.slice(10, 16) }}
+        </span>
+      </a>
+    </div>
+  `,
 
   computed: {
     ...Pinia.mapWritableState(useUserStore, ['userData']),
   },
-};
-</script>
 
-<style scoped>
+  mounted() {
+    style(
+      'Posted',
+      /*css*/ `
 .posted {
   text-align: center;
   padding: 30px 30px;
 }
-a {
+.posted a {
   outline: 1px solid black;
   outline-offset: -1px;
   text-decoration: none;
 }
-span {
+.posted span {
   font-size: 14px;
   padding-left: 10px;
   font-family: Arial, Helvetica, sans-serif;
   vertical-align: middle;
 }
-
 .postlinks {
   white-space: nowrap;
   overflow: hidden;
@@ -51,26 +50,25 @@ span {
   width: 100%;
   margin-bottom: 5px;
 }
-
 .fab {
   color: white;
 }
-.fa-facebook {
+.background-facebook {
   background: #3b5998;
 }
-.fa-twitter {
+.background-twitter {
   background: #55acee;
 }
-.fa-google {
+.background-google {
   background: #dd4b39;
 }
-.fa-linkedin {
+.background-linkedin {
   background: #007bb5;
 }
-.fa-youtube {
+.background-youtube {
   background: #bb0000;
 }
-.fa-instagram {
+.background-instagram {
   background: #fffc00;
   background: -webkit-linear-gradient(top, #fc01d6 0%, #ffc001 100%);
   background: -moz-linear-gradient(top, #fc01d6 0%, #ffc001 100%);
@@ -79,56 +77,59 @@ span {
   /* text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   background: #125688; */
 }
-.fa-pinterest {
+.background-pinterest {
   background: #cb2027;
 }
-.fa-snapchat-ghost {
+.background-snapchat-ghost {
   background: #fffc00;
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
-.fa-skype {
+.background-skype {
   background: #00aff0;
 }
-.fa-android {
+.background-android {
   background: #a4c639;
 }
-.fa-dribbble {
+.background-dribbble {
   background: #ea4c89;
 }
-.fa-vimeo {
+.background-vimeo {
   background: #45bbff;
 }
-.fa-tumblr {
+.background-tumblr {
   background: #2c4762;
 }
-.fa-vine {
+.background-vine {
   background: #00b489;
 }
-.fa-foursquare {
+.background-foursquare {
   background: #45bbff;
 }
-.fa-stumbleupon {
+.background-stumbleupon {
   background: #eb4924;
 }
-.fa-flickr {
+.background-flickr {
   background: #f40083;
 }
-.fa-yahoo {
+.background-yahoo {
   background: #430297;
 }
-.fa-soundcloud {
+.background-soundcloud {
   background: #ff5500;
 }
-.fa-reddit {
+.background-reddit {
   background: #ff5700;
 }
-.fa-rss {
+.background-rss {
   background: #ff6600;
 }
-.fa-tiktok {
+.background-tiktok {
   background: #fe2c55;
 }
-.fa-pexels {
+.background-pexels {
   background: #07a081;
 }
-</style>
+      `
+    );
+  },
+};
