@@ -8,6 +8,7 @@ const useUserStore = Pinia.defineStore('user', {
         snackBar: '',
         login: '',
       },
+      windowWidth: 0,
       userData: [],
       endPts: {
         url: url,

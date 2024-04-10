@@ -11,37 +11,46 @@ export default {
         <div class="tab-title"></div>
       </div>
 
+      <i v-if="sidePanelOpen" class="fa-solid fa-chevron-left" @click="toggleSidePanel" style="left: 239px" ></i>
+      <i v-else class="fa-solid fa-chevron-right" @click="toggleSidePanel" style="left: 39px" ></i>
       <div class="tab-body-container">
-        <div class="tab">
+        <div class="tab" 
+          :style="{
+            width: sidePanelOpen ? '250px' : '50px', 
+            'margin-right': sidePanelOpen ? '-200px' : '0px', 
+          }">
           <button
             title="Home"
             :class="{ 'tab-active': activeTab == 'home' }"
             class="fa fa-home"
-            @click="openTab"
-          ></button>
+            @click="openTab">
+            <span v-if="sidePanelOpen">
+              Home
+            </span>
+          </button>
           <button
             v-for="smParam in socialMediaParams"
             :title="
-              smParam.website.charAt(0).toUpperCase() + smParam.website.slice(1)
+              smParam.website?.charAt(0).toUpperCase() + smParam.website?.slice(1)
             "
             :class="[
               {'tab-active': activeTab == smParam.website.toLowerCase(),},
               ['fab fa-'] + smParam.website.toLowerCase(),
             ]"
-            @click="openTab"
-            ${
-              /* 
-              style="background: #f1f1f1"
-              @mouseover="hoverOverTab" 
-              @mouseout="hoverOutTab" */ ''
-            }
-          ></button>
+            @click="openTab">
+              <span v-if="sidePanelOpen">
+                {{ smParam.website?.charAt(0).toUpperCase() + smParam.website?.slice(1) }}
+              </span>
+            </button>
           <button
             title="Log out"
             :class="{ 'tab-active': activeTab == 'logout' }"
             class="fa fa-sign-out"
-            @click="openTab"
-          ></button>
+            @click="openTab">
+            <span v-if="sidePanelOpen">
+              Log out
+            </span>
+          </button>
         </div>
 
         <div class="tab-content" v-if="activeTab == 'home'">
@@ -70,7 +79,7 @@ export default {
               "
               @click="patchSocialMedia"
             />
-            {{ activeTab.charAt(0).toUpperCase() }}{{ activeTab.slice(1) }}
+            {{ activeTab?.charAt(0).toUpperCase() }}{{ activeTab?.slice(1) }}
           </h2>
 
           <div
@@ -106,6 +115,7 @@ export default {
       socialMediaParams: '',
       activeTab: 'home',
       active: false,
+      sidePanelOpen: false,
     };
   },
 
@@ -115,9 +125,14 @@ export default {
 
   methods: {
     openTab(event) {
-      if (event.target.className.split('fa-')[1] != this.activeTab) {
+      const selectedTab =
+        event.srcElement.localName == 'button'
+          ? event.target.className.split('fa-')[1].trim()
+          : event.target.innerHTML.toLowerCase().trim();
+      if (selectedTab != this.activeTab) {
+        console.log(selectedTab);
+        this.sidePanelOpen = false;
         // event.target.style.backgroundColor = '#bbbbbb';
-        const selectedTab = event.target.className.split('fa-')[1];
         if (!this.userStore.userData.SMParams?.[selectedTab]) {
           const mergedObj = Object.assign(
             { [selectedTab]: '' },
@@ -129,20 +144,8 @@ export default {
       }
     },
 
-    hoverOverTab(event) {
-      if (event.target.className.split('fa-')[1] != this.activeTab) {
-        event.target.style.backgroundColor = '#ddd';
-      } else {
-        event.target.style.backgroundColor = '#bbbbbb';
-      }
-    },
-
-    hoverOutTab(event) {
-      if (event.target.className.split('fa-')[1] != this.activeTab) {
-        event.target.style.backgroundColor = '#f1f1f1';
-      } else {
-        event.target.style.backgroundColor = '#bbbbbb';
-      }
+    toggleSidePanel() {
+      this.sidePanelOpen = !this.sidePanelOpen;
     },
 
     async patchSocialMedia(event) {
@@ -211,6 +214,12 @@ export default {
     },
   },
 
+  watch: {
+    windowWidth() {
+      this.sidePanelOpen = false;
+    },
+  },
+
   created() {
     this.getSocialMediaParams();
   },
@@ -219,47 +228,17 @@ export default {
     style(
       'SocialMedia',
       /*css*/ `
-.tab-title-container {
-}
-.tab-title {
-}
-.tab-body-container {
-  display: flex;
-  height: 100%;
-}
-.tab {
-  float: left;
-  width: 50px;
-  height: 100%;
-  background-color: #f1f1f1;
-  border-right: 1px solid darkgrey;
-}
-.tab button {
-  display: block;
-  color: black;
-  padding: 22px 13px;
-  width: 100%;
-  border: none;
-  outline: none;
-  text-align: left;
-  cursor: default;
-  transition: 0.3s;
-  font-size: 20px;
-  border-bottom: 1px solid darkgrey;
-}
-.tab button:hover:not(.tab-active) {
-  background-color: #ddd;
+.side-panel i {
+  position: absolute;
+  z-index: 4;
+  top: 54px;
+  font-size: 10px;
+  padding: 6px 8px 6px 8px;
+  border-radius: 50%;
+  color: white;
+  background-color: black;
   cursor: pointer;
-}
-.tab-active {
-  background-color: #bbbbbb;
-}
-.tab-content {
-  flex-grow: 1;
-  float: left;
-  height: 100%;
-  width: 100%;
-  padding: 0px 30px 0px 30px;
+  z-index: 4;
 }
 .side-panel input[type='text'] {
   background: white;
@@ -277,6 +256,54 @@ export default {
   border: 0px;
   width: 16px;
   height: 16px;
+}
+.tab-title-container {
+}
+.tab-title {
+}
+.tab-body-container {
+  height: 100%;
+}
+.tab {
+  position: relative;
+  z-index: 3;
+  float: left;
+  height: 100%;
+  background-color: #f1f1f1;
+  border-right: 1px solid darkgrey;
+}
+.tab button {
+  display: block;
+  color: black;
+  padding: 22px 13px;
+  border: none;
+  outline: none;
+  text-align: left;
+  cursor: default;
+  transition: 0.3s;
+  font-size: 20px;
+  width: 100%;
+  // border-bottom: 1px solid darkgrey;
+}
+.tab span {
+  font-size: 16px;
+  font-weight: normal;
+  font-family: 'Helvetica', sans-serif;
+  padding-left: 10px;
+}
+.tab button:hover:not(.tab-active) {
+  background-color: #ddd;
+  cursor: pointer;
+}
+.tab-active {
+  background-color: #bbbbbb;
+}
+.tab-content {
+  position: relative;
+  float: left;
+  height: 100%;
+  width: calc(100% - 50px);
+  padding: 0px 30px 0px 30px;
 }
 .fa-pexels:before {
   content: 'P';

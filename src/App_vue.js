@@ -48,6 +48,7 @@ export default {
       'sessionID',
       'loggedIn',
       'msg',
+      'windowWidth',
       'userData',
       'endPts',
     ]),
@@ -79,6 +80,15 @@ export default {
         this.msg.snackBar = error.toString();
       }
     },
+
+    updateScreenWidth() {
+      this.windowWidth = window.innerWidth;
+    },
+    onScreenResize() {
+      window.addEventListener('resize', () => {
+        this.updateScreenWidth();
+      });
+    },
   },
 
   watch: {
@@ -99,6 +109,8 @@ export default {
   },
 
   mounted() {
+    this.updateScreenWidth();
+    this.onScreenResize();
     style(
       'App',
       /*css*/ `
@@ -117,10 +129,12 @@ export default {
   border-right: none;
   overflow-y: hidden;
   overflow-x: hidden;
-  background: -webkit-linear-gradient(left, #f1f1f1 49px, #999999 49px);
+  ${
+    /* background: -webkit-linear-gradient(left, #f1f1f1 49px, #999999 49px);
   background: -moz-linear-gradient(left, #f1f1f1 49px, #999999 49px);
   background: -ms-linear-gradient(left, #f1f1f1 49px, #999999 49px);
-  background: linear-gradient(left, #f1f1f1 49px, #999999 49px);
+  background: linear-gradient(left, #f1f1f1 49px, #999999 49px); */ ''
+  }
 }
 
 .app-grid-item2 {
