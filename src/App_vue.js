@@ -125,16 +125,14 @@ export default {
 
 .app-grid-item1 {
   height: 100%;
-  background-color: #999999;
+  // background-color: #999999;
   border-right: none;
   overflow-y: hidden;
   overflow-x: hidden;
-  ${
-    /* background: -webkit-linear-gradient(left, #f1f1f1 49px, #999999 49px);
+  background: -webkit-linear-gradient(left, #f1f1f1 49px, #999999 49px);
   background: -moz-linear-gradient(left, #f1f1f1 49px, #999999 49px);
   background: -ms-linear-gradient(left, #f1f1f1 49px, #999999 49px);
-  background: linear-gradient(left, #f1f1f1 49px, #999999 49px); */ ''
-  }
+  background: linear-gradient(left, #f1f1f1 49px, #999999 49px);
 }
 
 .app-grid-item2 {
@@ -155,6 +153,10 @@ export default {
   .app-grid-container {
     grid-template-columns: 42vw 42vw 16vw;
     grid-template-rows: 100vh;
+  }
+
+  .app-grid-item1 {
+    background: #999999;
   }
 
   .app-grid-item1,

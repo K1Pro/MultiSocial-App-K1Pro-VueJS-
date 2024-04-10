@@ -11,13 +11,18 @@ export default {
         <div class="tab-title"></div>
       </div>
 
-      <i v-if="sidePanelOpen" class="fa-solid fa-chevron-left" @click="toggleSidePanel" style="left: 239px" ></i>
-      <i v-else class="fa-solid fa-chevron-right" @click="toggleSidePanel" style="left: 39px" ></i>
+      <i v-if="windowWidth > 768" 
+        :class="{ 'fa-solid fa-chevron-left': sidePanelOpen, 'fa-solid fa-chevron-right': !sidePanelOpen }" 
+        @click="toggleSidePanel" 
+        :style="{
+          left: sidePanelOpen ? '189px' : '39px',
+        }">
+      </i>
       <div class="tab-body-container">
         <div class="tab" 
           :style="{
-            width: sidePanelOpen ? '250px' : '50px', 
-            'margin-right': sidePanelOpen ? '-200px' : '0px', 
+            position: windowWidth > 768 ? 'absolute' : 'relative',
+            width: sidePanelOpen ? '200px' : '50px', 
           }">
           <button
             title="Home"
@@ -71,9 +76,9 @@ export default {
               type="checkbox"
               id="active"
               :checked="
-                this.userStore.userData.SMParams?.[activeTab]?.['active'] ==
+                this.userData.SMParams?.[activeTab]?.['active'] ==
                   '1' ||
-                this.userStore.userData.SMParams?.[activeTab]?.['active'] === true
+                this.userData.SMParams?.[activeTab]?.['active'] === true
                   ? true
                   : null
               "
@@ -98,7 +103,7 @@ export default {
               <input
                 :type="smKey.includes('Expiry') ? 'datetime-local' : 'text'"
                 :id="smKey"
-                :value="this.userStore.userData.SMParams?.[activeTab]?.[smKey]"
+                :value="this.userData.SMParams?.[activeTab]?.[smKey]"
                 @change="patchSocialMedia"
               /><br /><br />
             </div>
@@ -116,11 +121,18 @@ export default {
       activeTab: 'home',
       active: false,
       sidePanelOpen: false,
+      pageClicks: 0,
     };
   },
 
   computed: {
-    ...Pinia.mapStores(useUserStore),
+    ...Pinia.mapWritableState(useUserStore, [
+      'accessToken',
+      'msg',
+      'windowWidth',
+      'userData',
+      'endPts',
+    ]),
   },
 
   methods: {
@@ -130,41 +142,41 @@ export default {
           ? event.target.className.split('fa-')[1].trim()
           : event.target.innerHTML.toLowerCase().trim();
       if (selectedTab != this.activeTab) {
-        console.log(selectedTab);
         this.sidePanelOpen = false;
         // event.target.style.backgroundColor = '#bbbbbb';
-        if (!this.userStore.userData.SMParams?.[selectedTab]) {
+        if (!this.userData.SMParams?.[selectedTab]) {
           const mergedObj = Object.assign(
             { [selectedTab]: '' },
-            this.userStore.userData.SMParams
+            this.userData.SMParams
           );
-          this.userStore.userData.SMParams = mergedObj;
+          this.userData.SMParams = mergedObj;
         }
         this.activeTab = selectedTab;
       }
     },
 
     toggleSidePanel() {
+      this.pageClicks = 0;
       this.sidePanelOpen = !this.sidePanelOpen;
     },
 
     async patchSocialMedia(event) {
       // This checks if the social media groups properties exists already, if not it is created, ex: SMParams.facebook.App_ID; otherise key is modified
-      if (!this.userStore.userData.SMParams[this.activeTab]) {
+      if (!this.userData.SMParams[this.activeTab]) {
         // key is created
         event.target.type == 'checkbox'
-          ? (this.userStore.userData.SMParams[this.activeTab] = {
+          ? (this.userData.SMParams[this.activeTab] = {
               [event.target.id]: event.target.checked,
             })
-          : (this.userStore.userData.SMParams[this.activeTab] = {
+          : (this.userData.SMParams[this.activeTab] = {
               [event.target.id]: event.target.value,
             });
       } else {
         // key is modified
         event.target.type == 'checkbox'
-          ? (this.userStore.userData.SMParams[this.activeTab][event.target.id] =
+          ? (this.userData.SMParams[this.activeTab][event.target.id] =
               event.target.checked)
-          : (this.userStore.userData.SMParams[this.activeTab][event.target.id] =
+          : (this.userData.SMParams[this.activeTab][event.target.id] =
               event.target.value);
       }
       const inputValue =
@@ -172,45 +184,46 @@ export default {
           ? event.target.checked
           : event.target.value;
       try {
-        const response = await fetch(
-          servrURL + this.userStore.endPts.socialMedia,
-          {
-            method: 'PATCH',
-            headers: {
-              Authorization: this.userStore.accessToken,
-              'Content-Type': 'application/json',
-              'Cache-Control': 'no-store',
-            },
-            body: JSON.stringify({
-              website: this.activeTab,
-              [event.target.id]: inputValue,
-            }),
-          }
-        );
+        const response = await fetch(servrURL + this.endPts.socialMedia, {
+          method: 'PATCH',
+          headers: {
+            Authorization: this.accessToken,
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-store',
+          },
+          body: JSON.stringify({
+            website: this.activeTab,
+            [event.target.id]: inputValue,
+          }),
+        });
         const patchSocialMediaJSON = await response.json();
         if (patchSocialMediaJSON.success) {
-          this.userStore.msg.snackBar = patchSocialMediaJSON.messages[0];
+          this.msg.snackBar = patchSocialMediaJSON.messages[0];
         }
-        console.log(patchSocialMediaJSON);
+        // console.log(patchSocialMediaJSON);
       } catch (error) {
-        this.userStore.msg.snackBar = error.toString();
+        this.msg.snackBar = error.toString();
       }
     },
 
     async getSocialMediaParams() {
       try {
-        const response = await fetch(
-          servrURL + this.userStore.endPts.socialMediaParams,
-          {
-            method: 'GET',
-          }
-        );
+        const response = await fetch(servrURL + this.endPts.socialMediaParams, {
+          method: 'GET',
+        });
         const SocialMediaParamsJSON = await response.json();
         if (SocialMediaParamsJSON.success)
           this.socialMediaParams = SocialMediaParamsJSON.data.sm_params;
       } catch (error) {
         this.msg.snackBar = error.toString();
       }
+    },
+
+    onWindowClick() {
+      if (this.pageClicks > 0) {
+        this.sidePanelOpen = false;
+      }
+      this.pageClicks++;
     },
   },
 
@@ -224,7 +237,13 @@ export default {
     this.getSocialMediaParams();
   },
 
+  beforeDestroy() {
+    document.removeEventListener('click', this.onWindowClick);
+  },
+
   mounted() {
+    document.addEventListener('click', this.onWindowClick);
+
     style(
       'SocialMedia',
       /*css*/ `
@@ -239,6 +258,7 @@ export default {
   background-color: black;
   cursor: pointer;
   z-index: 4;
+  transition: all 0.3s ease;
 }
 .side-panel input[type='text'] {
   background: white;
@@ -265,12 +285,14 @@ export default {
   height: 100%;
 }
 .tab {
-  position: relative;
   z-index: 3;
   float: left;
   height: 100%;
   background-color: #f1f1f1;
   border-right: 1px solid darkgrey;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .tab button {
   display: block;
@@ -311,7 +333,8 @@ export default {
 @media only screen and (min-width: 768px) {
   .tab-content {
     height: 100vh;
-    padding: 0px 30px 0px 30px;
+    width: 100%;
+    padding: 0px 30px 0px 80px;
   }
   .tab {
     height: 100vh;
