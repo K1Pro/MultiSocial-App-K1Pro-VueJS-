@@ -1,47 +1,48 @@
-export default {
-  name: 'Gallery',
+<template>
+  <div class="Gallery">
+    <button type="button" @click.prevent="imageSearch">Search</button>
+    <input
+      name="MostRecentSearch"
+      type="search"
+      placeholder="Search for an image…"
+      v-model="imageSearchInput"
+      @keyup.enter="imageSearch"
+    />
+    <select name="images-searched" @change="selectSearch">
+      <option
+        v-for="searched in Object.keys(this.userData.SearchedPhotos)"
+        :value="searched"
+      >
+        {{ searched.charAt(0).toUpperCase()
+        }}{{ searched.slice(1).replaceAll('_', ' ') }}
+      </option>
+    </select>
+    <br />
 
-  template: /*html*/ `
-    <div class="Gallery">
-      <button type="button" @click.prevent="imageSearch">Search</button>
-      <input
-        name="MostRecentSearch"
-        type="search"
-        placeholder="Search for an image…"
-        v-model="imageSearchInput"
-        @keyup.enter="imageSearch"
-      />
-      <select name="images-searched" @change="selectSearch">
-        <option
-          v-for="searched in Object.keys(this.userData.SearchedPhotos)"
-          :value="searched"
-        >
-          {{ searched.charAt(0).toUpperCase()
-          }}{{ searched.slice(1).replaceAll('_', ' ') }}
-        </option>
-      </select>
-      <br />
-
-      <div class="Gallery-Row">
-        <div class="Gallery-Column">
-          <img
-            v-for="images in imgSrchArr1stPart"
-            name="MostRecentPhoto"
-            :src="images.src.medium"
-            @click="selectImg($event, images.src.landscape)"
-          />
-        </div>
-        <div class="Gallery-Column">
-          <img
-            v-for="images in imgSrchArr2ndPart"
-            name="MostRecentPhoto"
-            :src="images.src.medium"
-            @click="selectImg($event, images.src.landscape)"
-          />
-        </div>
+    <div class="Gallery-Row">
+      <div class="Gallery-Column">
+        <img
+          v-for="images in imgSrchArr1stPart"
+          name="MostRecentPhoto"
+          :src="images.src.medium"
+          @click="selectImg($event, images.src.landscape)"
+        />
+      </div>
+      <div class="Gallery-Column">
+        <img
+          v-for="images in imgSrchArr2ndPart"
+          name="MostRecentPhoto"
+          :src="images.src.medium"
+          @click="selectImg($event, images.src.landscape)"
+        />
       </div>
     </div>
-  `,
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Gallery',
 
   data() {
     return { imageSearchInput: '', imageSearchInputs: [] };
@@ -139,11 +140,10 @@ export default {
           .replaceAll('_', ' ')
       : '';
   },
+};
+</script>
 
-  mounted() {
-    style(
-      'Gallery',
-      /*css*/ `
+<style>
 .Gallery {
   padding: 30px 30px;
 }
@@ -189,7 +189,4 @@ export default {
   outline: 1px solid black;
   outline-offset: -1px;
 }
-      `
-    );
-  },
-};
+</style>

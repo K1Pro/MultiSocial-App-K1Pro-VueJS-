@@ -1,119 +1,122 @@
-import Post from './Post_vue.js';
-import Accountinfo from './AccountInfo_vue.js';
-import Logoutbtn from './LogOutBtn_vue.js';
+<template>
+  <div class="side-panel">
+    <div class="tab-title-container">
+      <div class="tab-title"></div>
+    </div>
 
-export default {
-  name: 'SocialMedia',
-
-  template: /*html*/ `
-    <div class="side-panel">
-      <div class="tab-title-container">
-        <div class="tab-title"></div>
+    <i
+      v-if="windowWidth > 768"
+      :class="{
+        'fa-solid fa-chevron-left': sidePanelOpen,
+        'fa-solid fa-chevron-right': !sidePanelOpen,
+      }"
+      :style="{ left: sidePanelOpen ? '189px' : '39px' }"
+      @click="toggleSidePanel"
+    >
+    </i>
+    <div class="tab-body-container">
+      <div
+        class="tab"
+        :style="{
+          position: windowWidth > 768 ? 'absolute' : 'relative',
+          width: sidePanelOpen ? '200px' : '50px',
+        }"
+      >
+        <button
+          title="Home"
+          :class="{ 'tab-active': activeTab == 'home' }"
+          class="fa fa-home"
+          @click="openTab"
+        >
+          <span v-if="sidePanelOpen"> Home </span>
+        </button>
+        <button
+          v-for="smParam in socialMediaParams"
+          :title="
+            smParam.website?.charAt(0).toUpperCase() + smParam.website?.slice(1)
+          "
+          :class="[
+            { 'tab-active': activeTab == smParam.website.toLowerCase() },
+            ['fab fa-'] + smParam.website.toLowerCase(),
+          ]"
+          @click="openTab"
+        >
+          <span v-if="sidePanelOpen">
+            {{
+              smParam.website?.charAt(0).toUpperCase() +
+              smParam.website?.slice(1)
+            }}
+          </span>
+        </button>
+        <button
+          title="Log out"
+          :class="{ 'tab-active': activeTab == 'logout' }"
+          class="fa fa-sign-out"
+          @click="openTab"
+        >
+          <span v-if="sidePanelOpen"> Log out </span>
+        </button>
       </div>
 
-      <i v-if="windowWidth > 768" 
-        :class="{ 'fa-solid fa-chevron-left': sidePanelOpen, 'fa-solid fa-chevron-right': !sidePanelOpen }" 
-        @click="toggleSidePanel" 
-        :style="{
-          left: sidePanelOpen ? '189px' : '39px',
-        }">
-      </i>
-      <div class="tab-body-container">
-        <div class="tab" 
-          :style="{
-            position: windowWidth > 768 ? 'absolute' : 'relative',
-            width: sidePanelOpen ? '200px' : '50px', 
-          }">
-          <button
-            title="Home"
-            :class="{ 'tab-active': activeTab == 'home' }"
-            class="fa fa-home"
-            @click="openTab">
-            <span v-if="sidePanelOpen">
-              Home
-            </span>
-          </button>
-          <button
-            v-for="smParam in socialMediaParams"
-            :title="
-              smParam.website?.charAt(0).toUpperCase() + smParam.website?.slice(1)
+      <div class="tab-content" v-if="activeTab == 'home'">
+        <post></post>
+      </div>
+
+      <div class="tab-content" v-if="activeTab == 'sign-out'">
+        <accountinfo></accountinfo>
+        <logout></logout>
+      </div>
+
+      <div
+        class="tab-content"
+        v-if="activeTab != 'home' && activeTab != 'sign-out'"
+      >
+        <h2>
+          <input
+            type="checkbox"
+            id="active"
+            :checked="
+              this.userData.SMParams?.[activeTab]?.['active'] == '1' ||
+              this.userData.SMParams?.[activeTab]?.['active'] === true
+                ? true
+                : null
             "
-            :class="[
-              {'tab-active': activeTab == smParam.website.toLowerCase(),},
-              ['fab fa-'] + smParam.website.toLowerCase(),
-            ]"
-            @click="openTab">
-              <span v-if="sidePanelOpen">
-                {{ smParam.website?.charAt(0).toUpperCase() + smParam.website?.slice(1) }}
-              </span>
-            </button>
-          <button
-            title="Log out"
-            :class="{ 'tab-active': activeTab == 'logout' }"
-            class="fa fa-sign-out"
-            @click="openTab">
-            <span v-if="sidePanelOpen">
-              Log out
-            </span>
-          </button>
-        </div>
-
-        <div class="tab-content" v-if="activeTab == 'home'">
-          <post></post>
-        </div>
-
-        <div class="tab-content" v-if="activeTab == 'sign-out'">
-          <accountinfo></accountinfo>
-          <logoutbtn>></logoutbtn>
-        </div>
+            @click="patchSocialMedia"
+          />
+          {{ activeTab?.charAt(0).toUpperCase() }}{{ activeTab?.slice(1) }}
+        </h2>
 
         <div
-          class="tab-content"
-          v-if="activeTab != 'home' && activeTab != 'sign-out'"
+          v-for="selectedWebsite in Object.values(socialMediaParams).filter(
+            (smParam) => {
+              return smParam.website == activeTab;
+            }
+          )"
         >
-          <h2>
-            <input
-              type="checkbox"
-              id="active"
-              :checked="
-                this.userData.SMParams?.[activeTab]?.['active'] ==
-                  '1' ||
-                this.userData.SMParams?.[activeTab]?.['active'] === true
-                  ? true
-                  : null
-              "
-              @click="patchSocialMedia"
-            />
-            {{ activeTab?.charAt(0).toUpperCase() }}{{ activeTab?.slice(1) }}
-          </h2>
-
           <div
-            v-for="selectedWebsite in Object.values(socialMediaParams).filter(
-              (smParam) => {
-                return smParam.website == activeTab;
-              }
-            )"
+            v-for="smKey in Object.values(selectedWebsite).filter((smValue) => {
+              return smValue != activeTab;
+            })"
           >
-            <div
-              v-for="smKey in Object.values(selectedWebsite).filter((smValue) => {
-                return smValue != activeTab;
-              })"
-            >
-              <b>{{ smKey.replaceAll('_', ' ') }}</b>
-              <input
-                :type="smKey.includes('Expiry') ? 'datetime-local' : 'text'"
-                :id="smKey"
-                :value="this.userData.SMParams?.[activeTab]?.[smKey]"
-                @change="patchSocialMedia"
-              /><br /><br />
-            </div>
+            <b>{{ smKey.replaceAll('_', ' ') }}</b>
+            <input
+              :type="smKey.includes('Expiry') ? 'datetime-local' : 'text'"
+              :id="smKey"
+              :value="this.userData.SMParams?.[activeTab]?.[smKey]"
+              @change="patchSocialMedia"
+            /><br /><br />
           </div>
         </div>
       </div>
     </div>
-  `,
+  </div>
+</template>
 
-  components: { Post, Accountinfo, Logoutbtn },
+<script>
+export default {
+  name: 'SocialMedia',
+
+  components: { Post, Accountinfo, Logout },
 
   data() {
     return {
@@ -143,7 +146,6 @@ export default {
           : event.target.innerHTML.toLowerCase().trim();
       if (selectedTab != this.activeTab) {
         this.sidePanelOpen = false;
-        // event.target.style.backgroundColor = '#bbbbbb';
         if (!this.userData.SMParams?.[selectedTab]) {
           const mergedObj = Object.assign(
             { [selectedTab]: '' },
@@ -220,9 +222,7 @@ export default {
     },
 
     onWindowClick() {
-      if (this.pageClicks > 0) {
-        this.sidePanelOpen = false;
-      }
+      if (this.pageClicks > 0) this.sidePanelOpen = false;
       this.pageClicks++;
     },
   },
@@ -243,10 +243,11 @@ export default {
 
   mounted() {
     document.addEventListener('click', this.onWindowClick);
+  },
+};
+</script>
 
-    style(
-      'SocialMedia',
-      /*css*/ `
+<style>
 .side-panel i {
   position: absolute;
   z-index: 4;
@@ -295,6 +296,7 @@ export default {
   overflow: hidden;
 }
 .tab button {
+  width: 100%;
   display: block;
   color: black;
   padding: 22px 13px;
@@ -304,8 +306,6 @@ export default {
   cursor: default;
   transition: 0.3s;
   font-size: 20px;
-  width: 100%;
-  // border-bottom: 1px solid darkgrey;
 }
 .tab span {
   font-size: 16px;
@@ -327,9 +327,6 @@ export default {
   width: calc(100% - 50px);
   padding: 0px 30px 0px 30px;
 }
-.fa-pexels:before {
-  content: 'P';
-}
 @media only screen and (min-width: 768px) {
   .tab-content {
     height: 100vh;
@@ -340,7 +337,4 @@ export default {
     height: 100vh;
   }
 }
-      `
-    );
-  },
-};
+</style>

@@ -1,32 +1,33 @@
+<template>
+  <div class="posted">
+    <a
+      v-for="value in userData.SMPosts"
+      :class="
+        ['postlinks fab background-'] + value.website + [' fa-'] + value.website
+      "
+      :href="value.link"
+      target="_blank"
+    >
+      <span>
+        {{ value.date.slice(5, 7) }}/ {{ value.date.slice(8, 10) }}/
+        {{ value.date.slice(2, 4) }}
+        {{ value.date.slice(10, 16) }}
+      </span>
+    </a>
+  </div>
+</template>
+
+<script>
 export default {
   name: 'Posted',
-
-  template: /*html*/ `
-    <div class="posted">
-      <a
-        v-for="value in userData.SMPosts"
-        :class="['postlinks fab background-'] + value.website + [' fa-'] + value.website"
-        :href="value.link"
-        target="_blank"
-      >
-        <span>
-          {{ value.date.slice(5, 7) }}/
-          {{ value.date.slice(8, 10) }}/
-          {{ value.date.slice(2, 4)}}
-          {{ value.date.slice(10, 16) }}
-        </span>
-      </a>
-    </div>
-  `,
 
   computed: {
     ...Pinia.mapWritableState(useUserStore, ['userData']),
   },
+};
+</script>
 
-  mounted() {
-    style(
-      'Posted',
-      /*css*/ `
+<style>
 .posted {
   text-align: center;
   padding: 30px 30px;
@@ -129,7 +130,4 @@ export default {
 .background-pexels {
   background: #07a081;
 }
-      `
-    );
-  },
-};
+</style>

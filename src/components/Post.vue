@@ -1,68 +1,69 @@
+<template>
+  <div class="Post">
+    <h2>
+      {{
+        this.userStore.userData.Organization
+          ? this.userStore.userData.Organization + ' # '
+          : ''
+      }}{{ this.userStore.userData.FirstName }}
+    </h2>
+
+    <!-- <b>Title | Body text</b> -->
+    <input
+      type="text"
+      name="postTitle"
+      placeholder="Title..."
+      v-model="this.userStore.userData.PostTitle"
+      @change="this.userStore.patchUserData"
+    />
+    <textarea
+      name="PostBody"
+      placeholder="Body text..."
+      v-model="this.userStore.userData.PostBody"
+      @change="this.userStore.patchUserData"
+    ></textarea>
+    <button type="button" @click.prevent="generateText()">Generate Text</button
+    ><br /><br />
+
+    <!-- <b>Link | Description | Tags</b> -->
+    <input
+      type="text"
+      name="Website"
+      placeholder="Link..."
+      v-model="this.userStore.userData.Website"
+      @change="this.userStore.patchUserData"
+    />
+    <input
+      type="text"
+      name="WebsiteDesc"
+      placeholder="Link description..."
+      v-model="this.userStore.userData.WebsiteDesc"
+      @change="this.userStore.patchUserData"
+    />
+    <input
+      type="text"
+      name="Tags"
+      placeholder="Hashtags..."
+      v-model="this.userStore.userData.Tags"
+      @change="this.userStore.patchUserData"
+    />
+
+    <img
+      v-if="this.userStore.userData.MostRecentPhoto"
+      alt="random-image"
+      :src="this.userStore.userData.MostRecentPhoto"
+    />
+
+    <input type="file" name="filename" @change="uploadImage" /><br /><br />
+
+    <button type="button" @click.prevent="socialMediaPost()">Post</button
+    ><br /><br />
+  </div>
+</template>
+
+<script>
 export default {
   name: 'Post',
-
-  template: /*html*/ `
-    <div class="Post">
-      <h2>
-        {{
-          this.userStore.userData.Organization
-            ? this.userStore.userData.Organization + ' # '
-            : ''
-        }}{{ this.userStore.userData.FirstName }}
-      </h2>
-
-      <!-- <b>Title | Body text</b> -->
-      <input
-        type="text"
-        name="postTitle"
-        placeholder="Title..."
-        v-model="this.userStore.userData.PostTitle"
-        @change="this.userStore.patchUserData"
-      />
-      <textarea
-        name="PostBody"
-        placeholder="Body text..."
-        v-model="this.userStore.userData.PostBody"
-        @change="this.userStore.patchUserData"
-      ></textarea>
-      <button type="button" @click.prevent="generateText()">Generate Text</button
-      ><br /><br />
-
-      <!-- <b>Link | Description | Tags</b> -->
-      <input
-        type="text"
-        name="Website"
-        placeholder="Link..."
-        v-model="this.userStore.userData.Website"
-        @change="this.userStore.patchUserData"
-      />
-      <input
-        type="text"
-        name="WebsiteDesc"
-        placeholder="Link description..."
-        v-model="this.userStore.userData.WebsiteDesc"
-        @change="this.userStore.patchUserData"
-      />
-      <input
-        type="text"
-        name="Tags"
-        placeholder="Hashtags..."
-        v-model="this.userStore.userData.Tags"
-        @change="this.userStore.patchUserData"
-      />
-
-      <img
-        v-if="this.userStore.userData.MostRecentPhoto"
-        alt="random-image"
-        :src="this.userStore.userData.MostRecentPhoto"
-      />
-
-      <input type="file" name="filename" @change="uploadImage" /><br /><br />
-
-      <button type="button" @click.prevent="socialMediaPost()">Post</button
-      ><br /><br />
-    </div>
-  `,
 
   computed: {
     ...Pinia.mapStores(useUserStore),
@@ -221,11 +222,10 @@ export default {
       }
     },
   },
+};
+</script>
 
-  mounted() {
-    style(
-      'Post',
-      /*css*/ `
+<style>
 .Post textarea {
   background: white;
   width: 100%;
@@ -287,7 +287,4 @@ export default {
     height: 10vw;
   }
 }
-      `
-    );
-  },
-};
+</style>
