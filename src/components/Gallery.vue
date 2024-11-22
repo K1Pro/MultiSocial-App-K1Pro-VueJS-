@@ -8,15 +8,13 @@
       v-model="imageSearchInput"
       @keyup.enter="imageSearch"
     />
+
     <select name="images-searched" @change="selectSearch">
-      <option
-        v-for="searched in Object.keys(this.userData.SearchedPhotos)"
-        :value="searched"
-      >
-        {{ searched.charAt(0).toUpperCase()
-        }}{{ searched.slice(1).replaceAll('_', ' ') }}
+      <option v-for="searched in Object.keys(userData?.SearchedPhotos)" :value="searched">
+        {{ searched.charAt(0).toUpperCase() }}{{ searched.slice(1).replaceAll('_', ' ') }}
       </option>
     </select>
+
     <br />
 
     <div class="Gallery-Row">
@@ -48,60 +46,57 @@ export default {
     return { imageSearchInput: '', imageSearchInputs: [] };
   },
 
+  inject: ['userData', 'showMsg', 'endPts', 'patchUserData'],
+
   computed: {
-    ...Pinia.mapWritableState(useUserStore, [
-      'accessToken',
-      'userData',
-      'imgSrchArr1stPart',
-      'imgSrchArr2ndPart',
-      'msg',
-      'endPts',
-      'patchUserData',
-    ]),
+    imgSrchArr1stPart() {
+      return this.userData.SearchedPhotos[this.userData.MostRecentSearch]?.photos.slice(
+        0,
+        this.userData.SearchedPhotos[this.userData.MostRecentSearch]?.photos.length / 2
+      );
+    },
+    imgSrchArr2ndPart() {
+      return this.userData.SearchedPhotos[this.userData.MostRecentSearch]?.photos.slice(
+        this.userData.SearchedPhotos[this.userData.MostRecentSearch]?.photos.length / 2,
+        this.userData.SearchedPhotos[this.userData.MostRecentSearch]?.photos.length
+      );
+    },
   },
 
   methods: {
     async imageSearch() {
-      const imageSearched = this.imageSearchInput
-        .replaceAll(' ', '_')
-        .toLowerCase()
-        .trim();
+      const imageSearched = this.imageSearchInput.replaceAll(' ', '_').toLowerCase().trim();
       this.userData.MostRecentSearch = imageSearched;
 
       if (
         this.imageSearchInput &&
-        (this.userData.SearchedPhotos[imageSearched]?.total_results ==
-          undefined ||
+        (this.userData.SearchedPhotos[imageSearched]?.total_results == undefined ||
           this.userData.SearchedPhotos[imageSearched]?.total_results > 80)
       ) {
         try {
-          const response = await fetch(servrURL + this.endPts.searchedPhotos, {
+          const response = await fetch(app_api_url + this.endPts.searchedPhotos, {
             method: 'POST',
             headers: {
-              Authorization: this.accessToken,
+              Authorization: access_token,
               'Content-Type': 'application/json',
               'Cache-Control': 'no-store',
             },
             body: JSON.stringify({
-              PhotoSearch: this.imageSearchInput
-                .replaceAll('_', ' ')
-                .toLowerCase()
-                .trim(),
+              PhotoSearch: this.imageSearchInput.replaceAll('_', ' ').toLowerCase().trim(),
             }),
           });
           const imageSearchJSON = await response.json();
           if (imageSearchJSON.success) {
             console.log(imageSearchJSON);
             console.log(imageSearchJSON.data.keyword);
-            this.userData.SearchedPhotos[imageSearchJSON.data.keyword] =
-              imageSearchJSON.data.Pexels_Response;
+            this.userData.SearchedPhotos[imageSearchJSON.data.keyword] = imageSearchJSON.data.Pexels_Response;
           }
-          this.msg.snackBar = imageSearchJSON.messages[0];
+          this.showMsg(imageSearchJSON.messages[0]);
         } catch (error) {
-          this.msg.snackBar = error.toString();
+          this.showMsg(error.toString());
         }
       } else {
-        this.msg.snackBar = 'No additional search results';
+        this.showMsg('No additional search results');
         this.patchUserData(null, 'MostRecentSearch', imageSearched);
       }
     },
@@ -116,28 +111,18 @@ export default {
     selectSearch(event) {
       this.imageSearchInput =
         event.srcElement.selectedOptions[0]._value.charAt(0).toUpperCase() +
-        event.srcElement.selectedOptions[0]._value
-          .slice(1)
-          .toLowerCase()
-          .replaceAll('_', ' ');
-      this.userData.MostRecentSearch =
-        event.srcElement.selectedOptions[0]._value
-          .replaceAll(' ', '_')
-          .toLowerCase()
-          .trim();
-      this.patchUserData(
-        null,
-        'MostRecentSearch',
-        this.imageSearchInput.replaceAll(' ', '_').toLowerCase().trim()
-      );
+        event.srcElement.selectedOptions[0]._value.slice(1).toLowerCase().replaceAll('_', ' ');
+      this.userData.MostRecentSearch = event.srcElement.selectedOptions[0]._value
+        .replaceAll(' ', '_')
+        .toLowerCase()
+        .trim();
+      this.patchUserData(null, 'MostRecentSearch', this.imageSearchInput.replaceAll(' ', '_').toLowerCase().trim());
     },
   },
   created() {
     this.imageSearchInput = this.userData.MostRecentSearch
       ? this.userData.MostRecentSearch.charAt(0).toUpperCase() +
-        this.userData.MostRecentSearch.slice(1)
-          .toLowerCase()
-          .replaceAll('_', ' ')
+        this.userData.MostRecentSearch.slice(1).toLowerCase().replaceAll('_', ' ')
       : '';
   },
 };

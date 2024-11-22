@@ -4,7 +4,7 @@
 
     <ul>
       <li
-        v-for="value in Object.keys(this.userStore.userData).filter((e) => {
+        v-for="value in Object.keys(userData).filter((e) => {
           return (
             e !== 'PostTitle' &&
             e !== 'PostBody' &&
@@ -20,7 +20,7 @@
           );
         })"
       >
-        {{ value }}: {{ this.userStore.userData[value] }}
+        {{ value }}: {{ userData[value] }}
       </li>
     </ul>
 
@@ -30,15 +30,9 @@
 
 <script>
 export default {
-  name: "AccountInfo",
+  name: 'AccountInfo',
 
-  data() {
-    return {};
-  },
-
-  computed: {
-    ...Pinia.mapStores(useUserStore),
-  },
+  inject: ['userData'],
 };
 </script>
 

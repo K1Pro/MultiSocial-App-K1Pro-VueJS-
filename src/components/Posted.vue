@@ -2,9 +2,7 @@
   <div class="posted">
     <a
       v-for="value in userData.SMPosts"
-      :class="
-        ['postlinks fab background-'] + value.website + [' fa-'] + value.website
-      "
+      :class="['postlinks fab background-'] + value.website + [' fa-'] + value.website"
       :href="value.link"
       target="_blank"
     >
@@ -21,9 +19,7 @@
 export default {
   name: 'Posted',
 
-  computed: {
-    ...Pinia.mapWritableState(useUserStore, ['userData']),
-  },
+  inject: ['userData'],
 };
 </script>
 

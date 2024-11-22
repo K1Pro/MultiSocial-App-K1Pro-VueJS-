@@ -1,0 +1,27 @@
+body {
+  background-color: #c6c6c6;
+  /* overflow-y: auto;
+  overflow-x: hidden; */
+}
+
+#loader-container {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+}
+
+#loader {
+  border: 13px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 13px solid #3498db;
+  width: 148px;
+  height: 148px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+@media only screen and (min-width: 768px) {
+  body {
+    overflow-y: auto;
+  }
+}

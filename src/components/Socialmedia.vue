@@ -5,7 +5,7 @@
     </div>
 
     <i
-      v-if="windowWidth > 768"
+      v-if="wndw.wdth > 768"
       :class="{
         'fa-solid fa-chevron-left': sidePanelOpen,
         'fa-solid fa-chevron-right': !sidePanelOpen,
@@ -18,23 +18,16 @@
       <div
         class="tab"
         :style="{
-          position: windowWidth > 768 ? 'absolute' : 'relative',
+          position: wndw.wdth > 768 ? 'absolute' : 'relative',
           width: sidePanelOpen ? '200px' : '50px',
         }"
       >
-        <button
-          title="Home"
-          :class="{ 'tab-active': activeTab == 'home' }"
-          class="fa fa-home"
-          @click="openTab"
-        >
+        <button title="Home" :class="{ 'tab-active': activeTab == 'home' }" class="fa fa-home" @click="openTab">
           <span v-if="sidePanelOpen"> Home </span>
         </button>
         <button
           v-for="smParam in socialMediaParams"
-          :title="
-            smParam.website?.charAt(0).toUpperCase() + smParam.website?.slice(1)
-          "
+          :title="smParam.website?.charAt(0).toUpperCase() + smParam.website?.slice(1)"
           :class="[
             { 'tab-active': activeTab == smParam.website.toLowerCase() },
             ['fab fa-'] + smParam.website.toLowerCase(),
@@ -42,10 +35,7 @@
           @click="openTab"
         >
           <span v-if="sidePanelOpen">
-            {{
-              smParam.website?.charAt(0).toUpperCase() +
-              smParam.website?.slice(1)
-            }}
+            {{ smParam.website?.charAt(0).toUpperCase() + smParam.website?.slice(1) }}
           </span>
         </button>
         <button
@@ -64,20 +54,16 @@
 
       <div class="tab-content" v-if="activeTab == 'sign-out'">
         <accountinfo></accountinfo>
-        <logout></logout>
+        <!-- <logout></logout> -->
       </div>
 
-      <div
-        class="tab-content"
-        v-if="activeTab != 'home' && activeTab != 'sign-out'"
-      >
+      <div class="tab-content" v-if="activeTab != 'home' && activeTab != 'sign-out'">
         <h2>
           <input
             type="checkbox"
             id="active"
             :checked="
-              this.userData.SMParams?.[activeTab]?.['active'] == '1' ||
-              this.userData.SMParams?.[activeTab]?.['active'] === true
+              userData.SMParams?.[activeTab]?.['active'] == '1' || userData.SMParams?.[activeTab]?.['active'] === true
                 ? true
                 : null
             "
@@ -87,11 +73,9 @@
         </h2>
 
         <div
-          v-for="selectedWebsite in Object.values(socialMediaParams).filter(
-            (smParam) => {
-              return smParam.website == activeTab;
-            }
-          )"
+          v-for="selectedWebsite in Object.values(socialMediaParams).filter((smParam) => {
+            return smParam.website == activeTab;
+          })"
         >
           <div
             v-for="smKey in Object.values(selectedWebsite).filter((smValue) => {
@@ -102,7 +86,7 @@
             <input
               :type="smKey.includes('Expiry') ? 'datetime-local' : 'text'"
               :id="smKey"
-              :value="this.userData.SMParams?.[activeTab]?.[smKey]"
+              :value="userData.SMParams?.[activeTab]?.[smKey]"
               @change="patchSocialMedia"
             /><br /><br />
           </div>
@@ -116,8 +100,6 @@
 export default {
   name: 'SocialMedia',
 
-  components: { Post, Accountinfo, Logout },
-
   data() {
     return {
       socialMediaParams: '',
@@ -128,15 +110,7 @@ export default {
     };
   },
 
-  computed: {
-    ...Pinia.mapWritableState(useUserStore, [
-      'accessToken',
-      'msg',
-      'windowWidth',
-      'userData',
-      'endPts',
-    ]),
-  },
+  inject: ['showMsg', 'wndw', 'userData', 'endPts'],
 
   methods: {
     openTab(event) {
@@ -147,10 +121,7 @@ export default {
       if (selectedTab != this.activeTab) {
         this.sidePanelOpen = false;
         if (!this.userData.SMParams?.[selectedTab]) {
-          const mergedObj = Object.assign(
-            { [selectedTab]: '' },
-            this.userData.SMParams
-          );
+          const mergedObj = Object.assign({ [selectedTab]: '' }, this.userData.SMParams);
           this.userData.SMParams = mergedObj;
         }
         this.activeTab = selectedTab;
@@ -176,20 +147,15 @@ export default {
       } else {
         // key is modified
         event.target.type == 'checkbox'
-          ? (this.userData.SMParams[this.activeTab][event.target.id] =
-              event.target.checked)
-          : (this.userData.SMParams[this.activeTab][event.target.id] =
-              event.target.value);
+          ? (this.userData.SMParams[this.activeTab][event.target.id] = event.target.checked)
+          : (this.userData.SMParams[this.activeTab][event.target.id] = event.target.value);
       }
-      const inputValue =
-        event.target.type == 'checkbox'
-          ? event.target.checked
-          : event.target.value;
+      const inputValue = event.target.type == 'checkbox' ? event.target.checked : event.target.value;
       try {
-        const response = await fetch(servrURL + this.endPts.socialMedia, {
+        const response = await fetch(app_api_url + this.endPts.socialMedia, {
           method: 'PATCH',
           headers: {
-            Authorization: this.accessToken,
+            Authorization: access_token,
             'Content-Type': 'application/json',
             'Cache-Control': 'no-store',
           },
@@ -200,24 +166,23 @@ export default {
         });
         const patchSocialMediaJSON = await response.json();
         if (patchSocialMediaJSON.success) {
-          this.msg.snackBar = patchSocialMediaJSON.messages[0];
+          this.showMsg(patchSocialMediaJSON.messages[0]);
         }
         // console.log(patchSocialMediaJSON);
       } catch (error) {
-        this.msg.snackBar = error.toString();
+        this.showMsg(error.toString());
       }
     },
 
     async getSocialMediaParams() {
       try {
-        const response = await fetch(servrURL + this.endPts.socialMediaParams, {
+        const response = await fetch(app_api_url + this.endPts.socialMediaParams, {
           method: 'GET',
         });
         const SocialMediaParamsJSON = await response.json();
-        if (SocialMediaParamsJSON.success)
-          this.socialMediaParams = SocialMediaParamsJSON.data.sm_params;
+        if (SocialMediaParamsJSON.success) this.socialMediaParams = SocialMediaParamsJSON.data.sm_params;
       } catch (error) {
-        this.msg.snackBar = error.toString();
+        this.showMsg(error.toString());
       }
     },
 
@@ -228,7 +193,7 @@ export default {
   },
 
   watch: {
-    windowWidth() {
+    'wndw.wdth'() {
       this.sidePanelOpen = false;
     },
   },
